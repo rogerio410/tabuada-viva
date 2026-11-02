@@ -12,14 +12,14 @@ Status: critérios FIEL À FONTE (L92–105); formalização e prazos `[PROPOSTA
 
 Todos precisam ser verdadeiros ao mesmo tempo. Cada um vira uma função pura `(estado, relógio) → {ok, progresso}`.
 
-| #   | Critério           | Predicado                                                                                         | Fonte |
-| --- | ------------------ | ------------------------------------------------------------------------------------------------- | ----- |
-| G1  | Adição             | todos os 121 fatos (0+0..10+10) em Fluente ou Dominado, e ≥ 90% em Dominado                       | L98   |
-| G2  | Subtração até 20   | o mesmo de G1 sobre o conjunto de fatos de subtração `[D9]`                                       | L99   |
-| G3  | Família de fatos   | acerto ≥ 90% nos triângulos completados                                                           | L100  |
-| G4  | Problemas aditivos | ≥ 85% na escolha da operação **e** no cálculo (juntar, acrescentar, retirar, comparar, completar) | L101  |
-| G5  | Uso de apoio       | < 10% das respostas nas últimas 2 semanas `[D8]`                                                  | L102  |
-| G6  | Prova do Portão    | 40 itens mistos, sem apoio, ≥ 95%, concluída 2 vezes com ≥ 7 dias entre elas                      | L103  |
+| #   | Critério           | Predicado                                                                                              | Fonte |
+| --- | ------------------ | ------------------------------------------------------------------------------------------------------ | ----- |
+| G1  | Adição             | todos os 66 fatos de adição (121 células, 0+0..10+10, D10) em Fluente ou Dominado, e ≥ 90% em Dominado | L98   |
+| G2  | Subtração até 20   | o mesmo de G1 sobre os 121 fatos de subtração `[D9]`                                                   | L99   |
+| G3  | Família de fatos   | acerto ≥ 90% nos triângulos completados                                                                | L100  |
+| G4  | Problemas aditivos | ≥ 85% na escolha da operação **e** no cálculo (juntar, acrescentar, retirar, comparar, completar)      | L101  |
+| G5  | Uso de apoio       | < 10% das respostas nas últimas 2 semanas `[D8]`                                                       | L102  |
+| G6  | Prova do Portão    | 40 itens mistos, sem apoio, ≥ 95%, concluída 2 vezes com ≥ 7 dias entre elas                           | L103  |
 
 Convenções:
 

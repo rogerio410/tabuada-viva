@@ -56,9 +56,11 @@ Cada item: o que a fonte diz, a lacuna, a proposta e o impacto. Marque `[APROVAD
 ### D9 — Contagem e escopo dos fatos
 
 - **Fonte:** L15 (0–10), L56 (até 20), L286 (121 fatos de adição), L354 (~440).
-- **Proposta (a validar):** adição 121 (0+0..10+10); subtração: fatos com minuendo ≤ 20 e subtraendo ≤ 10 e resultado ≥ 0 conforme família; × 121 (0..10); ÷ conforme × (divisor 1..10, sem divisão por 0). O número exato é fixado em `mundos-e-fases.md` por contagem e substitui "~440".
+- **Proposta (a validar), contagem feita em `mundos-e-fases.md`:** adição 66 fatos (121 células da grade, pares não ordenados por D10); subtração 121 fatos ordenados, cada um com seu fato raiz (minuendo ≤ 20, subtraendo ≤ 10); × 45 fatos + 2 regras (×0, ×1); ÷ 81 fatos + 3 regras (÷1, n÷n, 0÷n). Total 313 fatos + 5 regras, no lugar de "~440". O "121" do painel (L286) e do Portão (G1) passa a ser lido como 121 células da grade, que correspondem a 66 estados.
 
-### D10 — Comutatividade e o × 7
+### D10 — Comutatividade e o × 7 — [APROVADO]
+
+> Aprovado pelo responsável como proposto (sessão da Fase B, 2026-11-02).
 
 - **Fonte:** L150, L161, L235.
 - **Lacuna:** 6 × 4 e 4 × 6 são um fato ou dois? A fonte diz que o × 7 sobra "três fatos novos (7×7, 7×8, 7×9)", o que só vale se 8 e 9 vierem antes, mas L161 põe × 9 e × 8 **antes** do × 7 e o número correto de fatos novos ao chegar no × 7 é 1 (7 × 7).
@@ -83,6 +85,12 @@ Cada item: o que a fonte diz, a lacuna, a proposta e o impacto. Marque `[APROVAD
 
 - **Fonte:** nada. Risco: criança que já soma fica presa nos Mundos 1–3 (L173 "sem atalho").
 - **Proposta:** sondagem curta e opcional (ligada pelo adulto) que classifica fatos de adição já fluentes e acelera apenas o alicerce aditivo. Nunca abre ×, ÷ nem pula o Portão. Sem nota, sem rótulo, apresentada como "jogo de aquecimento".
+
+### D16 — Regras e unidade de apresentação `[PROPOSTA]`
+
+- **Lacuna:** o teto de "2 fatos novos por sessão" (L197) não diz o que é "um fato" quando uma regra cobre vários (+0, ×0, ×1, ÷1) ou quando − e ÷ são irmãos de um fato conhecido.
+- **Proposta:** (a) uma **regra** conta como 1 item novo, mas cada fato coberto por ela é rastreado individualmente; (b) a unidade de apresentação de −, × e ÷ é o **triângulo** (L62): dois triângulos novos por sessão; (c) os irmãos − e ÷ só abrem quando o fato raiz está em Praticando ou acima (L65, estendido a ÷).
+- **Impacto:** `maxNewFactsPerSession` passa a contar itens de apresentação, não fatos soltos.
 
 ## Decisões de economia (humano, CLAUDE.md)
 

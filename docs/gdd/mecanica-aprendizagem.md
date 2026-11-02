@@ -4,7 +4,7 @@ Status: base FIEL À FONTE (L175–215); lacunas fechadas como `[PROPOSTA D<n>]`
 
 ## Estados de um fato
 
-Um fato é um par não ordenado quando a operação é comutativa `[PROPOSTA D10]`. Subtração e divisão são ordenadas.
+Um fato é um par não ordenado quando a operação é comutativa `[APROVADO D10]`. Subtração e divisão são ordenadas.
 
 | Estado     | Significa                                       | Entra por                                                                 | Revisão (`reviewIntervalDays`) |
 | ---------- | ----------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------ |
