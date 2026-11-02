@@ -1,10 +1,10 @@
 # Acessibilidade
 
-Status: `[PROPOSTA D17]` — a fonte só pede "alto contraste" (L309), narração opcional (L310) e respeito a "reduzir movimento" (L318). Todo o resto abaixo é proposta da IA para aprovação.
+Status: `[APROVADO D17]` — a fonte só pede "alto contraste" (L309), narração opcional (L310) e respeito a "reduzir movimento" (L318). Todo o resto abaixo é proposta da IA para aprovação. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Alvo
 
-**WCAG 2.2 nível AA como piso** `[PROPOSTA D17]`, mais regras específicas para criança de 7–8 anos e leitura lenta. O conjunto vale para a área da criança e para o painel do adulto.
+**WCAG 2.2 nível AA como piso** `[APROVADO D17]`, mais regras específicas para criança de 7–8 anos e leitura lenta. O conjunto vale para a área da criança e para o painel do adulto.
 
 ## Contraste
 

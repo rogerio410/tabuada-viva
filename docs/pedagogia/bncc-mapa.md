@@ -2,6 +2,8 @@
 
 Status: `[FONTE L36–50, L488–495]`. **Nenhum código foi verificado na fonte oficial (MEC).** Regra do projeto: nunca inventar código BNCC; só usar os 9 abaixo. Qualquer código novo exige consulta ao texto oficial e aprovação humana.
 
+> Em 2026-11-02 o responsável aprovou o mapa, **mas a conferência no texto oficial do MEC não está registrada**. O aviso acima permanece até alguém marcar o checklist do fim do arquivo.
+
 ## Habilidades e verificação
 
 | Código   | Resumo (da fonte, paráfrase)                        | Verificação        | Fonte consultada pela fonte |

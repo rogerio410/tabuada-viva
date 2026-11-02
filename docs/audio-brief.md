@@ -1,6 +1,6 @@
 # Audio brief
 
-Status: `[PROPOSTA]`. Da fonte: "acerto com som e animação curta (menos de 1 s); erro com uma dica visual, **sem som de fracasso**" (L311) e narração opcional por Web Speech API em pt-BR (L310). Todo o resto é proposta. Decisão do responsável: sons **sintetizados por Web Audio**, sem arquivos. Decisão ligada: D18.
+Status: `[PROPOSTA]`. Da fonte: "acerto com som e animação curta (menos de 1 s); erro com uma dica visual, **sem som de fracasso**" (L311) e narração opcional por Web Speech API em pt-BR (L310). Todo o resto é proposta. Decisão do responsável: sons **sintetizados por Web Audio**, sem arquivos. Decisão ligada: D18. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Regras
 

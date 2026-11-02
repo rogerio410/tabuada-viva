@@ -1,6 +1,6 @@
 # Portão da Multiplicação
 
-Status: critérios FIEL À FONTE (L92–105); formalização e prazos `[PROPOSTA D6, D7, D8]`. Implementação em `src/domain/gate`; a interface só pergunta "está aberto?" (L362).
+Status: critérios FIEL À FONTE (L92–105); formalização e prazos `[APROVADO D6, D7, D8]`. Implementação em `src/domain/gate`; a interface só pergunta "está aberto?" (L362). **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## O que fecha e o que abre
 

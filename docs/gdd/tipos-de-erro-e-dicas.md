@@ -1,6 +1,6 @@
 # Tipos de erro e dicas
 
-Status: 5 tipos FIEL À FONTE (L203–215). Enum estendido e exemplos de dica: `[RASCUNHO – revisão humana]`. **Dicas de erro: 100% revisão humana** (CLAUDE.md). Nenhum texto aqui vai direto para o jogo.
+Status: 5 tipos FIEL À FONTE (L203–215). Enum estendido e exemplos de dica: `[RASCUNHO – revisão humana]`. **Dicas de erro: 100% revisão humana** (CLAUDE.md). Nenhum texto aqui vai direto para o jogo. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Princípios
 

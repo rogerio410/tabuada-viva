@@ -1,6 +1,6 @@
 # Pilares e regras
 
-Status: FIEL À FONTE (L26–34, L269) + CLAUDE.md. Um pilar violado é motivo de **veto** em qualquer revisão de spec, conteúdo ou código.
+Status: FIEL À FONTE (L26–34, L269) + CLAUDE.md. Um pilar violado é motivo de **veto** em qualquer revisão de spec, conteúdo ou código. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Fantasia central
 

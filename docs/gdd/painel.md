@@ -1,6 +1,6 @@
 # Painel de competências
 
-Status: FIEL À FONTE (L271–298); lacunas sinalizadas. Código em `src/dashboard`, que não importa `src/ui`.
+Status: FIEL À FONTE (L271–298); lacunas sinalizadas. Código em `src/dashboard`, que não importa `src/ui`. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Objetivo
 

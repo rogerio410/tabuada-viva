@@ -14,12 +14,12 @@ Game Design Document fatiado por tema. A fonte de verdade é `docs/00-fonte/tabu
 
 Cada arquivo abre com um bloco de status. Cada regra carrega um destes rótulos:
 
-| Rótulo                        | Significado                                                                                                               |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `[FONTE L<n>]`                | Vem do documento-fonte; `n` é a linha em `docs/00-fonte/tabuada-viva.md`.                                                 |
-| `[PROPOSTA D<n>]`             | A fonte não define. Proposta da IA, ligada a uma decisão em `decisoes-abertas.md`. **Não implementar antes de aprovada.** |
-| `[RASCUNHO – revisão humana]` | Texto ou valor provisório. Dicas de erro, termos de consentimento e voz do Calú exigem 100% de revisão humana.            |
-| `[APROVADO]`                  | Decisão fechada pelo responsável (data e quem).                                                                           |
+| Rótulo                        | Significado                                                                                                                                                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `[FONTE L<n>]`                | Vem do documento-fonte; `n` é a linha em `docs/00-fonte/tabuada-viva.md`.                                                                                                                                    |
+| `[PROPOSTA D<n>]`             | A fonte não define. Proposta da IA, ligada a uma decisão em `decisoes-abertas.md`. **Não implementar antes de aprovada.** (Em 2026-11-02 todas as D1–D20 foram aprovadas e os rótulos viraram `[APROVADO]`.) |
+| `[RASCUNHO – revisão humana]` | Texto ou valor provisório. Dicas de erro, termos de consentimento e voz do Calú exigem 100% de revisão humana.                                                                                               |
+| `[APROVADO]`                  | Decisão fechada pelo responsável (data e quem).                                                                                                                                                              |
 
 Números pedagógicos têm um único destino em código: `src/domain/config/params.ts`. Os documentos citam o nome do parâmetro. Mudar valor ali exige aprovação humana (CLAUDE.md).
 

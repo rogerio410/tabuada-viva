@@ -17,23 +17,23 @@ Legenda: ✅ feito · 🔶 feito com pendência humana · ⏳ a fazer.
 
 Vite, React, TS, Tailwind, PWA, Vitest, Playwright, oxlint, dependency-cruiser, husky, CI, scripts `check:bundle` e `check:trackers`.
 
-## Fase B — Documentação de design · 🔶 (branch `docs/fase-b`, PR aberto)
+## Fase B — Documentação de design · ✅ (aprovada em 2026-11-02)
 
-| Item                                       | Onde                                           | Status                                                                    |
-| ------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------- |
-| GDD fatiado                                | `docs/gdd/`                                    | ✅                                                                        |
-| Registro de decisões                       | `docs/gdd/decisoes-abertas.md`                 | 🔶 D10, D17–D20 aprovadas; **D1–D9, D11–D16 e cajus (D15) aguardam você** |
-| Mundos e fases (71)                        | `docs/gdd/mundos-e-fases.md`                   | 🔶 falta amostragem humana de ~10%                                        |
-| UX: interface, acessibilidade, voz do Calú | `docs/ux/`                                     | ✅ aprovados                                                              |
-| Arte e áudio                               | `docs/art/`, `docs/audio-brief.md`             | ✅ (lista de animais a conferir)                                          |
-| Pedagogia                                  | `docs/pedagogia/`                              | 🔶 BNCC sem verificação oficial                                           |
-| Template de spec e índice de ADRs          | `docs/roadmap/specs/_template.md`, `docs/adr/` | ✅ (ADRs só índice)                                                       |
+| Item                                       | Onde                                           | Status                                                         |
+| ------------------------------------------ | ---------------------------------------------- | -------------------------------------------------------------- |
+| GDD fatiado                                | `docs/gdd/`                                    | ✅                                                             |
+| Registro de decisões                       | `docs/gdd/decisoes-abertas.md`                 | ✅ D1–D20 aprovadas (cajus inclusos, valores iniciais)         |
+| Mundos e fases (71)                        | `docs/gdd/mundos-e-fases.md`                   | ✅ aprovado                                                    |
+| UX: interface, acessibilidade, voz do Calú | `docs/ux/`                                     | ✅                                                             |
+| Arte e áudio                               | `docs/art/`, `docs/audio-brief.md`             | ✅                                                             |
+| Pedagogia                                  | `docs/pedagogia/`                              | ✅ aprovado; ⚠ BNCC sem conferência registrada no texto do MEC |
+| Template de spec e índice de ADRs          | `docs/roadmap/specs/_template.md`, `docs/adr/` | ✅                                                             |
 
-**Para fechar a Fase B:** aprovar/ajustar D1–D9 e D11–D16; conferir BNCC no texto do MEC; amostrar `mundos-e-fases.md`.
+**Pendências que não bloqueiam a Fase C:** conferir BNCC no MEC; confirmar com a professora centavos/cédulas (D19) e a aceitação da soma repetida (L483); verificar a ocorrência dos animais do álbum; revisão 100% humana das dicas de erro e da voz quando virarem conteúdo.
 
-## Fase C — Contratos para a IA desenvolver · ⏳ (próxima)
+## Fase C — Contratos para a IA desenvolver · ⏳ (próxima, liberada)
 
-Pré-requisito: decisões D1, D2, D4, D5, D9, D11, D12 e D16 fechadas (elas definem schema e motor).
+Pré-requisito: decisões D1–D20 ✅ fechadas. **Pode começar.** Primeiro item sugerido: 13 (sprints.md) e os parâmetros novos, depois 10 e 11.
 
 | #   | Item                                                                                                                                     | Entregável                                                                                                                                 | Status                       |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |

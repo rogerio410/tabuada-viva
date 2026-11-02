@@ -1,6 +1,6 @@
 # Mundos e fases
 
-Status: estrutura FIEL À FONTE (L146–173, tabela de 9 mundos). Distribuição fase a fase `[PROPOSTA]` — nova, a validar por amostragem humana (~10% por lote). Decisões ligadas: D9, D10 (aprovada), D12, D16.
+Status: estrutura FIEL À FONTE (L146–173, tabela de 9 mundos). Distribuição fase a fase `[PROPOSTA]` — nova, a validar por amostragem humana (~10% por lote). Decisões ligadas: D9, D10 (aprovada), D12, D16. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Convenções
 

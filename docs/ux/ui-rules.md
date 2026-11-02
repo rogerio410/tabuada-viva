@@ -1,6 +1,6 @@
 # Regras de interface
 
-Status: `[FONTE L304–319]` para o que a fonte define; o restante é `[PROPOSTA]`. Decisões ligadas: D17, D18, D20 em `docs/gdd/decisoes-abertas.md`.
+Status: `[FONTE L304–319]` para o que a fonte define; o restante é `[PROPOSTA]`. Decisões ligadas: D17, D18, D20 em `docs/gdd/decisoes-abertas.md`. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 O jogo é desenhado para um celular intermediário, em pé, nas mãos de uma criança de 7 anos, possivelmente sem internet estável (L302).
 

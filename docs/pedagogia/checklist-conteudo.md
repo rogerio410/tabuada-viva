@@ -1,6 +1,6 @@
 # Checklist de conteúdo
 
-Status: `[PROPOSTA]` para aprovação. Usado por (1) o validador determinístico `validate:content`, (2) o subagente revisor e (3) o humano na amostragem. Vale para histórias, dicas, cartões da Fábrica de Histórias e textos do Calú.
+Status: `[PROPOSTA]` para aprovação. Usado por (1) o validador determinístico `validate:content`, (2) o subagente revisor e (3) o humano na amostragem. Vale para histórias, dicas, cartões da Fábrica de Histórias e textos do Calú. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Quem revisa o quê
 

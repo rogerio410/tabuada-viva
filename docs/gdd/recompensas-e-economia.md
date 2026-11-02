@@ -1,6 +1,6 @@
 # Recompensas e economia
 
-Status: princípios FIEL À FONTE (L259–269). Estrelas `[PROPOSTA D5]`. **Todos os valores de cajus são `[RASCUNHO – decisão humana D15]`**: a fonte não traz números e o CLAUDE.md reserva a economia ao responsável.
+Status: princípios FIEL À FONTE (L259–269). Estrelas `[APROVADO D5]`. **Todos os valores de cajus são `[APROVADO D15]`**: a fonte não traz números e o CLAUDE.md reserva a economia ao responsável. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Princípios (inegociáveis)
 
@@ -22,7 +22,7 @@ Status: princípios FIEL À FONTE (L259–269). Estrelas `[PROPOSTA D5]`. **Todo
 | Jardim da semana        | planta cresce um estágio por dia de prática; pular um dia = não cresce; **nunca murcha**    | L267      |
 | Avatar                  | itens de roupa/cor/acessório liberados com o progresso                                      | L226      |
 
-## Estrelas `[PROPOSTA D5]`
+## Estrelas `[APROVADO D5]`
 
 | Estrelas | Acerto na fase | Efeito                                           |
 | -------- | -------------- | ------------------------------------------------ |
@@ -32,7 +32,7 @@ Status: princípios FIEL À FONTE (L259–269). Estrelas `[PROPOSTA D5]`. **Todo
 
 Refazer a fase usa itens diferentes; vale o melhor resultado. Texto ao 1 estrela: "Boa! Vamos treinar mais um pouquinho com o Calú?" (nunca "você não passou").
 
-## Cajus — rascunho de valores `[RASCUNHO – D15]`
+## Cajus — rascunho de valores `[APROVADO D15]`
 
 | Evento                        | Cajus                          | Observação                                                                                               |
 | ----------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------- |

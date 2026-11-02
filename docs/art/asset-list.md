@@ -1,6 +1,6 @@
 # Lista de assets
 
-Status: `[PROPOSTA]`. IDs são **estáveis**: nunca reaproveitar um ID. Formato: `<CATEGORIA>-<NOME>[-<VARIAÇÃO>]`. Status: `placeholder-svg` (formas simples com tokens de `art-bible.md`) ou `final`. Tamanhos são alvo sem compressão. "Quando" é o sprint em que o asset é necessário (L381–392 da fonte).
+Status: `[PROPOSTA]`. IDs são **estáveis**: nunca reaproveitar um ID. Formato: `<CATEGORIA>-<NOME>[-<VARIAÇÃO>]`. Status: `placeholder-svg` (formas simples com tokens de `art-bible.md`) ou `final`. Tamanhos são alvo sem compressão. "Quando" é o sprint em que o asset é necessário (L381–392 da fonte). **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Regras dos placeholders
 
@@ -73,7 +73,7 @@ Cada objeto contável é um SVG de 1–2 KB, idêntico entre si.
 
 Inicial `[PROPOSTA]`, 12 figurinhas em 3 páginas de 4: `ALBUM-CALANGO`, `ALBUM-TATU`, `ALBUM-MOCO`, `ALBUM-ARARA`, `ALBUM-EMA`, `ALBUM-CAPIVARA`, `ALBUM-ONCA-PARDA`, `ALBUM-TUCANO`, `ALBUM-PREGUICA`, `ALBUM-JACARE`, `ALBUM-CARAMBOLA` (arbusto), `ALBUM-CAJU` (fruta). Lista final decidida com o responsável; **conferir a ocorrência de cada bicho no Piauí** (a lista acima não foi verificada); frases dos bichos conferidas por fonte científica. ~5 KB cada, WebP se o SVG passar de 6 KB.
 
-## Orçamento `[PROPOSTA D18]`
+## Orçamento `[APROVADO D18]`
 
 | Grupo              | Itens                            | KB (alvo)                   |
 | ------------------ | -------------------------------- | --------------------------- |

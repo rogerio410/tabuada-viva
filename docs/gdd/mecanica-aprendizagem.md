@@ -1,6 +1,6 @@
 # Mecânica de aprendizagem
 
-Status: base FIEL À FONTE (L175–215); lacunas fechadas como `[PROPOSTA D<n>]` (ver `decisoes-abertas.md`). Destino dos números no código: `src/domain/config/params.ts`.
+Status: base FIEL À FONTE (L175–215); lacunas fechadas como `[PROPOSTA D<n>]` (ver `decisoes-abertas.md`). Destino dos números no código: `src/domain/config/params.ts`. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Estados de um fato
 
@@ -16,9 +16,9 @@ Um fato é um par não ordenado quando a operação é comutativa `[APROVADO D10
 
 [FONTE L181–187]
 
-"Rápido" = tempo ≤ `fastAnswerMs` (4 s). Ajuste por dígito e operação em `[PROPOSTA D2]`. O tempo vai do aparecimento da conta ao primeiro toque de resposta.
+"Rápido" = tempo ≤ `fastAnswerMs` (4 s). Ajuste por dígito e operação em `[APROVADO D2]`. O tempo vai do aparecimento da conta ao primeiro toque de resposta.
 
-## Tabela de transições (resposta → novo estado) `[PROPOSTA D1]`
+## Tabela de transições (resposta → novo estado) `[APROVADO D1]`
 
 Uma resposta tem três atributos: correta?, com apoio?, rápida?
 
@@ -56,7 +56,7 @@ Regras comuns:
 - A sessão para sozinha após 10–12 min com o Calú: "Bora descansar? Amanhã tem mais!" (L312). Progresso é guardado a qualquer momento.
 - Aprendendo "toda sessão" respeita o teto de novos: entram só os Aprendendo da fase atual; os mais antigos competem por vaga nas revisões `[D12]`.
 
-## Fase e sessão `[PROPOSTA D12]`
+## Fase e sessão `[APROVADO D12]`
 
 Uma fase leva cerca de 2 a 3 sessões: apresentação e prática guiada (6 a 8 itens) na primeira; prática intercalada e história na seguinte. A fase libera a próxima com ≥ 80% de acerto (2 estrelas); ver estrelas em `recompensas-e-economia.md`.
 

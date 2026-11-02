@@ -1,6 +1,6 @@
 # Art Bible
 
-Status: `[PROPOSTA]` quase integral. A fonte só dá o cenário (bairro que lembra Teresina, L219), os personagens (L221–226), o álbum Bichos do Piauí (L264), "fonte arredondada" (L309) e SVG/WebP (L317). Paleta, formas e regras visuais abaixo são propostas da IA para aprovação. Nome do jogo e do mascote são **provisórios** (L486). Decisões ligadas: D18, D19, D20.
+Status: `[PROPOSTA]` quase integral. A fonte só dá o cenário (bairro que lembra Teresina, L219), os personagens (L221–226), o álbum Bichos do Piauí (L264), "fonte arredondada" (L309) e SVG/WebP (L317). Paleta, formas e regras visuais abaixo são propostas da IA para aprovação. Nome do jogo e do mascote são **provisórios** (L486). Decisões ligadas: D18, D19, D20. **Aprovado pelo responsável em 2026-11-02** (os rótulos `[PROPOSTA]` restantes neste arquivo são detalhes aprovados junto com o documento).
 
 ## Direção
 
@@ -27,7 +27,7 @@ Fundo e texto vêm do código atual (`#FFF7E6`, `#2E9E5B`); o restante é propos
 
 - Regra: **texto branco só sobre `green-deep`, `poti-deep`, `ameixa`, `barro`**; texto `ink` sobre `caju` e `sol`.
 - Erro nunca é vermelho de alarme. Dica usa `poti` (curiosidade). `barro` serve para cenário, não para punir.
-- Modo escuro fora da v1 `[PROPOSTA D20]`.
+- Modo escuro fora da v1 `[APROVADO D20]`.
 
 ## Os 5 estados (cor + forma + rótulo)
 
@@ -74,7 +74,7 @@ O Portão aparece como um portão de madeira no mapa, **fechado com carinho** (s
 
 Pães, ovos, cestas, frutas, copos, brigadeiros, balões, cadeiras, canteiros e potes; quadro de dez (2 × 5), colar de contas (2 fileiras de 10, de 5 em 5 por cor), reta numérica (0 a 20), Mãozinhas, dominós e dados (L80–86). Cada objeto contável é **simples e idêntico** entre si (a criança precisa contar).
 
-### Dinheiro `[PROPOSTA D19]`
+### Dinheiro `[APROVADO D19]`
 
 Moedas e cédulas de **R$ 1, 2, 5, 10 e 20**, estilizadas, **sem reproduzir fielmente a arte das cédulas reais** (evita problema legal e confusão com dinheiro de verdade); cores distintas por valor e o número bem grande. Centavos ficam fora da v1.
 
@@ -90,7 +90,7 @@ Sem medo, sangue, armas, fumaça densa, fogo solto, nem situações de perigo; a
 
 - **SVG primeiro**, WebP onde o SVG ficaria pesado `[FONTE L317]`. Cores por token e `currentColor` quando fizer sentido.
 - Sprites reutilizáveis (um SVG de objeto contável usado muitas vezes).
-- Orçamento `[PROPOSTA D18]`: **pacote inicial** de arte ≤ **150 KB** sem compressão (≈ 50–60 KB gzip); o total (≈ 385 KB, ver `asset-list.md`) carrega **por mundo, sob demanda**, e fica no cache do PWA. Cada cenário ≤ 12 KB; cada expressão do Calú ≤ 6 KB. Nunito (woff2, 3 pesos) fica à parte, ≈ 70–90 KB.
+- Orçamento `[APROVADO D18]`: **pacote inicial** de arte ≤ **150 KB** sem compressão (≈ 50–60 KB gzip); o total (≈ 385 KB, ver `asset-list.md`) carrega **por mundo, sob demanda**, e fica no cache do PWA. Cada cenário ≤ 12 KB; cada expressão do Calú ≤ 6 KB. Nunito (woff2, 3 pesos) fica à parte, ≈ 70–90 KB.
 - Acessibilidade: ilustração decorativa `aria-hidden`; informativa com `alt` curto em pt-BR.
 - Placeholders SVG antes da arte final: ver `asset-list.md`.
 
