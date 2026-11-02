@@ -2,7 +2,7 @@
 
 **Este é o documento para acompanhar e retomar o trabalho entre sessões.** Origem: o plano de inicialização (fora do repositório, em `~/.claude/plans/neste-diret-rio-vamos-criar-fluttering-sky.md`), copiado aqui para ficar versionado. Atualize a coluna Status ao fechar cada item.
 
-Depois da preparação vêm os 10 sprints do produto (fonte L377–392), detalhados em `docs/roadmap/sprints.md` (a criar na Fase C).
+Depois da preparação vêm os 10 sprints do produto (fonte L377–392), detalhados em `docs/roadmap/sprints.md` (criado na Fase C, Bloco 5).
 
 ## Como retomar numa sessão nova
 
