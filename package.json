@@ -16,9 +16,11 @@
     "validate:content": "node --experimental-strip-types scripts/validate-content.ts",
     "check:bundle": "node scripts/check-bundle-size.mjs",
     "check:trackers": "node scripts/check-no-trackers.mjs",
+    "gen:headers": "node scripts/gen-vercel-headers.mjs",
+    "check:headers": "node scripts/gen-vercel-headers.mjs --check",
     "format": "prettier --write .",
     "prepare": "husky",
-    "verify": "npm run lint && npm run typecheck && npm test && npm run validate:content && npm run build && npm run check:bundle && npm run check:trackers"
+    "verify": "npm run lint && npm run typecheck && npm test && npm run validate:content && npm run build && npm run check:bundle && npm run check:trackers && npm run check:headers"
   },
   "dependencies": {
     "dexie": "^4.4.7",

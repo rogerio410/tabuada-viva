@@ -1,41 +1,30 @@
-// Barreira LGPD art. 14: sem rastreadores/CDNs externos no build nem no HTML.
+// Barreira LGPD art. 14: sem rastreadores/CDNs/URLs externas no build e no HTML, sem links externos
+// nem texto livre na área da criança (src/ui). Regras em scripts/lib/tracker-rules.mjs.
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
+import { scanBuiltFile, scanChildUiSource } from './lib/tracker-rules.mjs'
 
-const banned = [
-  /google-analytics/i,
-  /googletagmanager/i,
-  /gtag\(/,
-  /fbevents/i,
-  /hotjar/i,
-  /mixpanel/i,
-  /segment\.(com|io)/i,
-  /posthog/i,
-  /fonts\.googleapis/i,
-  /fonts\.gstatic/i,
-]
-const files = ['index.html']
-for (const d of ['dist']) {
-  const walk = (p) =>
-    readdirSync(p, { withFileTypes: true }).flatMap((e) =>
+const walk = (dir, test) => {
+  try {
+    return readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
       e.isDirectory()
-        ? walk(join(p, e.name))
-        : /\.(js|html|css)$/.test(e.name)
-          ? [join(p, e.name)]
+        ? walk(join(dir, e.name), test)
+        : test.test(e.name)
+          ? [join(dir, e.name)]
           : [],
     )
-  try {
-    files.push(...walk(d))
-  } catch {}
+  } catch {
+    return []
+  }
 }
-let bad = 0
-for (const f of files) {
-  const txt = readFileSync(f, 'utf8')
-  for (const re of banned)
-    if (re.test(txt)) {
-      console.error(`✗ ${f}: ${re}`)
-      bad++
-    }
-}
-if (bad) process.exit(1)
-console.log(`✓ sem rastreadores (${files.length} arquivos)`)
+
+const built = ['index.html', ...walk('dist', /\.(js|html|css|webmanifest)$/)]
+const childUi = walk('src/ui', /\.(ts|tsx)$/).filter((f) => !/\.test\.tsx?$/.test(f))
+
+const violations = [
+  ...built.flatMap((f) => scanBuiltFile(f, readFileSync(f, 'utf8'))),
+  ...childUi.flatMap((f) => scanChildUiSource(f, readFileSync(f, 'utf8'))),
+]
+for (const v of violations) console.error(`✗ ${v.file}: [${v.rule}] ${v.detail}`)
+if (violations.length) process.exit(1)
+console.log(`✓ sem rastreadores (${built.length} arquivos de build, ${childUi.length} de src/ui)`)

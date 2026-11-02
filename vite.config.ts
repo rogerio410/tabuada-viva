@@ -4,12 +4,25 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import { CSP_META, SECURITY_HEADERS } from './config/security-headers.mjs'
 
 const src = (p: string) => fileURLToPath(new URL(`./src/${p}`, import.meta.url))
 
 export default defineConfig({
   plugins: [
     react(),
+    {
+      // CSP por <meta> só no build: o dev server do Vite injeta scripts inline (HMR).
+      name: 'csp-meta',
+      apply: 'build',
+      transformIndexHtml: () => [
+        {
+          tag: 'meta',
+          attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP_META },
+          injectTo: 'head-prepend',
+        },
+      ],
+    },
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -32,6 +45,8 @@ export default defineConfig({
       workbox: { globPatterns: ['**/*.{js,css,html,svg,webp,woff2}'] },
     }),
   ],
+  // O preview serve o build com os mesmos cabeçalhos da Vercel (usados pelo e2e).
+  preview: { headers: Object.fromEntries(SECURITY_HEADERS) },
   resolve: {
     alias: {
       '@domain': src('domain'),
@@ -43,6 +58,6 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
+    include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts', 'config/**/*.test.ts'],
   },
 })

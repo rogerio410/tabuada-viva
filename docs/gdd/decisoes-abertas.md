@@ -140,7 +140,7 @@ Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O 
 
 - **Lacuna:** Framer Motion aplica estilos inline em runtime; uma CSP sem `'unsafe-inline'` em estilo quebra animações.
 - **Proposta:** `script-src 'self'` (sem inline nem eval), `style-src 'self' 'unsafe-inline'`, `connect-src 'self'` (a URL do Supabase entra no Sprint 4). Alternativa mais rígida: nonce por requisição, que a Vercel não dá em site estático sem função de borda.
-- **Impacto:** `config/security-headers.mjs`, `vercel.json`, `<meta>` no `index.html` (Fase D, Bloco 2).
+- **Impacto:** `config/security-headers.mjs`, `vercel.json`, `<meta>` injetada só no build (Fase D, Bloco 2). **Implementada como provisória**; se você preferir nonce, a mudança é só nesse arquivo.
 
 ## Parâmetros que existem na fonte mas não em `params.ts`
 
