@@ -1,2 +1,2 @@
 npx lint-staged
-npm run lint:layers && npm test && npm run validate:content
+npm run check:secrets && npm run lint:layers && npm test && npm run validate:content

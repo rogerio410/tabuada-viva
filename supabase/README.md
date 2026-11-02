@@ -24,7 +24,7 @@ Modelo de dados, RLS e funções do Tabuada Viva, em SQL puro compatível com o 
 npm run test:db
 ```
 
-Cria um banco temporário no Postgres indicado por `PGHOST`, `PGPORT`, `PGUSER` e `PGPASSWORD` (padrão local: `localhost:5432`, `postgres`/`postgres`, só para desenvolvimento), aplica tudo, roda os testes e apaga o banco. Falha de forma ruidosa se não houver Postgres. Roda na CI (job `db`), não no `npm run verify`.
+Cria um banco temporário no Postgres indicado por `PGHOST`, `PGPORT` (padrões `localhost` e `5432`) e `PGUSER` (padrão `postgres`). **A senha nunca fica no repositório**: use `PGPASSWORD` no ambiente, `~/.pgpass` ou um `.env.local` (ignorado pelo git, modelo em `.env.example`). Aplica tudo, roda os testes e apaga o banco. Falha de forma ruidosa se não houver Postgres. Roda na CI (job `db`), não no `npm run verify`.
 
 O `auth.uid()` do teste é simulado (`request.jwt.claim.sub`), como o Supabase faz. Conferir contra um projeto Supabase real fica para o Sprint 4.
 

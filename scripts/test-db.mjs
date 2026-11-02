@@ -2,16 +2,27 @@
 // e roda supabase/tests/*.test.sql. Falha de forma ruidosa se não houver Postgres: nada de pular em silêncio.
 // Conexão: variáveis PG* (padrão de desenvolvimento: localhost:5432, postgres/postgres). No CI vêm do serviço.
 import { execFileSync } from 'node:child_process'
-import { readdirSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { SECURITY } from '../src/domain/config/security.ts'
 
+// Credenciais só por ambiente: variáveis PG*, ~/.pgpass (PGPASSFILE) ou um .env.local fora do git.
+// Nenhuma senha mora neste arquivo.
+try {
+  process.loadEnvFile('.env.local')
+} catch {}
 const env = {
   ...process.env,
   PGHOST: process.env.PGHOST ?? 'localhost',
   PGPORT: process.env.PGPORT ?? '5432',
   PGUSER: process.env.PGUSER ?? 'postgres',
-  PGPASSWORD: process.env.PGPASSWORD ?? 'postgres',
+}
+if (!env.PGPASSWORD && !env.PGPASSFILE && !existsSync(join(homedir(), '.pgpass'))) {
+  console.error(
+    '✗ Sem senha do Postgres. Defina PGPASSWORD (ou use ~/.pgpass), ou crie um .env.local (ignorado pelo git) a partir de .env.example.',
+  )
+  process.exit(1)
 }
 const dbName = `tv_test_${process.pid}_${Date.now()}`
 
@@ -34,8 +45,7 @@ try {
 } catch (e) {
   console.error(
     `✗ Não consegui falar com o Postgres em ${env.PGHOST}:${env.PGPORT} (usuário ${env.PGUSER}).\n` +
-      '  Suba um Postgres 15+ (ex.: docker run -p 5432:5432 -e POSTGRES_PASSWORD=postgres postgres:17) ' +
-      'ou ajuste PGHOST/PGPORT/PGUSER/PGPASSWORD.\n' +
+      '  Suba um Postgres 15+ local e confira PGHOST, PGPORT, PGUSER e a senha (veja .env.example).\n' +
       String(e.stderr ?? e.message),
   )
   process.exit(1)

@@ -33,7 +33,7 @@ begin
   end if;
 
   update public.adult
-     set pin_hash = extensions.crypt(p_new, extensions.gen_salt('bf', 8))
+     set pin_hash = extensions.crypt(p_new, extensions.gen_salt('bf', 10))
    where id = v_uid;
   return jsonb_build_object('ok', true, 'locked', false, 'retry_after_seconds', 0);
 end $$;
@@ -67,7 +67,7 @@ begin
 
   select pin_hash into v_hash from public.adult where id = v_uid;
   -- sempre roda o bcrypt (contra um hash fixo se não há PIN) para o tempo não revelar nada
-  v_ok := extensions.crypt(coalesce(p_pin, ''), coalesce(v_hash, '$2a$08$abcdefghijklmnopqrstuuJ1fK0QmQ9g1yq9s6j9c8kqZx0k8y2e6'))
+  v_ok := extensions.crypt(coalesce(p_pin, ''), coalesce(v_hash, '$2a$10$abcdefghijklmnopqrstuuJ1fK0QmQ9g1yq9s6j9c8kqZx0k8y2e6'))
           = coalesce(v_hash, 'x')
           and v_hash is not null and p_pin ~ '^[0-9]{4}$';
 

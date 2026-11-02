@@ -12,6 +12,7 @@ jobs:
         with: { node-version: 24, cache: npm }
       - run: npm ci
       - run: npm run verify
+      - run: npm audit --omit=dev --audit-level=high
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
   db:
@@ -20,7 +21,7 @@ jobs:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
         ports: ['5432:5432']
         options: >-
           --health-cmd "pg_isready -U postgres"
@@ -31,7 +32,7 @@ jobs:
       PGHOST: localhost
       PGPORT: '5432'
       PGUSER: postgres
-      PGPASSWORD: postgres
+      PGPASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

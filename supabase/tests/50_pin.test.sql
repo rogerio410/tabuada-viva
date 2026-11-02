@@ -12,7 +12,7 @@ begin
 
   perform tests.as_admin();
   perform tests.ok((select pin_hash from public.adult where id = tests.u('g1')) <> '4321'
-                   and (select pin_hash from public.adult where id = tests.u('g1')) like '$2%', 'PIN guardado como bcrypt, nunca em texto');
+                   and (select pin_hash from public.adult where id = tests.u('g1')) like '$2a$10$%', 'PIN guardado como bcrypt (custo 10), nunca em texto');
 
   perform tests.as_user('g1');
   r := public.verify_adult_pin('4321');
