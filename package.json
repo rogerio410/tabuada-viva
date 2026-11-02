@@ -18,6 +18,7 @@
     "check:trackers": "node scripts/check-no-trackers.mjs",
     "gen:headers": "node scripts/gen-vercel-headers.mjs",
     "check:headers": "node scripts/gen-vercel-headers.mjs --check",
+    "test:db": "node --experimental-strip-types scripts/test-db.mjs",
     "format": "prettier --write .",
     "prepare": "husky",
     "verify": "npm run lint && npm run typecheck && npm test && npm run validate:content && npm run build && npm run check:bundle && npm run check:trackers && npm run check:headers"

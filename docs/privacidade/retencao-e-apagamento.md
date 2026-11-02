@@ -10,12 +10,12 @@ Os dados da criança existem **para o adulto acompanhar e para o jogo funcionar*
 
 Quem pede: responsável, no painel, atrás do PIN e com confirmação explícita ("isso não pode ser desfeito").
 
-| Passo | Onde             | O que acontece                                                                                                                                                  |
-| ----- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | aparelho         | `deleteByChild(childId)` nos 4 repositórios locais: `FactStateRepo`, `AttemptRepo`, `SessionRepo`, `WalletRepo` (existem desde a Fase C) e no perfil local      |
-| 2     | nuvem (Sprint 4) | RPC `delete_child_data(child_id)`: apaga em cascata `fact_state`, `attempt`, `session`, `reward_wallet`, `class_membership` e `child_profile` (Fase D, Bloco 4) |
-| 3     | outros aparelhos | na próxima sincronização o aparelho recebe a ordem e apaga o que tiver local; **conflito**: apagar vence sempre                                                 |
-| 4     | confirmação      | a tela mostra quantas linhas foram apagadas por tabela (a RPC devolve a contagem); nada de dado da criança no recibo                                            |
+| Passo | Onde             | O que acontece                                                                                                                                                                                                                              |
+| ----- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | aparelho         | `deleteByChild(childId)` nos 4 repositórios locais: `FactStateRepo`, `AttemptRepo`, `SessionRepo`, `WalletRepo` (existem desde a Fase C) e no perfil local                                                                                  |
+| 2     | nuvem (Sprint 4) | RPC `delete_child_data(child_id)`: apaga em cascata `fact_state`, `attempt`, `session`, `reward_wallet`, `class_membership` e `child_profile` (`supabase/migrations/0004_delete_child.sql`, testada em `supabase/tests/60_delete.test.sql`) |
+| 3     | outros aparelhos | na próxima sincronização o aparelho recebe a ordem e apaga o que tiver local; **conflito**: apagar vence sempre                                                                                                                             |
+| 4     | confirmação      | a tela mostra quantas linhas foram apagadas por tabela (a RPC devolve a contagem); nada de dado da criança no recibo                                                                                                                        |
 
 O que **não** se recupera: tudo acima. Não há lixeira, backup de dados da criança sob demanda nem exportação depois do apagamento. Antes de apagar, o painel oferece o relatório em PDF (L298) para o adulto guardar, **por escolha dele**.
 

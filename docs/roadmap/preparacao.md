@@ -55,7 +55,7 @@ Pré-requisito: decisões D1–D20 ✅ fechadas. **Pode começar.** Primeiro ite
 | --- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 15  | Mapa de dados, retenção, direito de apagar, termo v1, política                      | `docs/privacidade/` (consentimento: 100% revisão humana; revisão jurídica recomendada). **Bloco 1 ✅** mapa de dados e retenção; Bloco 5: termo e política |
 | 16  | `check-no-trackers` ampliado, CSP restritiva, sem links externos na área da criança | `scripts/`, `index.html` **✅ Bloco 2** (check-no-trackers ampliado, CSP, `vercel.json`)                                                                   |
-| 17  | Modelo RLS e migrações Supabase testadas localmente; limite de tentativas do PIN    | `supabase/` **Bloco 3 ✅** limite do PIN no domínio                                                                                                        |
+| 17  | Modelo RLS e migrações Supabase testadas localmente; limite de tentativas do PIN    | `supabase/` **Blocos 3 e 4 ✅** limite do PIN no domínio; modelo, RLS, PIN e apagar no Postgres (`npm run test:db`)                                        |
 
 Adicionar Supabase ou Recharts exige sua aprovação (dependência nova).
 

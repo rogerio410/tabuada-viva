@@ -80,7 +80,9 @@ Para o adulto responsável pela conta: apenas o e-mail do login e o papel.
 | Professor             | só crianças com vínculo autorizado e vigente               | nada nos dados da criança      |
 | Operador do serviço   | metadados técnicos mínimos do provedor (ver política)      | —                              |
 
-A prova disso é automática: testes de RLS (Fase D, Bloco 4).
+A prova disso é automática: `npm run test:db` (`supabase/tests/`).
+
+Tabelas técnicas sem dado da criança: `app_config` (versão do termo, limites do PIN), `pin_guard` (falhas e bloqueio do PIN do adulto) e `class_group.invite_code` (código de convite da turma).
 
 ## Transferência e armazenamento
 

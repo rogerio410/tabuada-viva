@@ -1,0 +1,80 @@
+-- PIN: hash no servidor, limite de tentativas e bloqueio crescente (D22).
+do $$
+declare r jsonb; i int;
+begin
+  perform tests.seed();
+
+  perform tests.as_user('g1');
+  perform tests.fails('select public.set_adult_pin(''12a4'')', 'PIN com letra é recusado', '22023');
+  perform tests.fails('select public.set_adult_pin(''123'')', 'PIN curto é recusado', '22023');
+  perform public.set_adult_pin('4321');
+
+  perform tests.as_admin();
+  perform tests.ok((select pin_hash from public.adult where id = tests.u('g1')) <> '4321'
+                   and (select pin_hash from public.adult where id = tests.u('g1')) like '$2%', 'PIN guardado como bcrypt, nunca em texto');
+
+  perform tests.as_user('g1');
+  r := public.verify_adult_pin('4321');
+  perform tests.ok((r->>'ok')::bool and not (r->>'locked')::bool, 'PIN certo passa');
+
+  -- 4 falhas: ainda sem bloqueio, tentativas caindo
+  for i in 1..4 loop
+    r := public.verify_adult_pin('0000');
+  end loop;
+  perform tests.ok(not (r->>'ok')::bool and not (r->>'locked')::bool and (r->>'attempts_left')::int = 1, '4 falhas: sem bloqueio, resta 1 tentativa');
+
+  -- certo no meio zera
+  r := public.verify_adult_pin('4321');
+  perform tests.ok((r->>'ok')::bool, 'sucesso zera as falhas');
+  r := public.verify_adult_pin('0000');
+  perform tests.ok((r->>'attempts_left')::int = 4, 'depois do sucesso volta a ter 5 tentativas');
+
+  -- 5ª falha bloqueia 15 min
+  for i in 1..4 loop r := public.verify_adult_pin('0000'); end loop;
+  perform tests.ok((r->>'locked')::bool and (r->>'retry_after_seconds')::int = 900, '5ª falha: bloqueio de 15 min');
+
+  -- bloqueado: nem o PIN certo entra
+  r := public.verify_adult_pin('4321');
+  perform tests.ok(not (r->>'ok')::bool and (r->>'locked')::bool, 'bloqueado: PIN certo também é recusado');
+
+  -- passou o prazo: destrava
+  perform tests.as_admin();
+  update public.pin_guard set locked_until = now() - interval '1 second' where adult_id = tests.u('g1');
+  perform tests.as_user('g1');
+  -- 2º ciclo de falhas: bloqueio dobra (30 min)
+  for i in 1..5 loop r := public.verify_adult_pin('0000'); end loop;
+  perform tests.ok((r->>'locked')::bool and (r->>'retry_after_seconds')::int = 1800, '2º ciclo: bloqueio de 30 min');
+
+  -- teto de 24 h
+  perform tests.as_admin();
+  update public.pin_guard set locked_until = now() - interval '1 second', lock_level = 20 where adult_id = tests.u('g1');
+  perform tests.as_user('g1');
+  for i in 1..5 loop r := public.verify_adult_pin('0000'); end loop;
+  perform tests.ok((r->>'retry_after_seconds')::int = 86400, 'bloqueio nunca passa de 24 h');
+
+  -- sucesso depois do bloqueio zera o nível
+  perform tests.as_admin();
+  update public.pin_guard set locked_until = now() - interval '1 second' where adult_id = tests.u('g1');
+  perform tests.as_user('g1');
+  r := public.verify_adult_pin('4321');
+  perform tests.as_admin();
+  perform tests.ok((select lock_level from public.pin_guard where adult_id = tests.u('g1')) = 0, 'sucesso zera o nível de bloqueio');
+
+  -- quem nunca definiu PIN recebe o mesmo formato de resposta e também é limitado
+  perform tests.as_user('g2');
+  r := public.verify_adult_pin('1234');
+  perform tests.ok(not (r->>'ok')::bool and r ? 'attempts_left' and r ? 'locked' and r ? 'retry_after_seconds', 'sem PIN: mesma resposta, sem revelar que não há PIN');
+  for i in 1..4 loop r := public.verify_adult_pin('1234'); end loop;
+  perform tests.ok((r->>'locked')::bool, 'sem PIN: também bloqueia na 5ª falha');
+
+  -- um adulto não afeta o contador do outro
+  perform tests.as_user('g1');
+  r := public.verify_adult_pin('4321');
+  perform tests.ok((r->>'ok')::bool, 'o bloqueio de g2 não afeta g1');
+
+  -- trocar o PIN zera o bloqueio
+  perform tests.as_user('g2');
+  perform public.set_adult_pin('1111');
+  r := public.verify_adult_pin('1111');
+  perform tests.ok((r->>'ok')::bool, 'definir PIN novo libera');
+end $$;
