@@ -267,6 +267,30 @@ describe('história e fechamento', () => {
   })
 })
 
+describe('dica de estratégia (D3, D24)', () => {
+  it('marca strategyHint nos itens cujo fato está em slowCounting', () => {
+    const states = [
+      st('add:1+1', 'dominado', addDays(NOW, 3)),
+      st('add:2+2', 'praticando'),
+      st('add:3+3', 'praticando'),
+    ]
+    const plan = buildSession(
+      input({ states, phaseFacts: ['add:4+4'], slowCounting: new Set(['add:2+2', 'add:4+4']) }),
+      seededRng(1),
+      NOW,
+    )
+    const hinted = plan.items.filter((i) => i.strategyHint).map((i) => i.factId)
+    expect(new Set(hinted)).toEqual(new Set(['add:2+2', 'add:4+4']))
+    expect(plan.items.filter((i) => i.factId === 'add:3+3').every((i) => !i.strategyHint)).toBe(
+      true,
+    )
+  })
+  it('sem o conjunto, nenhum item tem dica', () => {
+    const plan = buildSession(input({ states: [st('add:2+2', 'praticando')] }), seededRng(1), NOW)
+    expect(plan.items.some((i) => i.strategyHint)).toBe(false)
+  })
+})
+
 describe('reinsertAfterError (errorReturnAfterItems: 2 a 3 itens)', () => {
   const q: SessionItem[] = Array.from({ length: 10 }, (_, i) => ({
     kind: 'review',

@@ -11,6 +11,8 @@ export interface SessionItem {
   factId: string | null
   /** Em `new`: todos os fatos que a apresentação cobre (um triângulo, ou todos os de uma regra). */
   unit?: string[]
+  /** A UI mostra a dica de estratégia nesta apresentação (D3: contou de um em um). */
+  strategyHint?: boolean
 }
 
 export interface SessionPlan {
@@ -30,6 +32,8 @@ export interface SessionInput {
   maxNew?: number
   /** Quantas histórias (1 ou 2). */
   storyItems?: number
+  /** Fatos com "contou de um em um" (`needsStrategyHint`): seus itens saem marcados com `strategyHint`. */
+  slowCounting?: ReadonlySet<string>
 }
 
 const RANK: Record<FactStatus, number> = {
@@ -169,6 +173,12 @@ export function buildSession(input: SessionInput, rng: Rng, now: Date): SessionP
         a.factId.localeCompare(b.factId),
     )[0]
   if (easy) items.push({ kind: 'closing', factId: easy.factId })
+
+  const slow = input.slowCounting
+  if (slow && slow.size > 0)
+    for (const item of items)
+      if (item.factId !== null && (slow.has(item.factId) || item.unit?.some((f) => slow.has(f))))
+        item.strategyHint = true
 
   return { items, sessionMinutes: { ...PARAMS.sessionMinutes } }
 }

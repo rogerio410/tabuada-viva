@@ -38,7 +38,14 @@ describe('PARAMS (invariantes)', () => {
     expect(PARAMS.pinLength).toBe(4)
   })
 
+  it('valores decididos por delegação (D24, D25)', () => {
+    expect(PARAMS.slowCountingFactor).toBe(2)
+    expect(PARAMS.slowCountingStreak).toBe(2)
+    expect(PARAMS.phaseSessions).toEqual({ min: 2, max: 3 })
+  })
+
   it('faixas têm min <= max', () => {
+    expect(PARAMS.phaseSessions.min).toBeLessThanOrEqual(PARAMS.phaseSessions.max)
     expect(PARAMS.guidedPracticeItems.min).toBeLessThanOrEqual(PARAMS.guidedPracticeItems.max)
     expect(PARAMS.errorReturnAfterItems.min).toBeLessThanOrEqual(PARAMS.errorReturnAfterItems.max)
   })

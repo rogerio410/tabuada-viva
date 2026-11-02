@@ -18,7 +18,12 @@ describe('sessionAccuracy (D4)', () => {
 })
 
 describe('adaptNextSession (D4)', () => {
-  const normal = { maxNew: PARAMS.maxNewFactsPerSession, restoreSupport: false, accelerate: false }
+  const normal = {
+    maxNew: PARAMS.maxNewFactsPerSession,
+    restoreSupport: false,
+    accelerate: false,
+    sessionsBeforeAdvance: PARAMS.phaseSessions.max,
+  }
 
   it('sem histórico: nada muda', () => {
     expect(adaptNextSession([])).toEqual(normal)
@@ -37,8 +42,15 @@ describe('adaptNextSession (D4)', () => {
   it('exatamente 70% não reduz', () => {
     expect(adaptNextSession(acc(0.7)).restoreSupport).toBe(false)
   })
-  it('acima de 90% por 3 sessões seguidas acelera', () => {
-    expect(adaptNextSession(acc(0.95, 0.92, 0.91)).accelerate).toBe(true)
+  it('acima de 90% por 3 sessões seguidas acelera: a fase avança no mínimo de sessões (D25)', () => {
+    const r = adaptNextSession(acc(0.95, 0.92, 0.91))
+    expect(r.accelerate).toBe(true)
+    expect(r.sessionsBeforeAdvance).toBe(PARAMS.phaseSessions.min)
+    expect(r.maxNew).toBe(PARAMS.maxNewFactsPerSession) // acelerar nunca passa do teto de novos
+  })
+  it('sem acelerar, a fase leva o máximo de sessões', () => {
+    expect(adaptNextSession(acc(0.85)).sessionsBeforeAdvance).toBe(PARAMS.phaseSessions.max)
+    expect(adaptNextSession(acc(0.5)).sessionsBeforeAdvance).toBe(PARAMS.phaseSessions.max)
   })
   it('acima de 90% por menos de 3 sessões não acelera', () => {
     expect(adaptNextSession(acc(0.95, 0.95)).accelerate).toBe(false)

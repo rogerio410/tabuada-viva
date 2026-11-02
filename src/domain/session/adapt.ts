@@ -11,8 +11,13 @@ export interface Adaptation {
   maxNew: number
   /** O apoio visual volta (aparece de novo sozinho). */
   restoreSupport: boolean
-  /** Sinal de que a criança pode avançar mais depressa; o efeito é decidido no Sprint 3. */
+  /** Sinal de que a criança pode avançar mais depressa. */
   accelerate: boolean
+  /**
+   * Sessões que a fase atual leva antes de liberar a próxima (D12: 2 a 3). Acelerar usa o mínimo (D25); o resto, o
+   * máximo. O efeito de acelerar NÃO mexe no teto de novos por sessão.
+   */
+  sessionsBeforeAdvance: number
 }
 
 /** Acerto da sessão (D4): respostas corretas SEM apoio ÷ todas as respostas; acerto com ajuda só no denominador. */
@@ -31,19 +36,28 @@ export function sessionAccuracy(
 export function adaptNextSession(history: readonly SessionSummary[]): Adaptation {
   const played = history.flatMap((h) => (h.accuracy === null ? [] : [h.accuracy]))
   const last = played.at(-1)
-  const normal = { maxNew: PARAMS.maxNewFactsPerSession, restoreSupport: false, accelerate: false }
+  const normal = {
+    maxNew: PARAMS.maxNewFactsPerSession,
+    restoreSupport: false,
+    accelerate: false,
+    sessionsBeforeAdvance: PARAMS.phaseSessions.max,
+  }
   if (last === undefined) return normal
 
   if (last < PARAMS.easeBelowAccuracy)
     return {
+      ...normal,
       maxNew: Math.max(1, PARAMS.maxNewFactsPerSession - 1),
       restoreSupport: true,
-      accelerate: false,
     }
 
   const window = played.slice(-PARAMS.accelerateAfterSessions)
   const accelerate =
     window.length === PARAMS.accelerateAfterSessions &&
     window.every((a) => a > PARAMS.accelerateAboveAccuracy)
-  return { ...normal, accelerate }
+  return {
+    ...normal,
+    accelerate,
+    sessionsBeforeAdvance: accelerate ? PARAMS.phaseSessions.min : normal.sessionsBeforeAdvance,
+  }
 }

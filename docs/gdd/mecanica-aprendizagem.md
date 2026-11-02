@@ -71,25 +71,27 @@ Uma fase leva cerca de 2 a 3 sessões: apresentação e prática guiada (6 a 8 i
 
 ## Tabela valor → fonte → parâmetro
 
-| Valor               | Fonte    | `params.ts`                         |
-| ------------------- | -------- | ----------------------------------- |
-| Intervalos 0/2/5/14 | L184–187 | `reviewIntervalDays` ✅             |
-| 4 s                 | L186     | `fastAnswerMs` ✅                   |
-| 3 acertos           | L185     | `streakToPracticing` ✅             |
-| ≤ 2 novos           | L197     | `maxNewFactsPerSession` ✅          |
-| 80–85%              | L32      | `targetAccuracy` ✅                 |
-| < 70% reduz         | L201     | `easeBelowAccuracy` ✅              |
-| > 90% acelera       | L201     | `accelerateAboveAccuracy` ✅        |
-| 3 sessões           | L201     | `accelerateAfterSessions` ✅        |
-| 10–12 min           | L193     | `sessionMinutes` ✅                 |
-| volta em 2–3 itens  | L189     | `errorReturnAfterItems` ✅          |
-| Aquecimento 3       | L195     | `warmupFacts` ✅                    |
-| Prática guiada 6–8  | L168     | `guidedPracticeItems` ✅            |
-| 70/30               | L201     | `knownToNewRatio` ✅                |
-| Fluente: 2 dias     | L186     | `fluentDistinctDays` ✅ (D1)        |
-| +1 s/dígito         | —        | `fastAnswerExtraMsPerDigit` ✅ (D2) |
-| Estrelas            | L173     | `starThresholds` ✅ (D5)            |
-| Portão              | L96–103  | `gate` ✅ (G1–G6)                   |
+| Valor               | Fonte    | `params.ts`                                         |
+| ------------------- | -------- | --------------------------------------------------- |
+| Intervalos 0/2/5/14 | L184–187 | `reviewIntervalDays` ✅                             |
+| 4 s                 | L186     | `fastAnswerMs` ✅                                   |
+| 3 acertos           | L185     | `streakToPracticing` ✅                             |
+| ≤ 2 novos           | L197     | `maxNewFactsPerSession` ✅                          |
+| 80–85%              | L32      | `targetAccuracy` ✅                                 |
+| < 70% reduz         | L201     | `easeBelowAccuracy` ✅                              |
+| > 90% acelera       | L201     | `accelerateAboveAccuracy` ✅                        |
+| 3 sessões           | L201     | `accelerateAfterSessions` ✅                        |
+| 10–12 min           | L193     | `sessionMinutes` ✅                                 |
+| volta em 2–3 itens  | L189     | `errorReturnAfterItems` ✅                          |
+| Aquecimento 3       | L195     | `warmupFacts` ✅                                    |
+| Prática guiada 6–8  | L168     | `guidedPracticeItems` ✅                            |
+| 70/30               | L201     | `knownToNewRatio` ✅                                |
+| Fluente: 2 dias     | L186     | `fluentDistinctDays` ✅ (D1)                        |
+| +1 s/dígito         | —        | `fastAnswerExtraMsPerDigit` ✅ (D2)                 |
+| Estrelas            | L173     | `starThresholds` ✅ (D5)                            |
+| Portão              | L96–103  | `gate` ✅ (G1–G6)                                   |
+| Contou de um em um  | D3       | `slowCountingFactor`, `slowCountingStreak` ✅ (D24) |
+| Sessões por fase    | D12      | `phaseSessions` ✅ (D25)                            |
 
 ✅ existe em `params.ts` (novos criados na Fase C, Bloco 1) · mudar valor exige aprovação (CLAUDE.md).
 

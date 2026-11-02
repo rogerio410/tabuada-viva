@@ -22,6 +22,12 @@ export const PARAMS = {
   sessionMinutes: { min: 10, max: 12 },
   /** Itens entre um erro e o retorno do fato na mesma sessão. */
   errorReturnAfterItems: { min: 2, max: 3 },
+  /** "Contou de um em um" (D3): acerto sem apoio mais lento que este múltiplo do limiar rápido... */
+  slowCountingFactor: 2,
+  /** ...repetido este número de vezes seguidas no mesmo fato dispara a dica de estratégia (D24). */
+  slowCountingStreak: 2,
+  /** Sessões de uma fase (D12); com o sinal de acelerar a fase avança no mínimo (D25). */
+  phaseSessions: { min: 2, max: 3 },
 
   /** Fatos já dominados no aquecimento da sessão (L195). */
   warmupFacts: 3,

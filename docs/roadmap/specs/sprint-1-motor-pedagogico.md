@@ -1,6 +1,6 @@
 # Spec Sprint 1 — Motor pedagógico
 
-Status: **implementada** (2026-11-02) conforme o padrão provisório do fim do arquivo; o responsável dispensou a revisão da spec. Itens não implementados: 4.4 (D3) e a detecção de `swapped_subtraction`.
+Status: **implementada** (2026-11-02) conforme o padrão provisório do fim do arquivo; o responsável dispensou a revisão da spec. Pendências do padrão provisório foram decididas pela IA a pedido do responsável (D24, D25, D26).
 Branch: `sprint-1/motor-pedagogico`
 
 ## 1. Objetivo
@@ -180,9 +180,9 @@ Todos já em `src/domain/config/params.ts` (Bloco 1): `reviewIntervalDays`, `fas
 Para que o Sprint 1 possa começar sem decidir nada que seja só do humano (CLAUDE.md):
 
 1. **Fluente:** vale a leitura desta spec (já alinhada com a D1).
-2. **Acelerar:** o motor só emite o sinal `accelerate`; nenhum efeito é implementado.
-3. **D3 (2 × o limiar):** **não implementar 4.4 ainda.** O resto do sprint segue; a regra espera a aprovação de `slowCountingFactor` em `params.ts`.
-4. **`swapped_subtraction`:** fica no enum (já em `ports/types.ts`) e **sem detecção** até o Sprint 3.
+2. **Acelerar:** decidido e implementado (D25): a fase avança no mínimo de sessões (`sessionsBeforeAdvance`); o teto de novos não muda.
+3. **D3 (2 × o limiar):** decidido e implementado (D24): `slowCountingFactor: 2`, `slowCountingStreak: 2`.
+4. **`swapped_subtraction`:** decidido (D26): reservado no enum e sem detecção na v1.
 5. **×0 e ×1:** vale `rootChain` do Bloco 3 (`add:0+0`, `add:0+n`), marcado como suposição.
 
 Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
@@ -197,3 +197,9 @@ Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
 - **Portão:** G4 usa `errorType === 'wrong_operation'` para a escolha da operação; G5 sem respostas elegíveis não passa (sem evidência); cada prova é o conjunto de respostas de uma sessão `kind: 'proof'`.
 - **`estimatedMinDaysToOpen`:** **limite inferior** pelas regras do motor (D1), mais otimista que as "4 a 5 semanas" de `portao.md`, que contam também o retorno de 14 dias. O painel deve mostrar o prazo mais prudente.
 - **`Attempt`** ganhou `phaseId` e `kind` (seção 9), refletidos no contrato dos repositórios; o SQL já os tinha.
+
+## Decisões do responsável delegadas à IA (2026-11-02)
+
+- **D24:** `isSlowCountingAttempt` e `needsStrategyHint` (`scheduler/slow-counting.ts`); `buildSession` aceita `slowCounting` e marca `strategyHint`.
+- **D25:** `adaptNextSession` devolve `sessionsBeforeAdvance`; `phaseSessions` em `params.ts`.
+- **D26:** `swapped_subtraction` reservado, sem detecção.
