@@ -27,7 +27,7 @@ O jogo é desenhado para um celular intermediário, em pé, nas mãos de uma cri
 
 - Fonte **arredondada e self-hosted**: **Nunito** (licença OFL) `[FONTE L309; escolha PROPOSTA]`. Sem Google Fonts nem CDN (CLAUDE.md; `check-no-trackers` veta `fonts.googleapis` e `fonts.gstatic`).
 - Arquivos `woff2` em `public/fonts/`, **sem nova dependência** (decisão do responsável). Pesos 400, 700 e 800; subsets `latin` e `latin-ext`; `font-display: swap`; licença OFL guardada junto dos arquivos.
-- ⚠ **Pendência de implementação:** `src/index.css` já pede `'Nunito'`, mas os arquivos ainda não estão no repositório; hoje cai no `ui-rounded` ou `system-ui`. Resolver antes do Sprint 1.
+- ✅ Nunito (400, 700, 800; `latin` e `latin-ext`) está em `public/fonts/` com a licença `OFL.txt`; `@font-face` em `src/index.css`.
 - Tamanhos: histórias **≥ 20 px** `[FONTE L309]`; números da conta **≥ 40 px** `[PROPOSTA]`; texto de botão ≥ 20 px; altura de linha ≥ 1,4.
 - Frases curtas e alto contraste `[FONTE L309]`; contraste mínimo em `acessibilidade.md`.
 
@@ -66,7 +66,7 @@ Estados vazio, carregando e offline mostram texto simples e uma ilustração; me
 - Instalável, abre em **< 3 s em 4G** e funciona offline; progresso sincroniza quando a conexão volta `[FONTE L316]`.
 - JavaScript < **300 KB gzip** `[FONTE L317; CI: check:bundle]`. Imagens SVG e WebP.
 - Alinhar `theme_color` e `background_color` do manifesto à paleta (`art-bible.md`). Hoje: `#2e9e5b` e `#fff7e6` em `vite.config.ts`.
-- ⚠ O ícone do PWA ainda é o `favicon.svg` padrão do template; trocar por ícone do Calú antes de instalar em aparelhos reais.
+- ✅ Ícone provisório do Calú (SVG/PNG em `public/icons/`); a arte final substitui os arquivos sem mudar o manifesto.
 
 ## Nunca na área da criança
 
