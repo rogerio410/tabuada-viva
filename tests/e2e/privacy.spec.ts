@@ -2,9 +2,12 @@ import { expect, test } from '@playwright/test'
 
 test.describe('privacidade e CSP (360x740)', () => {
   test('nenhuma requisição sai do domínio e a CSP não é violada', async ({ page, baseURL }) => {
+    const origin = new URL(baseURL!).origin
     const external: string[] = []
-    page.on('request', (r) => {
-      if (!r.url().startsWith(baseURL!) && !r.url().startsWith('data:')) external.push(r.url())
+    // context.on('request') também pega o service worker
+    page.context().on('request', (r) => {
+      if (r.url().startsWith('data:')) return
+      if (new URL(r.url()).origin !== origin) external.push(r.url())
     })
     const consoleErrors: string[] = []
     page.on('console', (m) => {
@@ -21,6 +24,7 @@ test.describe('privacidade e CSP (360x740)', () => {
     await page.goto('/')
     await expect(page.getByRole('heading', { name: 'Tabuada Viva' })).toBeVisible()
     await page.evaluate(() => document.fonts.ready)
+    await page.waitForLoadState('networkidle')
     expect(external).toEqual([])
     expect(await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp)).toEqual([])
     expect(consoleErrors.filter((t) => /content security policy/i.test(t))).toEqual([])

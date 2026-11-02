@@ -32,6 +32,10 @@ begin
     tests.affected($q$update public.reward_wallet set cajus = 999 where child_id = tests.u('c2')$q$) = 0,
     'g1 não altera a carteira de g2');
 
+  perform tests.fails(
+    format('insert into public.attempt (child_id, session_id, item_id, answer, correct, time_ms, created_at) values (%L, %L, ''i'', 1, true, 1, now())',
+      tests.u('c1'), tests.u('s-c2')),
+    'attempt não pode apontar para a sessão de outra criança', '42501');
   perform tests.fails('delete from public.child_profile where id = tests.u(''c1'')', 'sem delete direto de criança', '42501');
   perform tests.fails('update public.attempt set correct = false', 'attempt é append-only (sem update)', '42501');
   perform tests.fails('delete from public.attempt', 'attempt é append-only (sem delete)', '42501');

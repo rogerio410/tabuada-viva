@@ -32,6 +32,22 @@ export const BANNED = [
   /unpkg\.com/i,
   /cdnjs\.cloudflare/i,
   /navigator\.sendBeacon/,
+  /_vercel\/(insights|speed-insights)/i,
+  /va\.vercel-scripts/i,
+  /vercel\.live/i,
+  /plausible\.io/i,
+  /matomo/i,
+  /umami\.is/i,
+  /cloudflareinsights/i,
+  /logrocket/i,
+  /bugsnag/i,
+  /rollbar/i,
+  /newrelic/i,
+  /onesignal/i,
+  /facebook\.com\/tr/i,
+  /use\.typekit/i,
+  /bootstrapcdn/i,
+  /firebase(io|app)\.com/i,
 ]
 
 /**
@@ -43,11 +59,12 @@ export const ALLOWED_URL_PREFIXES = [
   'http://www.w3.org/',
   'https://www.w3.org/',
   'https://react.dev/errors/',
-  'https://tailwindcss.com',
+  'https://tailwindcss.com/',
   'https://bit.ly/wb-',
 ]
 
-const URL_RE = /https?:\/\/[^\s"'`)<>\\]+/g
+// http(s), ws(s) e protocolo-relativo (//host.tld) contam como URL externa
+const URL_RE = /(?:(?:https?|wss?):)?\/\/[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+[^\s"'`)<>\\]*/g
 
 /** Verifica um arquivo do build (js, css, html, webmanifest). */
 export function scanBuiltFile(file, text) {
@@ -55,16 +72,17 @@ export function scanBuiltFile(file, text) {
   for (const re of BANNED)
     if (re.test(text)) out.push({ file, rule: 'tracker', detail: String(re) })
   for (const url of text.match(URL_RE) ?? [])
-    if (!ALLOWED_URL_PREFIXES.some((p) => url.startsWith(p)))
+    if (!ALLOWED_URL_PREFIXES.some((p) => url.startsWith(p) || url === p.replace(/\/$/, '')))
       out.push({ file, rule: 'url-externa', detail: url })
   return out
 }
 
 const CHILD_UI_RULES = [
-  ['link-externo', /href\s*=\s*[{"'`\s]*https?:/i],
+  ['link-externo', /href\s*=\s*[{"'`\s]*(https?:|\/\/)/i],
+  ['contato-externo', /href\s*=\s*[{"'`\s]*(mailto|tel|sms):/i],
   ['nova-aba', /target\s*=\s*[{"'`\s]*_blank/i],
   ['window.open', /window\.open\s*\(/],
-  ['navegacao-externa', /location\.(href|assign|replace)\s*[=(]/],
+  ['navegacao-externa', /\blocation\s*(\.(href|assign|replace)\s*[=(]|=[^=])/],
   ['iframe', /<iframe/i],
   ['texto-livre', /<textarea|contenteditable/i],
   ['rede-na-ui', /\b(fetch|XMLHttpRequest|WebSocket|EventSource)\b\s*[(]?/],
@@ -78,7 +96,12 @@ export function scanChildUiSource(file, text) {
   // <input> só para tipos que não recebem texto livre
   for (const m of text.matchAll(/<input\b[^>]*>/gi)) {
     const type = /type\s*=\s*["'{]*\s*["']?(\w+)/i.exec(m[0])?.[1]?.toLowerCase()
-    if (!type || ['text', 'search', 'email', 'tel', 'url', 'password', 'number'].includes(type))
+    const dynamic = /type\s*=\s*\{(?!\s*["'])/.test(m[0]) // type={variavel}: não dá para provar o tipo
+    if (
+      !type ||
+      dynamic ||
+      ['text', 'search', 'email', 'tel', 'url', 'password', 'number'].includes(type)
+    )
       out.push({ file, rule: 'texto-livre', detail: m[0] })
   }
   return out

@@ -48,7 +48,7 @@ create table public.class_group (
   teacher_id uuid not null references public.adult (id) on delete cascade,
   name text not null check (char_length(name) between 1 and 40),
   school text check (char_length(school) <= 80),
-  invite_code text not null unique default substr(md5(gen_random_uuid()::text), 1, 10),
+  invite_code text not null unique default substr(md5(gen_random_uuid()::text), 1, 16),
   created_at timestamptz not null default now()
 );
 

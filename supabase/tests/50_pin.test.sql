@@ -1,13 +1,14 @@
 -- PIN: hash no servidor, limite de tentativas e bloqueio crescente (D22).
 do $$
-declare r jsonb; i int;
+declare r jsonb; i int; s jsonb;
 begin
   perform tests.seed();
 
   perform tests.as_user('g1');
-  perform tests.fails('select public.set_adult_pin(''12a4'')', 'PIN com letra é recusado', '22023');
-  perform tests.fails('select public.set_adult_pin(''123'')', 'PIN curto é recusado', '22023');
-  perform public.set_adult_pin('4321');
+  perform tests.fails('select public.set_adult_pin(''12a4'', null)', 'PIN com letra é recusado', '22023');
+  perform tests.fails('select public.set_adult_pin(''123'', null)', 'PIN curto é recusado', '22023');
+  s := public.set_adult_pin('4321'); -- primeiro PIN: não pede PIN atual
+  perform tests.ok((s->>'ok')::bool, 'primeiro PIN é definido sem PIN atual');
 
   perform tests.as_admin();
   perform tests.ok((select pin_hash from public.adult where id = tests.u('g1')) <> '4321'
@@ -72,9 +73,34 @@ begin
   r := public.verify_adult_pin('4321');
   perform tests.ok((r->>'ok')::bool, 'o bloqueio de g2 não afeta g1');
 
-  -- trocar o PIN zera o bloqueio
+  -- trocar o PIN: exige o PIN atual e passa pelo mesmo limite
+  perform tests.as_user('g1');
+  s := public.set_adult_pin('9999');
+  perform tests.ok(not (s->>'ok')::bool, 'trocar o PIN sem o PIN atual é recusado');
+  s := public.set_adult_pin('9999', '0000');
+  perform tests.ok(not (s->>'ok')::bool, 'trocar o PIN com o PIN atual errado é recusado');
+  r := public.verify_adult_pin('4321');
+  perform tests.ok((r->>'ok')::bool, 'o PIN antigo continua valendo depois das tentativas de troca recusadas');
+  -- tentar trocar às cegas consome o limite e bloqueia (anula o ataque de quem está com a sessão aberta)
+  for i in 1..5 loop s := public.set_adult_pin('9999', '0000'); end loop;
+  perform tests.ok((s->>'locked')::bool, 'tentativas de troca com PIN errado bloqueiam na 5ª');
+  s := public.set_adult_pin('9999', '4321');
+  perform tests.ok(not (s->>'ok')::bool and (s->>'locked')::bool, 'durante o bloqueio nem o PIN atual certo troca o PIN');
+  r := public.verify_adult_pin('9999');
+  perform tests.ok(not (r->>'ok')::bool, 'o PIN novo não foi gravado durante o bloqueio');
+  perform tests.as_admin();
+  update public.pin_guard set locked_until = now() - interval '1 second' where adult_id = tests.u('g1');
+  perform tests.as_user('g1');
+  s := public.set_adult_pin('9999', '4321');
+  perform tests.ok((s->>'ok')::bool, 'PIN atual certo, fora do bloqueio: troca permitida');
+  r := public.verify_adult_pin('9999');
+  perform tests.ok((r->>'ok')::bool, 'o PIN novo passa a valer');
+  perform tests.as_admin();
+  perform tests.ok((select lock_level from public.pin_guard where adult_id = tests.u('g1')) = 0, 'a troca bem-sucedida zera o nível pelo sucesso, não por reset do guard');
+
+  -- quem ainda não tem PIN e está bloqueado: definir PIN não destrava
   perform tests.as_user('g2');
-  perform public.set_adult_pin('1111');
+  s := public.set_adult_pin('1111');
   r := public.verify_adult_pin('1111');
-  perform tests.ok((r->>'ok')::bool, 'definir PIN novo libera');
+  perform tests.ok((r->>'locked')::bool, 'definir PIN não zera o bloqueio de quem já estava bloqueado');
 end $$;

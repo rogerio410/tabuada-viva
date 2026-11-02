@@ -67,7 +67,7 @@ O professor **só** vê a criança depois do vínculo autorizado pelo responsáv
 
 ## O que **não** é coletado
 
-Nome completo da criança · foto ou voz · localização · e-mail, telefone ou endereço da criança · nome da escola da criança · texto livre de qualquer tipo · identificadores de publicidade · cookies de terceiros · endereço IP guardado · mapa de toques, gravação de tela ou qualquer telemetria de comportamento fora das respostas do jogo.
+Nome completo da criança · foto ou voz · localização · e-mail, telefone ou endereço da criança · nome da escola da criança · texto livre de qualquer tipo · identificadores de publicidade · cookies de terceiros · endereço IP guardado **nas nossas tabelas** (o provedor de login e de hospedagem podem registrar IP e aparelho do **adulto** nos próprios logs: conferir e minimizar na configuração do projeto, **não verificado**) · mapa de toques, gravação de tela ou qualquer telemetria de comportamento fora das respostas do jogo.
 
 Para o adulto responsável pela conta: apenas o e-mail do login e o papel.
 

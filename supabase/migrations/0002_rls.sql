@@ -137,6 +137,7 @@ create policy membership_guardian_select on public.class_membership for select t
 create policy membership_teacher_select on public.class_membership for select to authenticated
   using (
     revoked_at is null
+    and public.teacher_can_view(child_id)
     and exists (select 1 from public.class_group g where g.id = class_id and g.teacher_id = auth.uid())
   );
 create policy membership_guardian_revoke on public.class_membership for update to authenticated
@@ -191,4 +192,9 @@ create policy attempt_guardian_select on public.attempt for select to authentica
 create policy attempt_teacher_select on public.attempt for select to authenticated
   using (public.teacher_can_view(child_id));
 create policy attempt_guardian_insert on public.attempt for insert to authenticated
-  with check (public.is_guardian_of(child_id) and public.has_current_consent(child_id));
+  with check (
+    public.is_guardian_of(child_id)
+    and public.has_current_consent(child_id)
+    -- a sessão tem de ser da mesma criança (a FK sozinha não garante)
+    and exists (select 1 from public.session s where s.id = session_id and s.child_id = attempt.child_id)
+  );

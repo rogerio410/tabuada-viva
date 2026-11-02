@@ -37,6 +37,28 @@ describe('scanBuiltFile', () => {
     expect(scanBuiltFile('dist/a.js', 'https://ad.doubleclick.net/x').length).toBeGreaterThan(0)
   })
 
+  it('pega domínio disfarçado, protocolo-relativo e WebSocket', () => {
+    expect(rules(scanBuiltFile('dist/a.js', 'https://tailwindcss.com.evil.example/x'))).toContain(
+      'url-externa',
+    )
+    expect(rules(scanBuiltFile('dist/a.js', 'src="//cdn.exemplo.com/a.js"'))).toContain(
+      'url-externa',
+    )
+    expect(rules(scanBuiltFile('dist/a.js', 'new WebSocket("wss://x.exemplo.com")'))).toContain(
+      'url-externa',
+    )
+  })
+
+  it('pega analytics da hospedagem e de terceiros comuns', () => {
+    for (const bad of [
+      '/_vercel/insights/script.js',
+      'plausible.io/js',
+      'cdn.logrocket.io',
+      'static.cloudflareinsights.com',
+    ])
+      expect(scanBuiltFile('dist/a.js', bad).length, bad).toBeGreaterThan(0)
+  })
+
   it('passa em um HTML limpo', () => {
     expect(
       scanBuiltFile('index.html', '<script type="module" src="/assets/index.js"></script>'),
@@ -54,6 +76,25 @@ describe('scanChildUiSource', () => {
     expect(rules(scanChildUiSource('a.tsx', 'window.open("/x")'))).toContain('window.open')
     expect(rules(scanChildUiSource('a.tsx', 'location.href = "/x"'))).toContain('navegacao-externa')
     expect(rules(scanChildUiSource('a.tsx', 'await fetch("/x")'))).toContain('rede-na-ui')
+  })
+
+  it('reprova mailto, tel, link protocolo-relativo, window.location e input de tipo dinâmico', () => {
+    expect(rules(scanChildUiSource('a.tsx', '<a href="mailto:a@b.c">x</a>'))).toContain(
+      'contato-externo',
+    )
+    expect(rules(scanChildUiSource('a.tsx', '<a href="tel:123">x</a>'))).toContain(
+      'contato-externo',
+    )
+    expect(rules(scanChildUiSource('a.tsx', '<a href="//exemplo.com">x</a>'))).toContain(
+      'link-externo',
+    )
+    expect(rules(scanChildUiSource('a.tsx', 'window.location = "/x"'))).toContain(
+      'navegacao-externa',
+    )
+    expect(rules(scanChildUiSource('a.tsx', 'document.location = "/x"'))).toContain(
+      'navegacao-externa',
+    )
+    expect(rules(scanChildUiSource('a.tsx', '<input type={tipo} />'))).toContain('texto-livre')
   })
 
   it('reprova texto livre: textarea e <input> de texto ou sem tipo', () => {

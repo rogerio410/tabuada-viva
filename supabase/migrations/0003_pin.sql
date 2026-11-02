@@ -4,23 +4,38 @@
 
 alter default privileges in schema public revoke all on functions from public, anon, authenticated;
 
-create function public.set_adult_pin(p_pin text) returns void
+-- Definir o PIN pela primeira vez (ainda não há PIN) não pede nada; TROCAR exige o PIN atual, passando pelo mesmo
+-- limite de tentativas de verify_adult_pin. Quem está com a sessão aberta (ex.: a criança no aparelho do adulto)
+-- não consegue trocar o PIN nem zerar o bloqueio. Devolve o mesmo formato de verify_adult_pin.
+create function public.set_adult_pin(p_new text, p_current text default null) returns jsonb
 language plpgsql security definer set search_path = '' as $$
+declare
+  v_uid uuid := auth.uid();
+  v_hash text;
+  v_check jsonb;
 begin
-  if auth.uid() is null then
+  if v_uid is null then
     raise exception 'forbidden' using errcode = '42501';
   end if;
-  if p_pin is null or p_pin !~ '^[0-9]{4}$' then
+  if p_new is null or p_new !~ '^[0-9]{4}$' then
     raise exception 'invalid_pin_format' using errcode = '22023';
   end if;
-  update public.adult
-     set pin_hash = extensions.crypt(p_pin, extensions.gen_salt('bf', 8))
-   where id = auth.uid();
+  select pin_hash into v_hash from public.adult where id = v_uid;
   if not found then
     raise exception 'adult_not_found' using errcode = 'P0002';
   end if;
-  -- trocar o PIN (com o adulto logado) zera o bloqueio
-  delete from public.pin_guard where adult_id = auth.uid();
+
+  if v_hash is not null then
+    v_check := public.verify_adult_pin(p_current);
+    if not (v_check->>'ok')::boolean then
+      return v_check; -- PIN atual errado ou adulto bloqueado: nada muda, a falha já foi contada
+    end if;
+  end if;
+
+  update public.adult
+     set pin_hash = extensions.crypt(p_new, extensions.gen_salt('bf', 8))
+   where id = v_uid;
+  return jsonb_build_object('ok', true, 'locked', false, 'retry_after_seconds', 0);
 end $$;
 
 -- Devolve sempre o mesmo formato, exista ou não um PIN, para não revelar se há PIN cadastrado.
@@ -74,5 +89,5 @@ begin
     'ok', false, 'locked', false, 'retry_after_seconds', 0, 'attempts_left', v_max - (v_guard.failures + 1));
 end $$;
 
-revoke all on function public.set_adult_pin(text), public.verify_adult_pin(text) from public, anon;
-grant execute on function public.set_adult_pin(text), public.verify_adult_pin(text) to authenticated;
+revoke all on function public.set_adult_pin(text, text), public.verify_adult_pin(text) from public, anon;
+grant execute on function public.set_adult_pin(text, text), public.verify_adult_pin(text) to authenticated;

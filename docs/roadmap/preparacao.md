@@ -49,13 +49,15 @@ Pré-requisito: decisões D1–D20 ✅ fechadas. **Pode começar.** Primeiro ite
 
 **Fechamento da Fase C (2026-11-02):** `validate:content` falha com conta errada e passa nos 5 exemplos ✅ · skills e revisores testados em sessão nova ✅ · prompt frio feito: o agente escreveu o teste vermelho antes de qualquer código; 4 lacunas da spec (entrada de `applyAnswer`, `nextReview`, formato de `fastDays`, "acerto do dia") foram corrigidas ✅ · **specs 1 e 2 sem revisão do responsável** (ele dispensou); cada uma termina com um "padrão provisório" que só usa o já aprovado. **Pendências humanas que continuam:** conferir BNCC no MEC (item 14), amostragem humana das 5 histórias, aprovar `slowCountingFactor` (D3), teto do `timeMs` e `fake-indexeddb` se quiser; ícone e arte são provisórios.
 
-## Fase D — Privacidade e segurança infantil · ⏳
+## Fase D — Privacidade e segurança infantil · ✅ (fechada em 2026-11-02, com pendências humanas)
 
-| #   | Item                                                                                | Entregável                                                                                                                                                 |
-| --- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 15  | Mapa de dados, retenção, direito de apagar, termo v1, política                      | `docs/privacidade/` (consentimento: 100% revisão humana; revisão jurídica recomendada). **Bloco 1 ✅** mapa de dados e retenção; Bloco 5: termo e política |
-| 16  | `check-no-trackers` ampliado, CSP restritiva, sem links externos na área da criança | `scripts/`, `index.html` **✅ Bloco 2** (check-no-trackers ampliado, CSP, `vercel.json`)                                                                   |
-| 17  | Modelo RLS e migrações Supabase testadas localmente; limite de tentativas do PIN    | `supabase/` **Blocos 3 e 4 ✅** limite do PIN no domínio; modelo, RLS, PIN e apagar no Postgres (`npm run test:db`)                                        |
+| #   | Item                                                                                | Entregável                                                                                                                                                                                              |
+| --- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 15  | Mapa de dados, retenção, direito de apagar, termo v1, política                      | `docs/privacidade/` (consentimento: 100% revisão humana; revisão jurídica recomendada). **Blocos 1 e 5 ✅ (mapa, retenção, termo e política em **rascunho**: aguardam sua reescrita e revisão jurídica) |
+| 16  | `check-no-trackers` ampliado, CSP restritiva, sem links externos na área da criança | `scripts/`, `index.html` **✅ Bloco 2** (check-no-trackers ampliado, CSP, `vercel.json`)                                                                                                                |
+| 17  | Modelo RLS e migrações Supabase testadas localmente; limite de tentativas do PIN    | `supabase/` **Blocos 3 e 4 ✅** limite do PIN no domínio; modelo, RLS, PIN e apagar no Postgres (`npm run test:db`)                                                                                     |
+
+**Fechamento da Fase D (2026-11-02):** `check:trackers` ampliado, CSP e cabeçalhos (`vercel.json` gerado) com e2e de privacidade ✅ · limite do PIN no domínio e no banco ✅ · modelo Supabase com RLS e `npm run test:db` (testes verificados por mutação) ✅ · ADRs 0001–0004 ✅. **Pendências humanas:** aprovar D21, D22 e D23; reescrever e aprovar o termo e a política (hoje rascunhos, nada vai ao app); preencher controlador, contato, provedor e região; revisão jurídica; conferir os cabeçalhos no deploy da Vercel; conferir o modelo contra um projeto Supabase real (Sprint 4).
 
 Adicionar Supabase ou Recharts exige sua aprovação (dependência nova).
 

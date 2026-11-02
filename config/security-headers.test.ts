@@ -9,6 +9,8 @@ describe('security-headers', () => {
     expect(CSP).toContain("frame-ancestors 'none'")
     for (const bad of ['unsafe-eval', 'http:', 'https:', '*']) expect(CSP, bad).not.toContain(bad)
     expect(CSP.match(/script-src[^;]*/)![0]).not.toContain('unsafe-inline')
+    expect(CSP.match(/style-src[^;]*/)![0]).not.toContain('unsafe-inline')
+    expect(CSP).toContain("frame-src 'none'")
   })
 
   it('a <meta> não tem frame-ancestors (o navegador ignora) e o resto é igual', () => {

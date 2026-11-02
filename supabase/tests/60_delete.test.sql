@@ -36,9 +36,18 @@ begin
 
   perform tests.fails(format('select public.delete_child_data(%L)', tests.u('c1')), 'apagar de novo falha (criança não existe mais)', '42501');
 
-  -- apagar a conta do adulto leva tudo (cascata a partir de auth.users)
+  -- apagar a conta do adulto leva tudo (delete_my_account -> cascata a partir de auth.users)
+  perform tests.as_user('t1');
+  perform tests.fails('delete from auth.users', 'ninguém apaga auth.users direto', '42501');
+  perform tests.as_anon();
+  perform tests.fails('select public.delete_my_account()', 'anon não apaga conta', '42501');
+  perform tests.as_user('g2');
+  perform public.delete_my_account();
   perform tests.as_admin();
-  delete from auth.users where id = tests.u('g2');
-  perform tests.eq('select 1 from public.child_profile', 0, 'apagar o adulto apaga as crianças dele');
+  perform tests.eq('select 1 from auth.users where id = tests.u(''g2'')', 0, 'o login do adulto foi apagado');
+  perform tests.eq('select 1 from public.adult where id = tests.u(''g2'')', 0, 'o adulto foi apagado');
+  perform tests.eq('select 1 from public.child_profile where guardian_id = tests.u(''g2'')', 0, 'apagar o adulto apaga as crianças dele');
+  perform tests.eq('select 1 from public.attempt where child_id = tests.u(''c2'')', 0, 'apagar o adulto apaga as respostas das crianças dele');
   perform tests.eq('select 1 from public.consent where guardian_id = tests.u(''g2'')', 0, 'apagar o adulto apaga as provas de consentimento dele');
+  perform tests.eq('select 1 from public.adult', 3, 'os outros adultos continuam');
 end $$;

@@ -2,16 +2,21 @@
 // e por scripts/gen-vercel-headers.mjs (vercel.json). O jogo não fala com nenhum domínio externo:
 // a URL do Supabase entra em `connect-src` no Sprint 4.
 
-/** Diretivas da CSP. `style-src 'unsafe-inline'`: Framer Motion aplica estilos inline (D23). */
+/**
+ * Diretivas da CSP (D23). `style-src 'self'`, sem 'unsafe-inline': o React e o Framer Motion aplicam estilos
+ * pelo CSSOM (`element.style`), que a CSP não bloqueia. Se algum componente precisar de <style> ou do atributo
+ * style="" em HTML, prefira `style-src-attr 'unsafe-inline'` a reabrir `style-src`.
+ */
 export const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
   'script-src': ["'self'"],
-  'style-src': ["'self'", "'unsafe-inline'"],
+  'style-src': ["'self'"],
   'img-src': ["'self'", 'data:'],
   'font-src': ["'self'"],
   'connect-src': ["'self'"],
   'manifest-src': ["'self'"],
   'worker-src': ["'self'"],
+  'frame-src': ["'none'"],
   'media-src': ["'self'"],
   'object-src': ["'none'"],
   'base-uri': ["'self'"],
@@ -40,6 +45,10 @@ const PERMISSIONS = [
   'serial',
   'bluetooth',
   'browsing-topics',
+  'display-capture',
+  'accelerometer',
+  'gyroscope',
+  'magnetometer',
 ]
   .map((f) => `${f}=()`)
   .join(', ')

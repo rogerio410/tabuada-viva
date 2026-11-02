@@ -25,3 +25,18 @@ end $$;
 
 revoke all on function public.delete_child_data(uuid) from public, anon;
 grant execute on function public.delete_child_data(uuid) to authenticated;
+
+-- Apagar a conta do adulto: remove o login (auth.users) e, em cascata, o adulto, o PIN, as turmas, as crianças e
+-- tudo delas, e as provas de consentimento dele. Conferir no Sprint 4 que o papel dono da função pode apagar
+-- em auth.users no projeto real.
+create function public.delete_my_account() returns void
+language plpgsql security definer set search_path = '' as $$
+begin
+  if auth.uid() is null then
+    raise exception 'forbidden' using errcode = '42501';
+  end if;
+  delete from auth.users where id = auth.uid();
+end $$;
+
+revoke all on function public.delete_my_account() from public, anon;
+grant execute on function public.delete_my_account() to authenticated;
