@@ -4,9 +4,9 @@ module.exports = {
     {
       name: 'domain-puro',
       comment:
-        'src/domain é TS puro: não importa nada de fora dele (nem react, dexie, supabase, zod).',
+        'src/domain é TS puro (exceto *.test.ts e *.contract.ts, que usam vitest): não importa nada de fora dele (nem react, dexie, supabase, zod).',
       severity: 'error',
-      from: { path: '^src/domain', pathNot: '\\.test\\.ts$' },
+      from: { path: '^src/domain', pathNot: '\\.(test|contract)\\.ts$' },
       to: { pathNot: '^src/domain', dependencyTypesNot: ['type-only'] },
     },
     {
