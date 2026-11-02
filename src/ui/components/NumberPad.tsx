@@ -7,7 +7,7 @@ interface NumberPadProps {
 }
 
 const KEY =
-  'min-h-[56px] min-w-[56px] rounded-2xl bg-white text-[28px] font-extrabold text-ink shadow-[0_2px_0_rgba(43,33,24,0.25)] border-2 border-ink/20 active:translate-y-px select-none touch-manipulation disabled:opacity-40'
+  'min-h-[56px] min-w-[56px] rounded-2xl bg-white text-[28px] font-extrabold text-ink shadow-[0_2px_0_rgba(43,33,24,0.25)] border-2 border-ink/60 active:translate-y-px select-none touch-manipulation disabled:opacity-40'
 
 /** Teclado próprio 3×4 (1–9, apagar, 0, confirmar). Sem tecla de limpar tudo e sem repetir ao segurar. */
 export function NumberPad({

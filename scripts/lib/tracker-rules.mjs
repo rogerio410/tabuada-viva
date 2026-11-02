@@ -56,14 +56,15 @@ export const BANNED = [
  * duas mensagens de erro do Dexie (links de ajuda, só texto; entradas exatas, não o domínio).
  * A URL do Supabase entra aqui no Sprint 4 (junto com `connect-src` da CSP).
  */
+/** URLs inteiras permitidas (igualdade exata, sem sufixo): mensagens de erro do Dexie. */
+export const ALLOWED_EXACT_URLS = ['https://tinyurl.com/y2uuvskb', 'http://bit.ly/2kdckMn']
+
 export const ALLOWED_URL_PREFIXES = [
   'http://www.w3.org/',
   'https://www.w3.org/',
   'https://react.dev/errors/',
   'https://tailwindcss.com/',
   'https://bit.ly/wb-',
-  'https://tinyurl.com/y2uuvskb',
-  'http://bit.ly/2kdckMn',
 ]
 
 // http(s), ws(s) e protocolo-relativo (//host.tld) contam como URL externa
@@ -75,7 +76,10 @@ export function scanBuiltFile(file, text) {
   for (const re of BANNED)
     if (re.test(text)) out.push({ file, rule: 'tracker', detail: String(re) })
   for (const url of text.match(URL_RE) ?? [])
-    if (!ALLOWED_URL_PREFIXES.some((p) => url.startsWith(p) || url === p.replace(/\/$/, '')))
+    if (
+      !ALLOWED_EXACT_URLS.includes(url) &&
+      !ALLOWED_URL_PREFIXES.some((p) => url.startsWith(p) || url === p.replace(/\/$/, ''))
+    )
       out.push({ file, rule: 'url-externa', detail: url })
   return out
 }

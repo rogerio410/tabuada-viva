@@ -110,3 +110,16 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Foco visível (D17): anel azul com 3:1 sobre creme e sobre o verde dos botões. */
+button:focus-visible {
+  outline: 4px solid #1f6496;
+  outline-offset: 3px;
+}
+
+/* Áreas seguras (notch e barra de gestos). */
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  box-sizing: border-box;
+}

@@ -162,7 +162,7 @@ test.describe('sessão de adição (360x740)', () => {
     await page.getByRole('button', { name: 'Descansar' }).tap()
     // no máximo um item de fechamento
     if (await page.getByTestId('equation').isVisible()) await answerRight(page)
-    await expect(page.getByText(/Você conseguiu!/)).toBeVisible()
+    await expect(page.getByText(/Você conseguiu\./)).toBeVisible()
     await expect(page.locator('main')).not.toContainText(/nota|pontos|\d{1,2}:\d{2}|%/i)
   })
 

@@ -54,14 +54,14 @@ export function NumberLine({ start, onUse }: { start: number; onUse: () => void 
         </button>
         <button
           type="button"
-          className="min-h-[56px] flex-1 rounded-2xl border-2 border-ink/30 bg-white px-4 text-xl font-extrabold text-ink select-none touch-manipulation"
+          className="min-h-[56px] flex-1 rounded-2xl border-2 border-ink/70 bg-white px-4 text-xl font-extrabold text-ink select-none touch-manipulation"
           onClick={() => setHops(0)}
         >
           Recomeçar
         </button>
       </div>
-      <p className="m-0 text-center text-base font-bold" aria-live="polite">
-        {hops} pulos · parou no {at}
+      <p className="m-0 text-center text-xl font-bold" aria-live="polite">
+        {hops} {hops === 1 ? 'pulo' : 'pulos'}, parou no {at}
       </p>
     </div>
   )

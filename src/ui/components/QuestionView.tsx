@@ -68,7 +68,7 @@ export function QuestionView({ question, onAnswer }: Props) {
         </span>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
         <button
           type="button"
           className="min-h-[56px] self-center rounded-2xl border-2 border-poti-deep bg-white px-6 text-xl font-extrabold text-poti-deep select-none touch-manipulation"
@@ -90,7 +90,7 @@ export function QuestionView({ question, onAnswer }: Props) {
                   type="button"
                   role="tab"
                   aria-selected={tool === t.tool}
-                  className={`min-h-[56px] rounded-2xl border-2 text-lg font-extrabold select-none touch-manipulation ${tool === t.tool ? 'border-poti-deep bg-poti-deep text-white' : 'border-ink/30 bg-white text-ink'}`}
+                  className={`min-h-[56px] rounded-2xl border-2 text-lg font-extrabold select-none touch-manipulation ${tool === t.tool ? 'border-poti-deep bg-poti-deep text-white' : 'border-ink/70 bg-white text-ink'}`}
                   onClick={() => pickTool(t.tool)}
                 >
                   {t.label}

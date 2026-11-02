@@ -23,17 +23,17 @@ export function Fingers({ onUse }: { onUse: () => void }) {
                 type="button"
                 aria-pressed={open[i]}
                 aria-label={`Dedo ${i + 1}`}
-                className={`${FINGER} ${open[i] ? 'border-caju bg-caju text-ink' : 'border-ink/30 bg-white text-ink/40'}`}
+                className={`${FINGER} ${open[i] ? 'border-caju bg-caju text-ink' : 'border-ink/70 bg-white text-ink/70'}`}
                 onClick={() => toggle(i)}
               >
-                {open[i] ? '☝' : '·'}
+                {open[i] ? '●' : '○'}
               </button>
             )
           })}
         </div>
       ))}
-      <p className="m-0 text-center text-base font-bold" aria-live="polite">
-        {total} dedos abertos
+      <p className="m-0 text-center text-xl font-bold" aria-live="polite">
+        {total} {total === 1 ? 'dedo aberto' : 'dedos abertos'}
       </p>
     </div>
   )

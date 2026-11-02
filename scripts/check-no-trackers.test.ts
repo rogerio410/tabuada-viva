@@ -37,6 +37,10 @@ describe('scanBuiltFile', () => {
   it('a exceção do Dexie vale só para as URLs exatas, não para o domínio', () => {
     expect(rules(scanBuiltFile('dist/a.js', 'https://tinyurl.com/outra'))).toContain('url-externa')
     expect(rules(scanBuiltFile('dist/a.js', 'http://bit.ly/outra'))).toContain('url-externa')
+    expect(rules(scanBuiltFile('dist/a.js', 'http://bit.ly/2kdckMnXYZ'))).toContain('url-externa')
+    expect(rules(scanBuiltFile('dist/a.js', 'https://tinyurl.com/y2uuvskbXYZ'))).toContain(
+      'url-externa',
+    )
   })
 
   it('não confunde onDoubleClick do React com o domínio de anúncios', () => {

@@ -87,7 +87,6 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
     return (
       <main className="flex h-full flex-col items-center justify-center gap-4 p-4 text-center">
         <Calu />
-        <p className="m-0">Um momentinho…</p>
       </main>
     )
   }
@@ -107,7 +106,7 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
           </button>
           <button
             type="button"
-            className={`${BTN} border-2 border-ink/30 bg-white text-ink`}
+            className={`${BTN} border-2 border-ink/70 bg-white text-ink`}
             onClick={() => void advance(ctl.current!.keepGoing())}
           >
             Continuar
@@ -121,7 +120,7 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
     return (
       <main className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center">
         <Calu size={120} />
-        <p className="m-0 text-2xl font-extrabold">Você conseguiu! Amanhã tem mais!</p>
+        <p className="m-0 text-2xl font-extrabold">Você conseguiu. Amanhã tem mais!</p>
         <button type="button" className={`${BTN} w-full bg-green-deep text-white`} onClick={onExit}>
           Voltar ao início
         </button>

@@ -17,13 +17,19 @@ export function TenFrame({ onUse }: { onUse: () => void }) {
             type="button"
             aria-pressed={on}
             aria-label={`Casa ${i + 1}`}
-            className={`h-14 w-14 rounded-2xl border-2 select-none touch-manipulation ${on ? 'border-poti-deep bg-poti-deep' : 'border-ink/30 bg-white'}`}
+            className={`h-14 w-14 rounded-2xl border-2 select-none touch-manipulation ${on ? 'border-poti-deep bg-poti-deep' : 'border-ink/70 bg-white'}`}
             onClick={() => toggle(i)}
-          />
+          >
+            {on && (
+              <span className="text-2xl text-white" aria-hidden="true">
+                ●
+              </span>
+            )}
+          </button>
         ))}
       </div>
-      <p className="m-0 text-center text-base font-bold" aria-live="polite">
-        {count} fichas
+      <p className="m-0 text-center text-xl font-bold" aria-live="polite">
+        {count} {count === 1 ? 'ficha' : 'fichas'}
       </p>
     </div>
   )

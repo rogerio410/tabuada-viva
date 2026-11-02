@@ -155,3 +155,14 @@ Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
 3. **Dexie:** **`fake-indexeddb` aprovada como devDependency**; `repo.contract.ts` roda no Vitest.
 4. **Arte e som:** placeholders SVG e Web Audio.
 5. **Fases:** W1-P01 a W1-P07 em ordem fixa; W1-P08 (Grande Desafio) fica fora.
+
+## Implementação e pendências humanas (2026-11-02)
+
+Implementado na branch `sprint-2/loop-de-jogo`: `verify` e `e2e` verdes, bundle 104,5 KB gzip. Interpretações e desvios para você confirmar:
+
+1. **Apoio automático é oferta.** Em Aprendendo as Mãozinhas já vêm abertas, mas só entram em `supportsUsed` se a criança tocar nelas ou abrir/trocar a ferramenta pelo botão. Se contasse só por abrir, Aprendendo nunca passaria a Praticando (3 acertos sem apoio).
+2. **Reta numérica:** o ponto de partida é o maior número da conta e há um botão "Pular +1" (em vez de tocar na reta), porque 21 alvos de 56 px não cabem em 360 px.
+3. **Sessão curta no início:** o motor limita 2 fatos novos por sessão; ao esgotar a fila a tela monta um novo plano com os estados atuais até o convite de descanso (10 min).
+4. **Allowlist do `check:trackers`:** duas URLs exatas de mensagens de erro do Dexie (`tinyurl.com/y2uuvskb`, `bit.ly/2kdckMn`), só texto, nunca requisitadas. Peço sua aprovação por mexer na barreira de privacidade.
+5. **Textos para amostragem humana:** "Isso mesmo!", "Você conseguiu. Amanhã tem mais!", "Bora!", "Descansar", "Continuar", "Voltar ao início", "Ajuda", "N dedos abertos", "N fichas", "N pulos, parou no N", e a dica de erro (bolinhas + soma, revisão 100% humana).
+6. **Decisões em aberto (revisores):** avanço automático de 900 ms após acerto (ritmo vs. pressa); botão "Sair"/pausa na pergunta; modo mudo; abas com semântica completa (`tabpanel`); gerenciar foco entre telas; testes de foco/reduzir movimento e de alvos nas telas de feedback, descanso e fim.
