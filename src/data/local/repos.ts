@@ -26,7 +26,10 @@ const toAttempt = ({ id: _id, ...attempt }: AttemptRow): Attempt => attempt
 const byTime = (a: Attempt, b: Attempt) => a.createdAt.getTime() - b.createdAt.getTime()
 
 export class DexieFactStateRepo implements FactStateRepo {
-  constructor(private db: TabuadaDb) {}
+  private db: TabuadaDb
+  constructor(db: TabuadaDb) {
+    this.db = db
+  }
 
   get(childId: ChildId, factId: FactId) {
     return this.db.factStates.get([childId, factId])
@@ -48,7 +51,10 @@ export class DexieFactStateRepo implements FactStateRepo {
 }
 
 export class DexieAttemptRepo implements AttemptRepo {
-  constructor(private db: TabuadaDb) {}
+  private db: TabuadaDb
+  constructor(db: TabuadaDb) {
+    this.db = db
+  }
 
   async add(attempt: Attempt) {
     await this.db.attempts.add({ ...attempt })
@@ -79,7 +85,10 @@ export class DexieAttemptRepo implements AttemptRepo {
 }
 
 export class DexieSessionRepo implements SessionRepo {
-  constructor(private db: TabuadaDb) {}
+  private db: TabuadaDb
+  constructor(db: TabuadaDb) {
+    this.db = db
+  }
 
   async save(session: Session) {
     await this.db.sessions.put(session)
@@ -97,7 +106,10 @@ export class DexieSessionRepo implements SessionRepo {
 }
 
 export class DexieWalletRepo implements WalletRepo {
-  constructor(private db: TabuadaDb) {}
+  private db: TabuadaDb
+  constructor(db: TabuadaDb) {
+    this.db = db
+  }
 
   async get(childId: ChildId) {
     return (
