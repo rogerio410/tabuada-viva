@@ -1,6 +1,6 @@
 # Spec Sprint 1 — Motor pedagógico
 
-Status: rascunho (aguardando aprovação do responsável)
+Status: rascunho. O responsável dispensou a revisão em 2026-11-02; vale o **padrão provisório** do fim do arquivo, que só usa o que já está aprovado.
 Branch: `sprint-1/motor-pedagogico`
 
 ## 1. Objetivo
@@ -46,7 +46,17 @@ Cada critério vira pelo menos um teste. Tempo e sorteio sempre por `Clock` e `R
 
 ### 4.3 Transições de estado (cada célula da tabela de `mecanica-aprendizagem.md`)
 
-Função pura `applyAnswer(state, answer, now) → { state, returnToQueue }`:
+Função pura `applyAnswer(state: FactState, answer: AnswerOutcome, now: Date) → { state: FactState; returnToQueue: boolean }`, em `src/domain/scheduler/apply-answer.ts`.
+
+- `AnswerOutcome = { correct: boolean; fast: boolean; supported: boolean }`, **já resolvido por quem chama**: `supported` vem de `supportsUsed.length > 0` (4.7b) e `fast` da função `isFast(...)` da 4.2. `applyAnswer` não mede tempo.
+- **`FactState` novo** é criado por `presentFact(childId, factId, now)` em estado Aprendendo, com `nextReview = now`, `streak = 0`, `fastDays = []`.
+- **`nextReview`:** depois de **toda** resposta, `nextReview = now + reviewIntervalDays[estado resultante]` em dias de calendário, inclusive quando o estado não muda (erro em Aprendendo continua com intervalo 0, ou seja, `nextReview = now`). Única exceção: Dominado com acerto lento sem apoio usa `reviewIntervalDays.fluente` (5 dias), sem parâmetro novo.
+- **"Revisão vencida"** significa `nextReview ≤ now` **antes** da resposta.
+- **`fastDays`:** dias locais `YYYY-MM-DD` derivados de `now` (fuso do aparelho); sem duplicatas no mesmo dia.
+- **"Acerto do dia" (Fluente, fora da revisão vencida):** não muda nada observável; o estado e o `nextReview` não se alteram.
+- `correct`, `streak`, `wrong` e `medianMs` são atualizados por quem persiste a `Attempt` (Sprint 2); `applyAnswer` só atualiza `status`, `nextReview`, `streak` e `fastDays`.
+
+Regras por estado:
 
 - **Aprendendo:** acerto sem apoio (rápido ou lento) soma 1 à sequência; ao chegar a 3 (`streakToPracticing`) vira **Praticando**. Acerto com apoio não avança a sequência. Erro zera a sequência, o estado fica e o fato volta à fila em 2–3 itens.
 - **Praticando:** acerto rápido sem apoio registra o dia de calendário em `fastDays`; ao ter **2 dias diferentes** (`fluentDistinctDays`) vira **Fluente**. Acerto lento ou com apoio: fica. Erro: desce para Aprendendo.
@@ -164,3 +174,15 @@ Todos já em `src/domain/config/params.ts` (Bloco 1): `reviewIntervalDays`, `fas
 3. **D3, "2 × o limiar":** vira parâmetro (`slowCountingFactor = 2`) ou fica fixo? Criar parâmetro é decisão sua.
 4. **`swapped_subtraction`:** o catálogo proíbe minuendo menor que subtraendo (`5 − 8`), então esse tipo só aparece se a UI aceitar a resposta "ao contrário" em problemas de história. Mantemos o tipo no enum e implementamos a detecção no Sprint 3, ou removemos?
 5. **Raiz de ×0 e ×1:** a spec usa `add:0+0` e `add:0+n` (suposição do Bloco 3). Confirme.
+
+## Padrão provisório (sem revisão do responsável, 2026-11-02)
+
+Para que o Sprint 1 possa começar sem decidir nada que seja só do humano (CLAUDE.md):
+
+1. **Fluente:** vale a leitura desta spec (já alinhada com a D1).
+2. **Acelerar:** o motor só emite o sinal `accelerate`; nenhum efeito é implementado.
+3. **D3 (2 × o limiar):** **não implementar 4.4 ainda.** O resto do sprint segue; a regra espera a aprovação de `slowCountingFactor` em `params.ts`.
+4. **`swapped_subtraction`:** fica no enum (já em `ports/types.ts`) e **sem detecção** até o Sprint 3.
+5. **×0 e ×1:** vale `rootChain` do Bloco 3 (`add:0+0`, `add:0+n`), marcado como suposição.
+
+Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.

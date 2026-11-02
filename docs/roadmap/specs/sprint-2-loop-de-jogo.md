@@ -1,6 +1,6 @@
 # Spec Sprint 2 — Loop de jogo e ferramentas
 
-Status: rascunho (aguardando aprovação do responsável)
+Status: rascunho. O responsável dispensou a revisão em 2026-11-02; vale o **padrão provisório** do fim do arquivo, que só usa o que já está aprovado.
 Branch: `sprint-2/loop-de-jogo`
 
 ## 1. Objetivo
@@ -137,3 +137,13 @@ Rodar os subagentes `revisor-ui-mobile` e `revisor-seguranca-infantil` antes do 
 3. **`fake-indexeddb`:** o contrato dos repositórios Dexie roda em Vitest com `fake-indexeddb`, uma **dependência nova de desenvolvimento**. Aprova, ou prefere testar o Dexie só no Playwright?
 4. **Arte e som do Calú:** usar as peças já listadas em `docs/art/asset-list.md` como placeholders SVG simples e os sons por Web Audio do `audio-brief.md`, ou esperar a arte final?
 5. **Sessão de teste:** como não há mapa de mundos, a sessão usa as fases 1–7 do Mundo 1 em ordem fixa e o motor escolhe os itens. Isso serve para o "primeiro teste" ou você prefere já escolher a fase atual manualmente (modo do adulto)?
+
+## Padrão provisório (sem revisão do responsável, 2026-11-02)
+
+1. **Perfil:** um perfil local fixo de desenvolvimento (apelido genérico, ano escolar 2º), **sem tela de criação** e sem coleta nova. A tela do adulto vem no Sprint 4.
+2. **Teto do `timeMs`:** não descartar nada. Registrar o valor bruto; o teto só entra depois de aprovado em `params.ts`.
+3. **Dexie:** **sem `fake-indexeddb`** (dependência nova). Os repositórios Dexie são testados no Playwright; o contrato `repo.contract.ts` roda no navegador ou fica como pendência registrada.
+4. **Arte e som:** placeholders SVG simples e sons por Web Audio.
+5. **Fase da sessão:** ordem fixa das fases 1 a 7 do Mundo 1.
+
+Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
