@@ -37,6 +37,37 @@ const attemptsInDb = (page: Page) =>
       ),
   )
 
+const expectTouchTargets = async (page: Page) => {
+  const boxes = await page.evaluate(() =>
+    [...document.querySelectorAll('button')]
+      .filter((b) => b.getBoundingClientRect().width > 0)
+      .map((b) => {
+        const r = b.getBoundingClientRect()
+        return {
+          name: b.textContent || b.ariaLabel || '',
+          x: r.x,
+          y: r.y,
+          w: r.width,
+          h: r.height,
+        }
+      }),
+  )
+  expect(boxes.length).toBeGreaterThan(0)
+  for (const b of boxes) {
+    expect(b.h, `altura de "${b.name}"`).toBeGreaterThanOrEqual(56)
+    expect(b.w, `largura de "${b.name}"`).toBeGreaterThanOrEqual(56)
+    expect(b.y + b.h, `"${b.name}" cabe na tela`).toBeLessThanOrEqual(740)
+  }
+  for (const [i, a] of boxes.entries())
+    for (const b of boxes.slice(i + 1)) {
+      const dx = Math.max(0, a.x - (b.x + b.w), b.x - (a.x + a.w))
+      const dy = Math.max(0, a.y - (b.y + b.h), b.y - (a.y + a.h))
+      expect(Math.hypot(dx, dy), `espaço entre "${a.name}" e "${b.name}"`).toBeGreaterThanOrEqual(
+        11.5,
+      )
+    }
+}
+
 const startGame = async (page: Page) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Jogar' }).tap()
@@ -68,11 +99,11 @@ test.describe('sessão de adição (360x740)', () => {
     await page.getByRole('button', { name: 'Dedo 1', exact: true }).tap()
     await answerRight(page)
 
-    await page.getByRole('tab', { name: 'Quadro' }).tap()
+    await page.getByRole('button', { name: 'Quadro', exact: true }).tap()
     await page.getByRole('button', { name: 'Casa 1', exact: true }).tap()
     await answerRight(page)
 
-    await page.getByRole('tab', { name: 'Reta' }).tap()
+    await page.getByRole('button', { name: 'Reta', exact: true }).tap()
     await page.getByRole('button', { name: 'Pular +1' }).tap()
     await answerRight(page)
 
@@ -99,34 +130,7 @@ test.describe('sessão de adição (360x740)', () => {
     await startGame(page)
     await expect(page.getByTestId('tool-dedos')).toBeVisible()
 
-    const boxes = await page.evaluate(() =>
-      [...document.querySelectorAll('button')]
-        .filter((b) => b.getBoundingClientRect().width > 0)
-        .map((b) => {
-          const r = b.getBoundingClientRect()
-          return {
-            name: b.textContent || b.ariaLabel || '',
-            x: r.x,
-            y: r.y,
-            w: r.width,
-            h: r.height,
-          }
-        }),
-    )
-    expect(boxes.length).toBeGreaterThan(12)
-    for (const b of boxes) {
-      expect(b.h, `altura de "${b.name}"`).toBeGreaterThanOrEqual(56)
-      expect(b.w, `largura de "${b.name}"`).toBeGreaterThanOrEqual(56)
-      expect(b.y + b.h, `"${b.name}" cabe na tela`).toBeLessThanOrEqual(740)
-    }
-    for (const [i, a] of boxes.entries())
-      for (const b of boxes.slice(i + 1)) {
-        const dx = Math.max(0, a.x - (b.x + b.w), b.x - (a.x + a.w))
-        const dy = Math.max(0, a.y - (b.y + b.h), b.y - (a.y + a.h))
-        expect(Math.hypot(dx, dy), `espaço entre "${a.name}" e "${b.name}"`).toBeGreaterThanOrEqual(
-          11.5,
-        )
-      }
+    await expectTouchTargets(page)
 
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -185,5 +189,70 @@ test.describe('sessão de adição (360x740)', () => {
     await expect(page.getByTestId('equation')).toBeVisible()
     await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2')
     expect((await attemptsInDb(page)).length).toBe(2)
+  })
+
+  test('as telas de início, dica, convite e fim também respeitam alvos e espaços', async ({
+    page,
+  }) => {
+    await page.clock.install()
+    await page.goto('/')
+    await expectTouchTargets(page)
+    await page.getByRole('button', { name: 'Jogar' }).tap()
+    await expect(page.getByTestId('equation')).toBeVisible()
+    for (const name of ['Quadro', 'Reta']) {
+      await page.getByRole('button', { name, exact: true }).tap()
+      await expectTouchTargets(page)
+    }
+    await answer(page, (await sum(page)) + 1)
+    await expect(page.getByTestId('hint')).toBeVisible()
+    await expectTouchTargets(page)
+    await page.getByRole('button', { name: 'Bora!' }).tap()
+    await expect(page.getByTestId('equation')).toBeVisible()
+    await page.clock.fastForward('11:00')
+    await answerRight(page)
+    await expect(page.getByText('Bora descansar? Amanhã tem mais!')).toBeVisible({ timeout: 5000 })
+    await expectTouchTargets(page)
+    await page.getByRole('button', { name: 'Descansar' }).tap()
+    if (await page.getByTestId('equation').isVisible()) await answerRight(page)
+    await expect(page.getByText(/Você conseguiu\./)).toBeVisible()
+    await expectTouchTargets(page)
+  })
+
+  test('Sair volta ao início sem perder o progresso', async ({ page }) => {
+    await startGame(page)
+    await answerRight(page)
+    await page.getByRole('button', { name: 'Sair' }).tap()
+    await expect(page.getByRole('heading', { name: 'Tabuada Viva' })).toBeVisible()
+    await page.getByRole('button', { name: 'Jogar' }).tap()
+    await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1')
+  })
+
+  test('o foco acompanha a troca de tela', async ({ page }) => {
+    await startGame(page)
+    await answer(page, (await sum(page)) + 1)
+    await expect(page.getByTestId('hint')).toBeVisible()
+    expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('MAIN')
+  })
+
+  test('o som pode ser desligado na tela inicial e a escolha fica no aparelho', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const toggle = page.getByRole('button', { name: /^Som/ })
+    await expect(toggle).toHaveText('Som ligado')
+    await toggle.tap()
+    await expect(toggle).toHaveText('Som desligado')
+    await page.reload()
+    await expect(page.getByRole('button', { name: /^Som/ })).toHaveText('Som desligado')
+  })
+
+  test('com "reduzir movimento" nenhuma transição passa de um instante', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await startGame(page)
+    const ms = await page.evaluate(() => {
+      const bar = document.querySelector('[role="progressbar"] > div')!
+      return parseFloat(getComputedStyle(bar).transitionDuration) * 1000
+    })
+    expect(ms).toBeLessThan(5)
   })
 })

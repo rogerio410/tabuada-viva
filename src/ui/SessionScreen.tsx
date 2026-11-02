@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { SupportKind } from '@domain/ports/types'
 import { playCorrect } from './audio'
 import { Calu } from './components/Calu'
@@ -39,6 +39,25 @@ function ProgressBar({ progress }: { progress: Progress }) {
         style={{ width: `${pct}%` }}
       />
     </div>
+  )
+}
+
+/** Cada troca de tela leva o foco ao contêiner (teclado e leitor de tela não ficam perdidos no <body>). */
+function Screen({
+  focusKey,
+  className,
+  children,
+}: {
+  focusKey: string
+  className: string
+  children: ReactNode
+}) {
+  const ref = useRef<HTMLElement>(null)
+  useEffect(() => ref.current?.focus(), [focusKey])
+  return (
+    <main ref={ref} tabIndex={-1} className={`${className} outline-none`}>
+      {children}
+    </main>
   )
 }
 
@@ -85,15 +104,21 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
 
   if (!view) {
     return (
-      <main className="flex h-full flex-col items-center justify-center gap-4 p-4 text-center">
+      <Screen
+        focusKey="loading"
+        className="flex h-full flex-col items-center justify-center gap-4 p-4 text-center"
+      >
         <Calu />
-      </main>
+      </Screen>
     )
   }
 
   if (view.type === 'rest-offer') {
     return (
-      <main className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center">
+      <Screen
+        focusKey="rest"
+        className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center"
+      >
         <Calu size={120} />
         <p className="m-0 text-2xl font-extrabold">Bora descansar? Amanhã tem mais!</p>
         <div className="flex w-full flex-col gap-3">
@@ -112,26 +137,43 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
             Continuar
           </button>
         </div>
-      </main>
+      </Screen>
     )
   }
 
   if (view.type === 'done') {
     return (
-      <main className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center">
+      <Screen
+        focusKey="done"
+        className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center"
+      >
         <Calu size={120} />
         <p className="m-0 text-2xl font-extrabold">Você conseguiu. Amanhã tem mais!</p>
         <button type="button" className={`${BTN} w-full bg-green-deep text-white`} onClick={onExit}>
           Voltar ao início
         </button>
-      </main>
+      </Screen>
     )
   }
 
   const q = view.question
   return (
-    <main className="mx-auto flex h-full max-w-[480px] flex-col gap-3 p-4">
-      <ProgressBar progress={progress} />
+    <Screen
+      focusKey={`${q.itemId}-${feedback ? 'fb' : 'q'}`}
+      className="mx-auto flex h-full max-w-[480px] flex-col gap-3 p-4"
+    >
+      <div className="flex items-center gap-3">
+        <div className="flex-1">
+          <ProgressBar progress={progress} />
+        </div>
+        <button
+          type="button"
+          className="min-h-[56px] min-w-[56px] rounded-2xl border-2 border-ink/70 bg-white px-4 text-lg font-extrabold text-ink select-none touch-manipulation"
+          onClick={onExit}
+        >
+          Sair
+        </button>
+      </div>
       {feedback ? (
         <div
           className="flex flex-1 flex-col items-center justify-center gap-6 text-center"
@@ -168,6 +210,6 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
           onAnswer={(g, at, s) => void onAnswer(g, at, s)}
         />
       )}
-    </main>
+    </Screen>
   )
 }

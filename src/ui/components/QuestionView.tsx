@@ -79,17 +79,12 @@ export function QuestionView({ question, onAnswer }: Props) {
         </button>
         {panelOpen && (
           <div className="flex flex-col gap-3" data-testid="tools">
-            <div
-              className="grid grid-cols-3 gap-3"
-              role="tablist"
-              aria-label="Ferramentas de ajuda"
-            >
+            <div className="grid grid-cols-3 gap-3" role="group" aria-label="Ferramentas de ajuda">
               {TABS.map((t) => (
                 <button
                   key={t.tool}
                   type="button"
-                  role="tab"
-                  aria-selected={tool === t.tool}
+                  aria-pressed={tool === t.tool}
                   className={`min-h-[56px] rounded-2xl border-2 text-lg font-extrabold select-none touch-manipulation ${tool === t.tool ? 'border-poti-deep bg-poti-deep text-white' : 'border-ink/70 bg-white text-ink'}`}
                   onClick={() => pickTool(t.tool)}
                 >

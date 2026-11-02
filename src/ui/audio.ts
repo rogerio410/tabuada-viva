@@ -3,8 +3,27 @@
  * O contexto nasce no primeiro toque, como os navegadores exigem; sem Web Audio, fica em silêncio.
  */
 let ctx: AudioContext | null = null
+const KEY = 'tv-som'
+
+/** Preferência de som deste aparelho (nada sai dele). Sem armazenamento disponível, o som fica ligado. */
+export function isSoundOn(): boolean {
+  try {
+    return localStorage.getItem(KEY) !== 'off'
+  } catch {
+    return true
+  }
+}
+
+export function setSoundOn(on: boolean): void {
+  try {
+    localStorage.setItem(KEY, on ? 'on' : 'off')
+  } catch {
+    // sem armazenamento: vale só até recarregar
+  }
+}
 
 export function playCorrect(): void {
+  if (!isSoundOn()) return
   try {
     ctx ??= new AudioContext()
     const t = ctx.currentTime
