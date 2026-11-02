@@ -8,20 +8,20 @@ Formas geométricas com os tokens da paleta, contorno `ink`, nome do ID visível
 
 ## Personagens
 
-| ID                     | Descrição       | Usado em        | Formato | KB  | Status          | Quando   |
-| ---------------------- | --------------- | --------------- | ------- | --- | --------------- | -------- |
-| `CHAR-CALU-HAPPY`      | Calú alegre     | todo o jogo     | SVG     | 6   | placeholder-svg | Sprint 1 |
-| `CHAR-CALU-THINK`      | pensando (dica) | dicas           | SVG     | 6   | placeholder-svg | Sprint 1 |
-| `CHAR-CALU-CHEER`      | comemorando     | fim de fase     | SVG     | 6   | placeholder-svg | Sprint 1 |
-| `CHAR-CALU-REST`       | descansando     | fim de sessão   | SVG     | 6   | placeholder-svg | Sprint 1 |
-| `CHAR-MARIA`           | Vó Maria        | W8              | SVG     | 6   | placeholder-svg | Sprint 7 |
-| `CHAR-RAIMUNDO`        | Seu Raimundo    | W4, W9          | SVG     | 5   | placeholder-svg | Sprint 5 |
-| `CHAR-LUCIA`           | Dona Lúcia      | W5, W9          | SVG     | 5   | placeholder-svg | Sprint 6 |
-| `AVATAR-BASE`          | corpo do avatar | perfil          | SVG     | 6   | placeholder-svg | Sprint 3 |
-| `AVATAR-SKIN-01…06`    | 6 tons de pele  | perfil          | token   | 0   | placeholder-svg | Sprint 3 |
-| `AVATAR-HAIR-01…08`    | 8 cabelos       | perfil          | SVG     | 8   | placeholder-svg | Sprint 3 |
-| `AVATAR-CLOTHES-01…06` | 6 roupas        | perfil, lojinha | SVG     | 12  | placeholder-svg | Sprint 3 |
-| `AVATAR-ACC-01…06`     | 6 acessórios    | lojinha         | SVG     | 8   | placeholder-svg | Sprint 7 |
+| ID                     | Descrição       | Usado em        | Formato | KB  | Status          | Quando     |
+| ---------------------- | --------------- | --------------- | ------- | --- | --------------- | ---------- |
+| `CHAR-CALU-HAPPY`      | Calú alegre     | todo o jogo     | SVG     | 6   | placeholder-svg | Sprint 1   |
+| `CHAR-CALU-THINK`      | pensando (dica) | dicas           | SVG     | 6   | placeholder-svg | Sprint 1   |
+| `CHAR-CALU-CHEER`      | comemorando     | fim de fase     | SVG     | 6   | placeholder-svg | Sprint 1   |
+| `CHAR-CALU-REST`       | descansando     | fim de sessão   | SVG     | 6   | placeholder-svg | Sprint 1   |
+| `CHAR-MARIA`           | Vó Maria        | W8              | SVG     | 6   | placeholder-svg | Sprint 7   |
+| `CHAR-RAIMUNDO`        | Seu Raimundo    | W4, W9          | SVG     | 5   | placeholder-svg | Sprint 5   |
+| `CHAR-LUCIA`           | Dona Lúcia      | W5, W9          | SVG     | 5   | placeholder-svg | Sprint 6   |
+| `AVATAR-BASE`          | corpo do avatar | perfil          | SVG     | 6   | placeholder-svg | Sprint 4/7 |
+| `AVATAR-SKIN-01…06`    | 6 tons de pele  | perfil          | token   | 0   | placeholder-svg | Sprint 4/7 |
+| `AVATAR-HAIR-01…08`    | 8 cabelos       | perfil          | SVG     | 8   | placeholder-svg | Sprint 4/7 |
+| `AVATAR-CLOTHES-01…06` | 6 roupas        | perfil, lojinha | SVG     | 12  | placeholder-svg | Sprint 4/7 |
+| `AVATAR-ACC-01…06`     | 6 acessórios    | lojinha         | SVG     | 8   | placeholder-svg | Sprint 7   |
 
 ## Interface
 
