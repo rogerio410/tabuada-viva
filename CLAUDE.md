@@ -1,6 +1,6 @@
 # Tabuada Viva
 
-Jogo web (PWA) mobile-first para crianças de 7–8 anos dominarem as tabuadas. Fonte de verdade do design: `docs/00-fonte/tabuada-viva.md` (imutável). GDD fatiado em `docs/gdd/`. Plano de preparação: `~/.claude/plans/neste-diret-rio-vamos-criar-fluttering-sky.md`.
+Jogo web (PWA) mobile-first para crianças de 7–8 anos dominarem as tabuadas. Fonte de verdade do design: `docs/00-fonte/tabuada-viva.md` (imutável). GDD fatiado em `docs/gdd/`. Roteiro e status das fases: `docs/roadmap/preparacao.md` (retomar sempre por ele).
 
 ## Antes de qualquer tarefa, leia (nesta ordem)
 
