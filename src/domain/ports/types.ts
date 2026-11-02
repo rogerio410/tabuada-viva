@@ -36,6 +36,9 @@ export type ErrorType =
 
 export type SupportKind = 'dedos' | 'quadro-de-dez' | 'reta' | 'contas' | 'grupos' | 'tabela'
 
+/** Tipo do item: fato avulso, família de fatos, história ou prova do Portão (critérios G3 a G6). */
+export type AttemptKind = 'fact' | 'family' | 'story' | 'proof'
+
 export interface Attempt {
   childId: ChildId
   sessionId: SessionId
@@ -49,6 +52,9 @@ export interface Attempt {
   /** Apoios abertos; vazio = sem apoio. Apoio nunca promove a Fluente. */
   supportsUsed: SupportKind[]
   errorType: ErrorType | null
+  /** Fase em que a resposta foi dada (`W<n>-P<nn>`); null fora das fases (ex.: Prova do Portão). */
+  phaseId: string | null
+  kind: AttemptKind
   createdAt: Date
 }
 

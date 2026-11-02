@@ -119,6 +119,26 @@ Cada item: o que a fonte diz, a lacuna, a proposta e o impacto. Marque `[APROVAD
 - **Fonte:** L265–267: só princípios. Não há números.
 - **Proposta:** ver rascunho em `recompensas-e-economia.md` (a escrever no Bloco 1). Princípios: nunca punir, nunca premiar velocidade, teto semanal, preço de itens equivalente a 3–5 dias de prática.
 
+## Decisões delegadas pelo responsável (Sprint 1) — `[DECIDIDO PELA IA, 2026-11-02]`
+
+O responsável pediu expressamente que a IA decidisse estes três pontos ("tome essas decisões por mim"). Valem até ele rever; cada uma é reversível mudando um valor ou um arquivo.
+
+### D24 — "Contou de um em um" (D3) `[DECIDIDO]`
+
+- **Decisão:** acerto sem apoio, em fato avulso, com tempo **> 2 ×** o limiar rápido (`slowCountingFactor: 2`), **2 vezes seguidas** no mesmo fato (`slowCountingStreak: 2`), dispara a dica de estratégia **na próxima apresentação**. Os números são os do texto aprovado da D3.
+- **Como:** `needsStrategyHint(attempts, factId)` lê as últimas respostas do fato (sem campo novo em `FactState`); `buildSession` marca `strategyHint` nos itens desses fatos. Nunca é erro nem interrompe um acerto.
+- **Impacto:** `params.ts` (dois valores novos), `src/domain/scheduler/slow-counting.ts`.
+
+### D25 — O que "acelerar" faz (D4) `[DECIDIDO]`
+
+- **Decisão:** acelerar **não** mexe no teto de 2 itens novos por sessão. O efeito é a fase liberar a próxima no **mínimo** de sessões da D12 (`phaseSessions: { min: 2, max: 3 }`): `adaptNextSession` devolve `sessionsBeforeAdvance` = 2 ao acelerar e 3 nos demais casos (inclusive ao reduzir).
+- **Impacto:** `params.ts` (`phaseSessions`), `adapt.ts`. O Sprint 3 usa `sessionsBeforeAdvance` no mapa de fases.
+
+### D26 — `swapped_subtraction` `[DECIDIDO]`
+
+- **Decisão:** o tipo **fica reservado** no enum (o banco já o aceita) e **não é detectado** na v1. O catálogo só tem subtrações com minuendo maior ou igual ao subtraendo (`5 − 8` não existe como fato), então não há resposta "ao contrário" a reconhecer. Se um formato futuro mostrar operandos invertidos (comparar, completar), a detecção entra com esse formato.
+- **Impacto:** nenhum código; `classifyError` devolve `other` para subtração errada.
+
 ## Decisões de privacidade e segurança (Fase D) — `[PROPOSTA]` até você aprovar
 
 Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O código da Fase D usa estes valores como **provisórios e claramente marcados**.
