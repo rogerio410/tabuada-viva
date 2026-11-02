@@ -22,19 +22,19 @@
     {
       "id": "W1-P07-H01",
       "phase": "W1-P07",
-      "text": "O ônibus leva 10 passageiros. Já tem 3 passageiros nele. Quantos passageiros ainda cabem?",
+      "text": "O ônibus tem 10 lugares. Já tem 3 passageiros nele. Quantos lugares ainda faltam?",
       "context": "rua",
       "type": "completar",
       "fact": "add:3+7",
       "rootChain": [],
       "numbers": [10, 3],
       "answer": 7,
-      "distractors": [6, 8]
+      "distractors": [3, 8]
     },
     {
       "id": "W2-P06-H01",
       "phase": "W2-P06",
-      "text": "Na escola tem 9 lápis na mesa. A professora pega 4 lápis. Quantos lápis sobram?",
+      "text": "Na escola tem 9 lápis na mesa. Uma criança pega 4 lápis. Quantos lápis sobram?",
       "context": "escola",
       "type": "retirar",
       "fact": "sub:9-4",
@@ -46,7 +46,7 @@
     {
       "id": "W5-P02-H01",
       "phase": "W5-P02",
-      "text": "Na feira, cada cesta tem 4 laranjas. Dona Lúcia vende 2 cestas. Quantas laranjas são?",
+      "text": "Na feira, cada cesta tem 4 laranjas. Tem 2 cestas na banca. Quantas laranjas há nas cestas?",
       "context": "compras",
       "type": "grupos iguais",
       "fact": "mul:2x4",

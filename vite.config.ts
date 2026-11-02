@@ -22,7 +22,12 @@ export default defineConfig({
         start_url: '/',
         background_color: '#fff7e6',
         theme_color: '#2e9e5b',
-        icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+        icons: [
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+        ],
       },
       workbox: { globPatterns: ['**/*.{js,css,html,svg,webp,woff2}'] },
     }),

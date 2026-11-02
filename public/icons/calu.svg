@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Calú">
+  <rect width="512" height="512" fill="#2E9E5B"/>
+  <g stroke="#2B2118" stroke-width="12" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M150 330c-40 8-70 40-60 70 8 22 40 20 52 2" fill="none" stroke-width="24" stroke="#1F7A44"/>
+    <ellipse cx="270" cy="320" rx="130" ry="82" fill="#FFF7E6"/>
+    <ellipse cx="270" cy="338" rx="100" ry="52" fill="#F5B72E"/>
+    <circle cx="340" cy="230" r="86" fill="#FFF7E6"/>
+    <circle cx="340" cy="230" r="74" fill="#2E9E5B" stroke="none"/>
+    <circle cx="316" cy="214" r="22" fill="#FFF7E6"/>
+    <circle cx="366" cy="214" r="22" fill="#FFF7E6"/>
+    <circle cx="322" cy="216" r="9" fill="#2B2118" stroke="none"/>
+    <circle cx="372" cy="216" r="9" fill="#2B2118" stroke="none"/>
+    <path d="M318 262q24 20 48 0" fill="none"/>
+  </g>
+</svg>
