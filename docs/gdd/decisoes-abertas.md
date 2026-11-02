@@ -135,6 +135,7 @@ Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O 
 - **Lacuna:** 4 dígitos = 10 000 combinações; sem limite, força bruta é trivial.
 - **Proposta:** **5 falhas seguidas → bloqueio de 15 min**, dobrando a cada novo ciclo de 5 falhas até 24 h; sucesso zera. Vale no aparelho (offline) e no servidor (`verify_adult_pin`). O PIN é um portão do adulto, não a autenticação (essa é o login do Supabase).
 - **Impacto:** `src/domain/config/security.ts` (não `params.ts`, que é pedagógico), `src/domain/pin/pin-guard.ts` e `supabase/migrations/0003_pin.sql`.
+- **Estado:** `security.ts` e `pin-guard.ts` existem (Bloco 3) com estes valores **provisórios**, testados; `0003_pin.sql` é o Bloco 4. Se você mudar os números, mude `SECURITY.pin` e o SQL juntos.
 
 ### D23 — CSP com `style-src 'unsafe-inline'` `[PROPOSTA]`
 
