@@ -7,7 +7,8 @@ Game Design Document fatiado por tema. A fonte de verdade é `docs/00-fonte/tabu
 1. `pilares-e-regras.md` — o que nunca muda.
 2. `mecanica-aprendizagem.md` — estados, sessão, parâmetros.
 3. `portao.md` · `mundos-e-fases.md` · `tipos-de-erro-e-dicas.md` · `recompensas-e-economia.md` · `painel.md`.
-4. `decisoes-abertas.md` — tudo o que depende de aprovação humana.
+4. Interface, arte e som: `../ux/ui-rules.md` · `../ux/acessibilidade.md` · `../ux/voz-do-calu.md` · `../art/art-bible.md` · `../art/asset-list.md` · `../audio-brief.md`.
+5. `decisoes-abertas.md` — tudo o que depende de aprovação humana.
 
 ## Convenção de rótulos
 

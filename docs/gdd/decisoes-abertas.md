@@ -92,6 +92,24 @@ Cada item: o que a fonte diz, a lacuna, a proposta e o impacto. Marque `[APROVAD
 - **Proposta:** (a) uma **regra** conta como 1 item novo, mas cada fato coberto por ela é rastreado individualmente; (b) a unidade de apresentação de −, × e ÷ é o **triângulo** (L62): dois triângulos novos por sessão; (c) os irmãos − e ÷ só abrem quando o fato raiz está em Praticando ou acima (L65, estendido a ÷).
 - **Impacto:** `maxNewFactsPerSession` passa a contar itens de apresentação, não fatos soltos.
 
+### D17 — Alvo de acessibilidade `[PROPOSTA]`
+
+- **Fonte:** só pede "alto contraste" (L309) e "reduzir movimento" (L318).
+- **Proposta:** WCAG 2.2 AA como piso, com daltonismo (cor + forma + rótulo), leitor de tela e alternativa ao arrastar. Ver `docs/ux/acessibilidade.md`.
+- **Achado:** `#2E9E5B` com texto branco tem contraste 3,4 : 1 (reprova para texto pequeno); o botão primário passa a usar `#1F7A44` (5,4 : 1).
+
+### D18 — Orçamento de arte e áudio `[PROPOSTA]`
+
+- **Proposta:** pacote inicial de arte ≤ 150 KB sem compressão; total ≈ 385 KB carregado por mundo, sob demanda; sons sintetizados por Web Audio (0 KB de arquivo); Nunito (woff2) em `public/fonts` sem nova dependência. Ver `docs/art/asset-list.md` e `docs/audio-brief.md`.
+
+### D19 — Dinheiro: centavos e cédulas `[PROPOSTA]`
+
+- **Proposta:** valores inteiros de R$ 1 a R$ 20 na v1 (sem centavos) e cédulas estilizadas, não fiéis às reais. **Validar com a professora**: EF02MA20 trata de equivalência entre moedas e cédulas.
+
+### D20 — Modo escuro `[PROPOSTA]`
+
+- **Proposta:** fora da v1.
+
 ## Decisões de economia (humano, CLAUDE.md)
 
 ### D15 — Cajus
