@@ -10,7 +10,7 @@ Em 30 segundos, o adulto responde: o que ela já domina, onde está travando, o 
 
 - Atrás de PIN de 4 dígitos do adulto, separado da tela da criança (L275).
 - Professor vê a turma; responsável vê só os próprios filhos (L275). A visão de turma está no checklist (L461), mas a fonte só descreve telas individuais: **lacuna**, tratar em spec.
-- ⚠ PIN de 4 dígitos é fraco contra força bruta: exigir limite de tentativas e bloqueio temporário (Fase D).
+- PIN de 4 dígitos é fraco contra força bruta: limite de tentativas e bloqueio temporário **implementados no domínio** (`src/domain/pin/pin-guard.ts`, valores provisórios da D22); a verificação no servidor chega com o modelo Supabase (Fase D, Bloco 4).
 
 ## Telas (L277–284)
 

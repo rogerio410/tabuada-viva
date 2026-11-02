@@ -119,6 +119,30 @@ Cada item: o que a fonte diz, a lacuna, a proposta e o impacto. Marque `[APROVAD
 - **Fonte:** L265–267: só princípios. Não há números.
 - **Proposta:** ver rascunho em `recompensas-e-economia.md` (a escrever no Bloco 1). Princípios: nunca punir, nunca premiar velocidade, teto semanal, preço de itens equivalente a 3–5 dias de prática.
 
+## Decisões de privacidade e segurança (Fase D) — `[PROPOSTA]` até você aprovar
+
+Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O código da Fase D usa estes valores como **provisórios e claramente marcados**.
+
+### D21 — Retenção por inatividade e prova de consentimento `[PROPOSTA]`
+
+- **Fonte:** L374 (botão de apagar); a fonte não fala de prazo.
+- **Proposta:** apagar os dados da criança após **12 meses** sem prática ou login, com aviso 30 dias antes; guardar a prova de consentimento (sem dado da criança) por **5 anos** após o apagamento **da criança**. O modelo atual só a guarda enquanto a conta do adulto existir; guardar além disso exige uma tabela de arquivo (sua decisão). Ver `docs/privacidade/retencao-e-apagamento.md`.
+- **Impacto:** rotina agendada e e-mail transacional (Sprint 4 ou depois). Prazos jurídicos **não verificados**.
+
+### D22 — Limite de tentativas do PIN `[PROPOSTA]`
+
+- **Fonte:** L275 (PIN de 4 dígitos); `painel.md` pede limite de tentativas.
+- **Lacuna:** 4 dígitos = 10 000 combinações; sem limite, força bruta é trivial.
+- **Proposta:** **5 falhas seguidas → bloqueio de 15 min**, dobrando a cada novo ciclo de 5 falhas até 24 h; sucesso zera. Vale no aparelho (offline) e no servidor (`verify_adult_pin`). O PIN é um portão do adulto, não a autenticação (essa é o login do Supabase).
+- **Impacto:** `src/domain/config/security.ts` (não `params.ts`, que é pedagógico), `src/domain/pin/pin-guard.ts` e `supabase/migrations/0003_pin.sql`.
+- **Estado:** `security.ts` e `pin-guard.ts` existem (Bloco 3) com estes valores **provisórios**, testados; `0003_pin.sql` é o Bloco 4. Se você mudar os números, mude `SECURITY.pin` e o SQL juntos.
+
+### D23 — CSP restritiva em estilo `[PROPOSTA]`
+
+- **Premissa (verificada no e2e):** React e Framer Motion aplicam estilos pelo CSSOM (`element.style`), que a CSP não bloqueia; o app atual abre sem violações com `style-src 'self'`.
+- **Proposta:** `script-src 'self'` e `style-src 'self'` (**sem** `'unsafe-inline'`), `connect-src 'self'` (a URL **exata** do Supabase entra no Sprint 4, sem curinga), `frame-src 'none'`, `frame-ancestors 'none'`. Se algum componente futuro exigir o atributo `style=""` em HTML, usar `style-src-attr 'unsafe-inline'` em vez de reabrir `style-src`; o e2e de privacidade falha se houver violação.
+- **Impacto:** `config/security-headers.mjs`, `vercel.json`, `<meta>` injetada só no build. **Implementada como provisória.**
+
 ## Parâmetros que existem na fonte mas não em `params.ts`
 
 **Aprovados para criar em `params.ts` na Fase C (2026-11-02):** pontos de corte do Portão (90/90/90/85/10/95%, 40 itens, 2 provas, 7 dias, janela de 2 semanas), `starThresholds` (D5), `warmupFacts: 3`, `guidedPracticeItems: {6, 8}`, `knownToNewRatio: 70/30`, `fluentDistinctDays: 2`, `fastAnswerExtraMsPerDigit` (D2), tamanho do PIN.
