@@ -1,0 +1,72 @@
+{
+  "batch": {
+    "id": "exemplo-1",
+    "origin": "ia",
+    "date": "2026-11-02",
+    "reviewer": null,
+    "humanSample": "pendente"
+  },
+  "problems": [
+    {
+      "id": "W1-P02-H01",
+      "phase": "W1-P02",
+      "text": "O Calú tem 1 bolinha. Ele ganha mais 6 bolinhas. Quantas bolinhas o Calú tem agora?",
+      "context": "casa",
+      "type": "acrescentar",
+      "fact": "add:1+6",
+      "rootChain": [],
+      "numbers": [1, 6],
+      "answer": 7,
+      "distractors": [6, 8]
+    },
+    {
+      "id": "W1-P07-H01",
+      "phase": "W1-P07",
+      "text": "O ônibus tem 10 lugares. Já tem 3 passageiros nele. Quantos lugares ainda faltam?",
+      "context": "rua",
+      "type": "completar",
+      "fact": "add:3+7",
+      "rootChain": [],
+      "numbers": [10, 3],
+      "answer": 7,
+      "distractors": [3, 8]
+    },
+    {
+      "id": "W2-P06-H01",
+      "phase": "W2-P06",
+      "text": "Na escola tem 9 lápis na mesa. Uma criança pega 4 lápis. Quantos lápis sobram?",
+      "context": "escola",
+      "type": "retirar",
+      "fact": "sub:9-4",
+      "rootChain": ["add:4+5"],
+      "numbers": [9, 4],
+      "answer": 5,
+      "distractors": [4, 6]
+    },
+    {
+      "id": "W5-P02-H01",
+      "phase": "W5-P02",
+      "text": "Na feira, cada cesta tem 4 laranjas. Tem 2 cestas na banca. Quantas laranjas há nas cestas?",
+      "context": "compras",
+      "type": "grupos iguais",
+      "fact": "mul:2x4",
+      "rootChain": ["add:4+4"],
+      "numbers": [4, 2],
+      "answer": 8,
+      "distractors": [6, 12],
+      "repeatedSum": [4, 4]
+    },
+    {
+      "id": "W8-P02-H01",
+      "phase": "W8-P02",
+      "text": "Na festa tem 14 biscoitos. Eles vão para 2 pratos iguais. Quantos biscoitos ficam em cada prato?",
+      "context": "festa",
+      "type": "repartir",
+      "fact": "div:14/2",
+      "rootChain": ["mul:2x7", "add:7+7"],
+      "numbers": [14, 2],
+      "answer": 7,
+      "distractors": [12, 28]
+    }
+  ]
+}
