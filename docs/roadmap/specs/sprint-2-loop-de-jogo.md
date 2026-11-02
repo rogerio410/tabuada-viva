@@ -1,6 +1,6 @@
 # Spec Sprint 2 — Loop de jogo e ferramentas
 
-Status: rascunho. O responsável dispensou a revisão em 2026-11-02; vale o **padrão provisório** do fim do arquivo, que só usa o que já está aprovado.
+Status: aprovada (2026-11-02). Decisões do responsável no fim do arquivo (seção "Decisões aprovadas"); elas substituem o padrão provisório onde diferem.
 Branch: `sprint-2/loop-de-jogo`
 
 ## 1. Objetivo
@@ -147,3 +147,30 @@ Rodar os subagentes `revisor-ui-mobile` e `revisor-seguranca-infantil` antes do 
 5. **Fase da sessão:** ordem fixa das fases 1 a 7 do Mundo 1.
 
 Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
+
+## Decisões aprovadas (2026-11-02)
+
+1. **Perfil:** local fixo (apelido genérico, 2º ano), sem tela de criação.
+2. **`timeMs`:** sem teto; `params.ts` não muda.
+3. **Dexie:** **`fake-indexeddb` aprovada como devDependency**; `repo.contract.ts` roda no Vitest.
+4. **Arte e som:** placeholders SVG e Web Audio.
+5. **Fases:** W1-P01 a W1-P07 em ordem fixa; W1-P08 (Grande Desafio) fica fora.
+
+## Implementação e pendências humanas (2026-11-02)
+
+Implementado na branch `sprint-2/loop-de-jogo`: `verify` e `e2e` verdes, bundle 104,5 KB gzip. Interpretações e desvios para você confirmar:
+
+1. **Apoio automático é oferta.** Em Aprendendo as Mãozinhas já vêm abertas, mas só entram em `supportsUsed` se a criança tocar nelas ou abrir/trocar a ferramenta pelo botão. Se contasse só por abrir, Aprendendo nunca passaria a Praticando (3 acertos sem apoio).
+2. **Reta numérica:** o ponto de partida é o maior número da conta e há um botão "Pular +1" (em vez de tocar na reta), porque 21 alvos de 56 px não cabem em 360 px.
+3. **Sessão curta no início:** o motor limita 2 fatos novos por sessão; ao esgotar a fila a tela monta um novo plano com os estados atuais até o convite de descanso (10 min).
+4. **Allowlist do `check:trackers`:** duas URLs exatas de mensagens de erro do Dexie (`tinyurl.com/y2uuvskb`, `bit.ly/2kdckMn`), só texto, nunca requisitadas. Peço sua aprovação por mexer na barreira de privacidade.
+5. **Textos para amostragem humana:** "Isso mesmo!", "Você conseguiu. Amanhã tem mais!", "Bora!", "Descansar", "Continuar", "Voltar ao início", "Ajuda", "N dedos abertos", "N fichas", "N pulos, parou no N", e a dica de erro (bolinhas + soma, revisão 100% humana).
+6. **Decisões tomadas pela IA a pedido do responsável (2026-11-02), reversíveis:**
+   - Allowlist do `check:trackers`: mantida, só as 2 URLs exatas do Dexie (igualdade, sem sufixo).
+   - Apoio automático como oferta, reta com "Pular +1" e sessão que se reabastece até o convite: mantidos.
+   - Avanço automático de 900 ms após acerto: mantido (feedback < 1 s da spec; a dica de erro espera o toque). Rever no teste com a Ana.
+   - Botão "Sair" na pergunta: volta ao início sem perder nada; a sessão aberta é retomada em "Jogar".
+   - Modo mudo: botão "Som ligado/desligado" na tela inicial; preferência só no aparelho (`localStorage`, nada sai dele).
+   - Ferramentas viram grupo de botões `aria-pressed` (sem `tablist` incompleto); o foco vai ao contêiner a cada troca de tela; contraste das bordas ≥ 3:1; foco visível; áreas seguras.
+   - Testes novos: alvos e espaços nas telas de início, dica, convite e fim; Sair; foco; som; reduzir movimento.
+7. **Continua com o responsável:** amostragem das frases novas (lista no item 5) e revisão 100% humana da dica de erro.

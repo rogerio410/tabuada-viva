@@ -42,10 +42,10 @@ Formas geométricas com os tokens da paleta, contorno `ink`, nome do ID visível
 
 | ID                         | Descrição                             | Mundos       | KB  | Status          | Quando   |
 | -------------------------- | ------------------------------------- | ------------ | --- | --------------- | -------- |
-| `TOOL-HANDS`               | Mãozinhas (duas mãos, dedos tocáveis) | W1–W3        | 6   | placeholder-svg | Sprint 3 |
-| `TOOL-TENFRAME`            | quadro de dez (2 × 5)                 | W1–W3        | 3   | placeholder-svg | Sprint 3 |
+| `TOOL-HANDS`               | Mãozinhas (duas mãos, dedos tocáveis) | W1–W3        | 6   | placeholder-svg | Sprint 2 |
+| `TOOL-TENFRAME`            | quadro de dez (2 × 5)                 | W1–W3        | 3   | placeholder-svg | Sprint 2 |
 | `TOOL-BEADS`               | colar de contas (2 × 10)              | W3           | 4   | placeholder-svg | Sprint 5 |
-| `TOOL-NUMLINE`             | reta numérica 0–20                    | W2–W3        | 3   | placeholder-svg | Sprint 3 |
+| `TOOL-NUMLINE`             | reta numérica 0–20                    | W2–W3        | 3   | placeholder-svg | Sprint 2 |
 | `TOOL-DOMINO`, `TOOL-DICE` | dominós e dados                       | aquecimentos | 4   | placeholder-svg | Sprint 3 |
 | `TOOL-ARRAY`               | arranjo de fileiras e colunas         | W5–W8        | 3   | placeholder-svg | Sprint 6 |
 
