@@ -126,7 +126,7 @@ Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O 
 ### D21 — Retenção por inatividade e prova de consentimento `[PROPOSTA]`
 
 - **Fonte:** L374 (botão de apagar); a fonte não fala de prazo.
-- **Proposta:** apagar os dados da criança após **12 meses** sem prática ou login, com aviso 30 dias antes; guardar a prova de consentimento (sem dado da criança) por **5 anos** após o apagamento. Ver `docs/privacidade/retencao-e-apagamento.md`.
+- **Proposta:** apagar os dados da criança após **12 meses** sem prática ou login, com aviso 30 dias antes; guardar a prova de consentimento (sem dado da criança) por **5 anos** após o apagamento **da criança**. O modelo atual só a guarda enquanto a conta do adulto existir; guardar além disso exige uma tabela de arquivo (sua decisão). Ver `docs/privacidade/retencao-e-apagamento.md`.
 - **Impacto:** rotina agendada e e-mail transacional (Sprint 4 ou depois). Prazos jurídicos **não verificados**.
 
 ### D22 — Limite de tentativas do PIN `[PROPOSTA]`
@@ -137,11 +137,11 @@ Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O 
 - **Impacto:** `src/domain/config/security.ts` (não `params.ts`, que é pedagógico), `src/domain/pin/pin-guard.ts` e `supabase/migrations/0003_pin.sql`.
 - **Estado:** `security.ts` e `pin-guard.ts` existem (Bloco 3) com estes valores **provisórios**, testados; `0003_pin.sql` é o Bloco 4. Se você mudar os números, mude `SECURITY.pin` e o SQL juntos.
 
-### D23 — CSP com `style-src 'unsafe-inline'` `[PROPOSTA]`
+### D23 — CSP restritiva em estilo `[PROPOSTA]`
 
-- **Lacuna:** Framer Motion aplica estilos inline em runtime; uma CSP sem `'unsafe-inline'` em estilo quebra animações.
-- **Proposta:** `script-src 'self'` (sem inline nem eval), `style-src 'self' 'unsafe-inline'`, `connect-src 'self'` (a URL do Supabase entra no Sprint 4). Alternativa mais rígida: nonce por requisição, que a Vercel não dá em site estático sem função de borda.
-- **Impacto:** `config/security-headers.mjs`, `vercel.json`, `<meta>` injetada só no build (Fase D, Bloco 2). **Implementada como provisória**; se você preferir nonce, a mudança é só nesse arquivo.
+- **Premissa (verificada no e2e):** React e Framer Motion aplicam estilos pelo CSSOM (`element.style`), que a CSP não bloqueia; o app atual abre sem violações com `style-src 'self'`.
+- **Proposta:** `script-src 'self'` e `style-src 'self'` (**sem** `'unsafe-inline'`), `connect-src 'self'` (a URL **exata** do Supabase entra no Sprint 4, sem curinga), `frame-src 'none'`, `frame-ancestors 'none'`. Se algum componente futuro exigir o atributo `style=""` em HTML, usar `style-src-attr 'unsafe-inline'` em vez de reabrir `style-src`; o e2e de privacidade falha se houver violação.
+- **Impacto:** `config/security-headers.mjs`, `vercel.json`, `<meta>` injetada só no build. **Implementada como provisória.**
 
 ## Parâmetros que existem na fonte mas não em `params.ts`
 

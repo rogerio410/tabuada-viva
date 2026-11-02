@@ -27,3 +27,13 @@ npm run test:db
 Cria um banco temporário no Postgres indicado por `PGHOST`, `PGPORT`, `PGUSER` e `PGPASSWORD` (padrão local: `localhost:5432`, `postgres`/`postgres`, só para desenvolvimento), aplica tudo, roda os testes e apaga o banco. Falha de forma ruidosa se não houver Postgres. Roda na CI (job `db`), não no `npm run verify`.
 
 O `auth.uid()` do teste é simulado (`request.jwt.claim.sub`), como o Supabase faz. Conferir contra um projeto Supabase real fica para o Sprint 4.
+
+## Riscos conhecidos (a tratar até o Sprint 4/9)
+
+- **Papel de professor é auto-declarado** no cadastro (`adult.role`); validar por convite ou aprovação antes de produção.
+- O professor vê a linha inteira de `child_profile` (inclui `guardian_id`, opaco, e `created_at`); uma visão própria resolve (Sprint 9).
+- `authorize_class_membership` não limita tentativas de código (16 hex = 64 bits, sem expiração); reforçar quando a tela existir.
+- As funções auxiliares (`is_guardian_of`, `has_current_consent`...) são executáveis pelo cliente com qualquer uuid; avaliar torná-las internas ao conferir contra o Supabase real.
+- O cliente grava `reward_wallet` e `fact_state` sem limite de valor: a economia é decisão humana (D15); a validação por regra entra com o Sprint 7.
+- Os `default privileges` do Supabase concedem acesso a tabelas novas; o teste `10_rls_coverage` é o portão (RLS ligado e `anon` barrado em todas) e roda na CI.
+- Quem tenta o PIN de um adulto que **não** tem PIN também consome o limite (comportamento aceito).

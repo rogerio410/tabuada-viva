@@ -65,6 +65,12 @@ O professor **só** vê a criança depois do vínculo autorizado pelo responsáv
 | -------------------------------------------------------- | ---------------------- | ----- | ----------- | ------------------------------------------------------------------------------- |
 | `consent`: adulto, criança, `terms_version`, `aceito_em` | prova do consentimento | N     | responsável | **ver `retencao-e-apagamento.md`** (guardar a prova ≠ guardar dados da criança) |
 
+Observações sobre o perfil:
+
+- O perfil (apelido, avatar, ano escolar) é criado **antes** do aceite do termo, porque a prova do consentimento aponta para ele. Nenhum dado de **aprendizagem** é gravado antes do aceite (o banco recusa). Perfil sem aceite por muito tempo: limpeza automática fica para o Sprint 4 (a decidir).
+- O professor, com vínculo vigente, enxerga a linha inteira do perfil, inclusive o identificador opaco do responsável e a data de criação. Reduzir isso (visão própria do professor) fica para o Sprint 9.
+- `adult.role` é declarado pelo próprio adulto no cadastro; antes de produção é preciso validar o papel de professor (convite ou aprovação). O que o professor vê já depende do aceite do responsável.
+
 ## O que **não** é coletado
 
 Nome completo da criança · foto ou voz · localização · e-mail, telefone ou endereço da criança · nome da escola da criança · texto livre de qualquer tipo · identificadores de publicidade · cookies de terceiros · endereço IP guardado **nas nossas tabelas** (o provedor de login e de hospedagem podem registrar IP e aparelho do **adulto** nos próprios logs: conferir e minimizar na configuração do projeto, **não verificado**) · mapa de toques, gravação de tela ou qualquer telemetria de comportamento fora das respostas do jogo.

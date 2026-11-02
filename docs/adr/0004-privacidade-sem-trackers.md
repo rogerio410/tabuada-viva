@@ -1,6 +1,6 @@
 # ADR 0004 — Sem analytics, trackers nem CDNs externos; coleta mínima
 
-Status: aceita (CLAUDE.md; fonte L366–376). Os números de retenção (D21), de PIN (D22) e a CSP com `unsafe-inline` em estilo (D23) são **propostas** aguardando sua aprovação.
+Status: aceita (CLAUDE.md; fonte L366–376). Os números de retenção (D21), de PIN (D22) e a CSP restritiva em estilo (D23) são **propostas** aguardando sua aprovação.
 
 ## Contexto
 

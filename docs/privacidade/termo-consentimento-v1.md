@@ -42,7 +42,9 @@ Para a criança jogar, precisamos da sua autorização. Leia com calma. É curto
 
 **Por quanto tempo:** até você apagar. Se a conta ficar parada por `[EM BRANCO: prazo, D21 propõe 12 meses]`, avisamos você antes de apagar.
 
-**Seus direitos:** você pode ver, corrigir e **apagar todos os dados da criança** a qualquer momento, no painel, com um botão. Apagar não tem volta.
+**Seus direitos:** você pode ver, corrigir e **apagar todos os dados da criança** a qualquer momento `[EM BRANCO: o caminho exato — painel do adulto (Sprint 8) ou pedido ao contato; hoje o botão ainda não existe]`. Apagar não tem volta.
+
+**O que fica depois de apagar:** somente o registro de que você aceitou este termo (a versão e a data), **sem** o apelido nem as respostas da criança. `[EM BRANCO: por quanto tempo; ver D21]`
 
 **Retirar a autorização:** apague os dados da criança no painel ou fale com `[EM BRANCO: e-mail de privacidade]`.
 
@@ -51,7 +53,7 @@ Para a criança jogar, precisamos da sua autorização. Leia com calma. É curto
 ## Contrato de versionamento (para o Sprint 4)
 
 - O aceite grava uma linha em `consent` com `guardian_id`, `child_id`, `terms_version` e `accepted_at`. O banco **só aceita** a versão vigente (`current_terms_version()`) e a tabela é append-only (`supabase/tests/30_consent.test.sql`).
-- Mudou o texto de forma relevante? Aumente a versão (`v2`) em `app_config`. Enquanto o responsável não aceitar de novo, o banco **bloqueia a escrita** de dados da criança; a leitura continua.
+- Mudou o texto de forma relevante? Aumente a versão (`v2`) em `app_config`. Enquanto o responsável não aceitar de novo, o banco **bloqueia a escrita dos dados de aprendizagem** (respostas, estados dos fatos, sessões, prêmios); a leitura continua. O perfil (apelido e ano escolar) é criado antes do primeiro aceite, porque a prova de consentimento aponta para ele.
 - A tela do aceite mostra o texto da versão vigente, em destaque, e o campo de aceite começa **desmarcado**.
 - O texto exibido no app vem de um arquivo de conteúdo versionado, aprovado por você (não deste rascunho).
 

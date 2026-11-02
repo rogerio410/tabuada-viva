@@ -22,12 +22,12 @@ O que **não** se recupera: tudo acima. Não há lixeira, backup de dados da cri
 ## O que sobra depois de apagar
 
 - **Nada que identifique a criança**: nem apelido, nem respostas, nem vínculos.
-- **Prova do consentimento** (`consent`): guarda adulto, versão do termo e data, **sem** apelido nem respostas, para o serviço provar que pediu autorização. Quando a criança é apagada, a linha deixa de apontar para o perfil (`child_id` anulado). **Prazo de guarda da prova: `[PROPOSTA D21]`.** Decisão jurídica: **não verificado** se é obrigatório guardar e por quanto tempo.
+- **Prova do consentimento** (`consent`): guarda adulto, versão do termo e data, **sem** apelido nem respostas. Quando só a **criança** é apagada, a linha fica sem `child_id` e **permanece enquanto a conta do adulto existir**. Quando a **conta do adulto** é apagada, a prova some junto (cascata): o modelo atual **não** guarda prova por 5 anos depois disso. Guardar além da conta exigiria uma tabela de arquivo e uma base legal: **decisão sua (D21)**; juridicamente **não verificado**.
 - Logs técnicos do provedor: fora do nosso controle direto; ver "Pontos abertos".
 
 ## Apagar a conta do adulto
 
-Apaga o adulto, seus PIN/hash e **todas** as crianças dele (mesmo fluxo acima por criança). Se o adulto é professor, as turmas somem e os vínculos são desfeitos; as crianças continuam com seus responsáveis.
+Função `delete_my_account()` (`supabase/migrations/0004_delete_child.sql`, testada em `60_delete.test.sql`): apaga o login, o adulto, o PIN (hash), as turmas dele e **todas** as crianças dele com tudo delas, **inclusive as provas de consentimento dele**. Se o adulto é professor, as turmas somem e os vínculos são desfeitos; as crianças continuam com seus responsáveis. Conferir no Sprint 4 que o papel dono da função consegue apagar em `auth.users` no projeto real.
 
 ## Revogar um vínculo de turma
 
@@ -35,11 +35,11 @@ O responsável revoga a qualquer momento: o professor perde o acesso imediatamen
 
 ## Retenção por inatividade `[PROPOSTA D21]`
 
-| Situação                                            | Proposta                                                                              |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Conta sem nenhuma prática ou login por **12 meses** | aviso ao e-mail do responsável (30 dias antes), depois **apagar** os dados da criança |
-| Resposta do responsável ao aviso                    | "manter" reinicia a contagem; "apagar" executa na hora                                |
-| Prova de consentimento                              | guardada por **5 anos** após o apagamento `[não verificado juridicamente]`            |
+| Situação                                            | Proposta                                                                                                                                |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Conta sem nenhuma prática ou login por **12 meses** | aviso ao e-mail do responsável (30 dias antes), depois **apagar** os dados da criança                                                   |
+| Resposta do responsável ao aviso                    | "manter" reinicia a contagem; "apagar" executa na hora                                                                                  |
+| Prova de consentimento                              | hoje: enquanto a conta do adulto existir. Guardar por **5 anos** depois exigiria uma tabela de arquivo `[não verificado juridicamente]` |
 
 Os números 12 meses e 5 anos são **propostas da IA** para você ajustar. Nada é implementado até a aprovação: o apagamento por inatividade exige um e-mail transacional e uma rotina agendada, então só entra com o Sprint 4 ou depois.
 
