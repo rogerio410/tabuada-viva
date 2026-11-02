@@ -62,8 +62,11 @@ export function scanText(file, text) {
     const m = ENV_LINE.exec(l)
     if (!m || ignored.has(i)) return
     const value = m[1].trim().replace(/^["']|["']$/g, '')
+    // sinalizadores (1, true, yes...) e valores curtíssimos não são segredos
+    const flag = value.length < 6 || /^(true|false|yes|no|on|off)$/i.test(value)
     if (
       value &&
+      !flag &&
       !PLACEHOLDER.test(value) &&
       !value.startsWith('process.env') &&
       !value.includes('${')

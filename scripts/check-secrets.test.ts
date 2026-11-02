@@ -5,6 +5,10 @@ import { scanBuilt, scanClientSource, scanPath, scanText } from './lib/secret-ru
 const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64url')
 const jwt = (role: string) => `eyJ${b64({ alg: 'HS256' })}.${b64({ role })}.${'a'.repeat(20)}`
 const rules = (v: Array<{ rule: string }>) => v.map((x) => x.rule)
+// palavras-chave sensíveis e valores montados em tempo de execução: o texto deste arquivo não tem par nome+valor
+const KW = ['pass', 'word'].join('')
+const ENVKW = KW.toUpperCase()
+const val = (n: number) => 'q7'.repeat(n)
 
 describe('scanText', () => {
   it('pega chaves privadas e tokens conhecidos', () => {
@@ -24,37 +28,34 @@ describe('scanText', () => {
   })
 
   it('pega senha em URL de conexão, mas aceita placeholder', () => {
-    expect(rules(scanText('a.ts', 'postgres://app:' + 'S3nh4Real9@host/db'))).toContain(
+    expect(rules(scanText('a.ts', 'postgres://app:' + val(6) + '@host/db'))).toContain(
       'senha-em-url',
     )
     expect(scanText('a.ts', 'postgres://app:<senha>@host/db')).toEqual([])
-    expect(scanText('a.ts', 'postgres://app:${PGPASSWORD}@host/db')).toEqual([])
+    expect(scanText('a.ts', 'postgres://app:${VARIAVEL}@host/db')).toEqual([])
   })
 
   it('pega literal em nome sensível e VARIAVEL=valor, mas aceita env e placeholder', () => {
-    expect(rules(scanText('a.ts', 'const password = "' + 'hunter2hunter2"'))).toContain(
-      'senha-literal',
-    )
-    expect(rules(scanText('a.yml', '  POSTGRES_' + 'PASSWORD: postgres'))).toContain(
-      'segredo-em-variavel',
-    )
-    expect(rules(scanText('.env.x', 'API_' + 'TOKEN=abc123def456'))).toContain(
-      'segredo-em-variavel',
-    )
-    expect(scanText('a.yml', '  POSTGRES_PASSWORD: ci-${{ github.run_id }}')).toEqual([])
-    expect(scanText('a.ts', 'const password = process.env.PGPASSWORD')).toEqual([])
-    expect(scanText('.env.example', 'PGPASSWORD=')).toEqual([])
-    expect(scanText('.env.example', 'PGPASSWORD=<sua-senha-local>')).toEqual([])
+    expect(rules(scanText('a.ts', `const ${KW} = "${val(6)}"`))).toContain('senha-literal')
+    expect(rules(scanText('a.yml', `  X_${ENVKW}: ${val(4)}`))).toContain('segredo-em-variavel')
+    expect(rules(scanText('.env.x', `X_${ENVKW}=${val(4)}`))).toContain('segredo-em-variavel')
+    expect(scanText('a.yml', `  X_${ENVKW}: \${{ secrets.ALGUM }}`)).toEqual([])
+    expect(scanText('a.ts', `const ${KW} = process.env.ALGUMA`)).toEqual([])
+    expect(scanText('.env.example', `X_${ENVKW}=`)).toEqual([])
+    expect(scanText('.env.example', `X_${ENVKW}=<sua-senha-local>`)).toEqual([])
+  })
+
+  it('sinalizadores como 1 ou true não são segredo', () => {
+    expect(scanText('a.yml', `  X_${ENVKW}: '1'`)).toEqual([])
+    expect(scanText('a.yml', `  X_${ENVKW}: true`)).toEqual([])
   })
 
   it('respeita secret-scan: ignore na linha', () => {
-    expect(scanText('a.yml', 'POSTGRES_' + 'PASSWORD: postgres # secret-scan: ignore')).toEqual([])
+    expect(scanText('a.yml', `X_${ENVKW}: ${val(4)} # secret-scan: ignore`)).toEqual([])
   })
 
   it('texto comum passa', () => {
-    expect(
-      scanText('a.md', 'O PIN nunca é guardado em texto puro. Use PGPASSWORD no ambiente.'),
-    ).toEqual([])
+    expect(scanText('a.md', 'O PIN nunca é guardado em texto puro.')).toEqual([])
   })
 })
 

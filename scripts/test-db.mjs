@@ -1,6 +1,7 @@
 // Aplica as migrações do Supabase em um banco temporário de um Postgres local (com o schema `auth` simulado)
 // e roda supabase/tests/*.test.sql. Falha de forma ruidosa se não houver Postgres: nada de pular em silêncio.
-// Conexão: variáveis PG* (padrão de desenvolvimento: localhost:5432, postgres/postgres). No CI vêm do serviço.
+// Conexão: variáveis PG* (padrões: localhost:5432, usuário postgres). A senha nunca fica neste arquivo.
+// No CI o serviço é descartável e sem senha: PG_NO_PASSWORD=1.
 import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync } from 'node:fs'
 import { homedir } from 'node:os'
@@ -18,7 +19,12 @@ const env = {
   PGPORT: process.env.PGPORT ?? '5432',
   PGUSER: process.env.PGUSER ?? 'postgres',
 }
-if (!env.PGPASSWORD && !env.PGPASSFILE && !existsSync(join(homedir(), '.pgpass'))) {
+if (
+  env.PG_NO_PASSWORD !== '1' &&
+  !env.PGPASSWORD &&
+  !env.PGPASSFILE &&
+  !existsSync(join(homedir(), '.pgpass'))
+) {
   console.error(
     '✗ Sem senha do Postgres. Defina PGPASSWORD (ou use ~/.pgpass), ou crie um .env.local (ignorado pelo git) a partir de .env.example.',
   )

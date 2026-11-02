@@ -21,7 +21,8 @@ jobs:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_PASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
+          # serviço descartável, alcançável só de dentro do runner: sem senha, nada para vazar
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports: ['5432:5432']
         options: >-
           --health-cmd "pg_isready -U postgres"
@@ -32,7 +33,7 @@ jobs:
       PGHOST: localhost
       PGPORT: '5432'
       PGUSER: postgres
-      PGPASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
+      PG_NO_PASSWORD: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
