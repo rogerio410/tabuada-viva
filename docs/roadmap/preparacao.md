@@ -65,6 +65,8 @@ Adicionar Supabase ou Recharts exige sua aprovação (dependência nova).
 
 `docs/piloto/protocolo-ana.md` (semana 0, 3 carinhas, perguntas à professora) e instrumentação local, sem analytics externo.
 
+**Status dos sprints do produto:** Sprint 1 (motor pedagógico) ✅ implementado na branch `sprint-1/motor-pedagogico`, ainda sem merge em `main` · Sprint 2 (loop de jogo) spec aprovada em 2026-11-02, branch `sprint-2/loop-de-jogo` em andamento.
+
 ## Depois: Sprints 0 a 9 do produto
 
 Ver `docs/roadmap/sprints.md` (Fase C, item 13) e a fonte L377–392. Cada sprint segue: spec → testes primeiro → código → `npm run verify` + `npm run e2e` → PR.

@@ -1,6 +1,6 @@
 # Spec Sprint 2 — Loop de jogo e ferramentas
 
-Status: rascunho. O responsável dispensou a revisão em 2026-11-02; vale o **padrão provisório** do fim do arquivo, que só usa o que já está aprovado.
+Status: aprovada (2026-11-02). Decisões do responsável no fim do arquivo (seção "Decisões aprovadas"); elas substituem o padrão provisório onde diferem.
 Branch: `sprint-2/loop-de-jogo`
 
 ## 1. Objetivo
@@ -147,3 +147,11 @@ Rodar os subagentes `revisor-ui-mobile` e `revisor-seguranca-infantil` antes do 
 5. **Fase da sessão:** ordem fixa das fases 1 a 7 do Mundo 1.
 
 Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
+
+## Decisões aprovadas (2026-11-02)
+
+1. **Perfil:** local fixo (apelido genérico, 2º ano), sem tela de criação.
+2. **`timeMs`:** sem teto; `params.ts` não muda.
+3. **Dexie:** **`fake-indexeddb` aprovada como devDependency**; `repo.contract.ts` roda no Vitest.
+4. **Arte e som:** placeholders SVG e Web Audio.
+5. **Fases:** W1-P01 a W1-P07 em ordem fixa; W1-P08 (Grande Desafio) fica fora.
