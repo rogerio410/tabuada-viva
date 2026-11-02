@@ -1,7 +1,7 @@
 # Spec Sprint 3 — Mundos 1 e 2 jogáveis (núcleo)
 
-Status: rascunho (aguarda aprovação do responsável)
-Branch: `sprint-3/mundos-1-2` (criada só depois da aprovação)
+Status: aprovada em 2026-11-02 (decisões delegadas pelo responsável à IA; reversíveis)
+Branch: `sprint-3/mundos-1-2`
 
 ## 1. Objetivo
 
