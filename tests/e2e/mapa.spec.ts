@@ -26,6 +26,13 @@ test.describe('mapa, estrelas e subtração (360x740)', () => {
     await expect(page.getByText('Portão: em breve')).toBeVisible()
     await expect(page.locator('main')).not.toContainText(/crit[ée]rio|portão abre|o que falta/i)
     await expectTouchTargets(page, { scroll: true })
+    await expect(page.getByTestId('phase-W1-P02')).toContainText('Bloqueada')
+    await expect(page.getByTestId('phase-W1-P01')).toContainText('fase atual')
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(0)
     await expect(page.locator('input, textarea, [contenteditable]')).toHaveCount(0)
   })
 
@@ -39,6 +46,7 @@ test.describe('mapa, estrelas e subtração (360x740)', () => {
       await answerRight(page)
       await finishSession(page)
       await expect(page.getByTestId('stars')).toHaveAttribute('data-count', '3')
+      await expect(page.getByRole('img', { name: '3 de 3 estrelas' })).toBeVisible()
       await page.getByRole('button', { name: 'Voltar ao mapa' }).tap()
       await expect(page.getByRole('heading', { name: 'Mapa' })).toBeVisible()
       if (i < 2) await expect(page.getByTestId('phase-W1-P02')).toBeDisabled()
@@ -124,5 +132,10 @@ test.describe('mapa, estrelas e subtração (360x740)', () => {
     await page.getByRole('button', { name: 'Reta', exact: true }).tap()
     await expect(page.getByRole('button', { name: 'Pular −1' })).toBeVisible()
     await expectTouchTargets(page)
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(0)
   })
 })

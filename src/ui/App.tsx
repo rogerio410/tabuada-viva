@@ -40,7 +40,6 @@ export function App() {
       <button
         type="button"
         className="min-h-[56px] w-full rounded-2xl border-2 border-ink/70 bg-white px-6 text-xl font-extrabold text-ink select-none touch-manipulation"
-        aria-pressed={sound}
         onClick={() => {
           setSoundOn(!sound)
           setSound(!sound)

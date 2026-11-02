@@ -52,7 +52,7 @@ export function NumberLine({
       <div className="flex gap-3">
         <button
           type="button"
-          className="min-h-[56px] flex-1 rounded-2xl bg-poti-deep px-4 text-xl font-extrabold text-white select-none touch-manipulation disabled:opacity-40"
+          className="min-h-[56px] flex-1 rounded-2xl bg-poti-deep px-4 text-xl font-extrabold text-white select-none touch-manipulation disabled:bg-ink/15 disabled:text-[#5e5247]"
           disabled={back ? at <= 0 : at >= MAX}
           onClick={() => {
             onUse()

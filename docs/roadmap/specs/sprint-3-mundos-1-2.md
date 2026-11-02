@@ -122,4 +122,11 @@ Nenhum dado novo: respostas (já gravadas), sessões e estrelas por fase, tudo n
 - Grande Desafio: mistura todos os fatos do mundo, sem histórias (3b).
 - Simulação de vários dias no Vitest (`progression.test.ts`): uma criança perfeita e outra que erra 1 em 7 avançam pelas fases sem travar.
 - **Não feito (arte provisória):** as 4 expressões do Calú (`CHAR-CALU-*`) e `ENV-MAP`; o mapa usa a lista de fases e as estrelas em SVG (`UI-STAR-*`). Ficam para quando houver arte.
-- **Textos novos para amostragem humana:** "Muito bem! A próxima fase abriu." e "Boa! Vamos treinar mais um pouquinho com o Calú?" (voz-do-calu.md); novos: "Muito bem! Bora jogar mais uma para abrir a próxima fase?", "Muito bem! Mais mundos em breve.", "Mapa", "Início", "Voltar ao mapa", "Mundos 3 e 4: em breve", "Portão: em breve", "Pular −1", "N pulos, parou no N" e a **dica de subtração (b + r = a, revisão 100% humana)**.
+- **Textos novos para amostragem humana:** "Muito bem! A próxima fase abriu." e "Boa! Vamos treinar mais um pouquinho com o Calú?" (voz-do-calu.md); novos: "Muito bem! Bora jogar mais uma?", "Muito bem! Mais mundos em breve.", "Mapa", "Início", "Voltar ao mapa", "Mundos 3 e 4: em breve", "Portão: em breve", "Pular −1", "N pulos, parou no N" e a **dica de subtração (b + r = a, revisão 100% humana)**.
+
+## Revisões e decisões da IA a pedido do responsável (2026-11-02)
+
+- `revisor-ui-mobile` e `revisor-seguranca-infantil`: sem violação inegociável. Aplicado: conta que quebra linha (48 px), botão desabilitado legível, fase atual marcada além da cor (▶ e "fase atual"), estrelas numa pastilha branca e estrela vazia tracejada, mapa com carregamento/erro e rolagem até a fase atual, resposta anunciada com os dígitos, "GD:" lido como "Grande Desafio:", frase de 2 estrelas sem expor o critério.
+- **Mantido por decisão:** "Portão: em breve" no mapa (a `ui-rules.md` pede o Portão como "em breve"; o revisor sugere ocultar para a criança). Reversível: remover a linha em `MapScreen.tsx`.
+- **Fica para depois:** `SessionController.open` não valida se a fase está liberada (a trava é a UI; defesa em profundidade); dica específica por tipo de erro (100% humana); caminho para apagar dados na UI (painel do adulto, Sprint 8); narração por botão.
+- **Para você conferir antes de mesclar:** textos novos da lista acima e a dica de subtração (b + r = a).

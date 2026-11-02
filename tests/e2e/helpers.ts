@@ -106,8 +106,15 @@ export const finishSession = async (page: Page) => {
   await answer(page, await sum(page))
   await expect(page.getByText('Bora descansar? Amanhã tem mais!')).toBeVisible({ timeout: 5000 })
   await page.getByRole('button', { name: 'Descansar' }).tap()
+  await finishAfterRest(page)
+}
+
+/** Depois de aceitar descansar: responde o item de fechamento, se vier, e espera a tela de resultado. */
+export const finishAfterRest = async (page: Page) => {
+  const back = page.getByRole('button', { name: 'Voltar ao mapa' })
+  await expect(page.getByTestId('equation').or(back)).toBeVisible()
   if (await page.getByTestId('equation').isVisible()) await answerRight(page)
-  await expect(page.getByRole('button', { name: 'Voltar ao mapa' })).toBeVisible()
+  await expect(back).toBeVisible()
 }
 
 /**

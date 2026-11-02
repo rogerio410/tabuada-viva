@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import type { PhaseStatus } from '@domain/progress/phase-progress'
+import { phaseStatuses, type PhaseStatus } from '@domain/progress/phase-progress'
 import { Stars } from './components/Stars'
 import { useServices } from './services'
-import { GAME_PHASES } from './session/phases'
+import { GAME_PHASES, PHASE_ORDER } from './session/phases'
 import { loadProgress } from './session/progress'
 
 const WORLD_NAMES: Record<number, string> = { 1: 'Casa do Calú', 2: 'Praça do Bairro' }
@@ -32,8 +32,16 @@ export function MapScreen({
   const [status, setStatus] = useState<PhaseStatus[] | null>(null)
 
   useEffect(() => {
-    void loadProgress(svc).then(setStatus)
+    // sem progresso legível (ex.: erro no banco), cai no começo: só a primeira fase liberada
+    void loadProgress(svc)
+      .catch(() => phaseStatuses(PHASE_ORDER, [], {}))
+      .then(setStatus)
   }, [svc])
+  useEffect(() => {
+    // volta do jogo: leva a fase atual para o meio da tela
+    if (status)
+      ref.current?.querySelector('[data-state="current"]')?.scrollIntoView({ block: 'center' })
+  }, [status])
   useEffect(() => ref.current?.focus(), [])
 
   const byId = new Map(status?.map((s) => [s.id, s]))
@@ -53,6 +61,7 @@ export function MapScreen({
           Início
         </button>
       </div>
+      {!status && <p className="m-0 text-center">Carregando…</p>}
       {status &&
         [1, 2].map((world) => (
           <section key={world} className="flex flex-col gap-3" aria-labelledby={`mundo-${world}`}>
@@ -60,7 +69,11 @@ export function MapScreen({
               {WORLD_NAMES[world]}
             </h2>
             {GAME_PHASES.filter((p) => p.world === world).map((phase) => {
-              const s = byId.get(phase.id)!
+              const s = byId.get(phase.id) ?? {
+                id: phase.id,
+                state: 'locked' as const,
+                stars: 0 as const,
+              }
               const locked = s.state === 'locked'
               return (
                 <button
@@ -78,14 +91,24 @@ export function MapScreen({
                   }`}
                   onClick={() => onPlay(phase.id)}
                 >
-                  <span>{phase.name}</span>
+                  <span>
+                    {phase.name.replace(/^GD:\s*/, 'Grande Desafio: ')}
+                    {s.state === 'current' && <span className="sr-only"> (fase atual)</span>}
+                  </span>
                   {locked ? (
                     <>
                       <Lock />
                       <span className="sr-only">Bloqueada</span>
                     </>
                   ) : (
-                    <Stars count={s.stars} size={24} />
+                    <span className="flex items-center gap-2 rounded-full bg-white px-2 py-1">
+                      {s.state === 'current' && (
+                        <span aria-hidden="true" className="text-lg font-extrabold text-green-deep">
+                          ▶
+                        </span>
+                      )}
+                      <Stars count={s.stars} size={24} />
+                    </span>
                   )}
                 </button>
               )

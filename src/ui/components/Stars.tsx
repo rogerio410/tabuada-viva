@@ -3,7 +3,7 @@ export function Stars({ count, size = 28 }: { count: 0 | 1 | 2 | 3; size?: numbe
   return (
     <span
       role="img"
-      aria-label={`${count} de 3 estrelas`}
+      aria-label={count === 0 ? 'Sem estrelas ainda' : `${count} de 3 estrelas`}
       className="inline-flex gap-1"
       data-testid="stars"
       data-count={count}
@@ -16,6 +16,7 @@ export function Stars({ count, size = 28 }: { count: 0 | 1 | 2 | 3; size?: numbe
             stroke="#2b2118"
             strokeWidth="1.5"
             strokeLinejoin="round"
+            strokeDasharray={i <= count ? undefined : '3 2'}
           />
         </svg>
       ))}

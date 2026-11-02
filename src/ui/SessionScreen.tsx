@@ -25,7 +25,7 @@ function resultLine(r: PhaseResult): string {
     const isLast = PHASE_ORDER.indexOf(r.phaseId) === PHASE_ORDER.length - 1
     return isLast ? 'Muito bem! Mais mundos em breve.' : 'Muito bem! A próxima fase abriu.'
   }
-  if (r.stars >= 2) return 'Muito bem! Bora jogar mais uma para abrir a próxima fase?'
+  if (r.stars >= 2) return 'Muito bem! Bora jogar mais uma?'
   return 'Boa! Vamos treinar mais um pouquinho com o Calú?'
 }
 

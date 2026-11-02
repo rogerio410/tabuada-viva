@@ -4,6 +4,7 @@ import {
   answerRight,
   attemptsInDb,
   expectTouchTargets,
+  finishAfterRest,
   finishSession,
   openMap,
   playPhase,
@@ -103,7 +104,7 @@ test.describe('sessão de adição (360x740)', () => {
     await expect(page.getByText('Bora descansar? Amanhã tem mais!')).toBeVisible({ timeout: 5000 })
     await page.getByRole('button', { name: 'Descansar' }).tap()
     // no máximo um item de fechamento
-    if (await page.getByTestId('equation').isVisible()) await answerRight(page)
+    await finishAfterRest(page)
     await expect(page.getByRole('button', { name: 'Voltar ao mapa' })).toBeVisible()
     await expect(page.getByTestId('stars')).toBeVisible()
     await expect(page.locator('main')).not.toContainText(/nota|pontos|\d{1,2}:\d{2}|%/i)
@@ -153,7 +154,7 @@ test.describe('sessão de adição (360x740)', () => {
     await expect(page.getByText('Bora descansar? Amanhã tem mais!')).toBeVisible({ timeout: 5000 })
     await expectTouchTargets(page)
     await page.getByRole('button', { name: 'Descansar' }).tap()
-    if (await page.getByTestId('equation').isVisible()) await answerRight(page)
+    await finishAfterRest(page)
     await expect(page.getByRole('button', { name: 'Voltar ao mapa' })).toBeVisible()
     await expectTouchTargets(page)
   })
