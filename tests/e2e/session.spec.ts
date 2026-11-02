@@ -1,78 +1,16 @@
-import { expect, test, type Page } from '@playwright/test'
-
-const sum = async (page: Page) => {
-  const text = await page.getByTestId('equation').innerText()
-  const m = text.match(/(\d+)\s*\+\s*(\d+)/)!
-  return Number(m[1]) + Number(m[2])
-}
-
-const typeNumber = async (page: Page, n: number) => {
-  for (const d of String(n)) await page.getByRole('button', { name: d, exact: true }).tap()
-}
-
-const answer = async (page: Page, n: number) => {
-  await typeNumber(page, n)
-  await page.getByRole('button', { name: 'Confirmar' }).tap()
-}
-
-/** Acerta a conta atual e espera a próxima tela (pergunta, convite ou fim). */
-const answerRight = async (page: Page) => {
-  await answer(page, await sum(page))
-  await expect(page.getByTestId('feedback')).toBeVisible()
-  await expect(page.getByTestId('feedback')).toBeHidden()
-}
-
-const attemptsInDb = (page: Page) =>
-  page.evaluate(
-    () =>
-      new Promise<{ supportsUsed: string[]; timeMs: number; correct: boolean }[]>(
-        (resolve, reject) => {
-          const open = indexedDB.open('tabuada-viva')
-          open.onerror = () => reject(open.error)
-          open.onsuccess = () => {
-            const get = open.result.transaction('attempts').objectStore('attempts').getAll()
-            get.onsuccess = () => resolve(get.result)
-          }
-        },
-      ),
-  )
-
-const expectTouchTargets = async (page: Page) => {
-  const boxes = await page.evaluate(() =>
-    [...document.querySelectorAll('button')]
-      .filter((b) => b.getBoundingClientRect().width > 0)
-      .map((b) => {
-        const r = b.getBoundingClientRect()
-        return {
-          name: b.textContent || b.ariaLabel || '',
-          x: r.x,
-          y: r.y,
-          w: r.width,
-          h: r.height,
-        }
-      }),
-  )
-  expect(boxes.length).toBeGreaterThan(0)
-  for (const b of boxes) {
-    expect(b.h, `altura de "${b.name}"`).toBeGreaterThanOrEqual(56)
-    expect(b.w, `largura de "${b.name}"`).toBeGreaterThanOrEqual(56)
-    expect(b.y + b.h, `"${b.name}" cabe na tela`).toBeLessThanOrEqual(740)
-  }
-  for (const [i, a] of boxes.entries())
-    for (const b of boxes.slice(i + 1)) {
-      const dx = Math.max(0, a.x - (b.x + b.w), b.x - (a.x + a.w))
-      const dy = Math.max(0, a.y - (b.y + b.h), b.y - (a.y + a.h))
-      expect(Math.hypot(dx, dy), `espaço entre "${a.name}" e "${b.name}"`).toBeGreaterThanOrEqual(
-        11.5,
-      )
-    }
-}
-
-const startGame = async (page: Page) => {
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Jogar' }).tap()
-  await expect(page.getByTestId('equation')).toBeVisible()
-}
+import { expect, test } from '@playwright/test'
+import {
+  answer,
+  answerRight,
+  attemptsInDb,
+  expectTouchTargets,
+  finishSession,
+  openMap,
+  playPhase,
+  startGame,
+  sum,
+  typeNumber,
+} from './helpers'
 
 test.describe('sessão de adição (360x740)', () => {
   test('joga offline usando dedos, quadro de dez e reta, e guarda tudo no aparelho', async ({
@@ -92,7 +30,7 @@ test.describe('sessão de adição (360x740)', () => {
     await context.setOffline(true)
     await page.reload()
     await page.getByRole('button', { name: 'Jogar' }).tap()
-    await expect(page.getByTestId('equation')).toBeVisible()
+    await playPhase(page)
 
     // Aprendendo: as Mãozinhas já vêm abertas.
     await expect(page.getByTestId('tool-dedos')).toBeVisible()
@@ -166,7 +104,8 @@ test.describe('sessão de adição (360x740)', () => {
     await page.getByRole('button', { name: 'Descansar' }).tap()
     // no máximo um item de fechamento
     if (await page.getByTestId('equation').isVisible()) await answerRight(page)
-    await expect(page.getByText(/Você conseguiu\./)).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Voltar ao mapa' })).toBeVisible()
+    await expect(page.getByTestId('stars')).toBeVisible()
     await expect(page.locator('main')).not.toContainText(/nota|pontos|\d{1,2}:\d{2}|%/i)
   })
 
@@ -186,7 +125,7 @@ test.describe('sessão de adição (360x740)', () => {
     await answerRight(page)
     await page.reload()
     await page.getByRole('button', { name: 'Jogar' }).tap()
-    await expect(page.getByTestId('equation')).toBeVisible()
+    await playPhase(page)
     await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2')
     expect((await attemptsInDb(page)).length).toBe(2)
   })
@@ -198,7 +137,8 @@ test.describe('sessão de adição (360x740)', () => {
     await page.goto('/')
     await expectTouchTargets(page)
     await page.getByRole('button', { name: 'Jogar' }).tap()
-    await expect(page.getByTestId('equation')).toBeVisible()
+    await expectTouchTargets(page, { scroll: true })
+    await playPhase(page)
     for (const name of ['Quadro', 'Reta']) {
       await page.getByRole('button', { name, exact: true }).tap()
       await expectTouchTargets(page)
@@ -214,16 +154,16 @@ test.describe('sessão de adição (360x740)', () => {
     await expectTouchTargets(page)
     await page.getByRole('button', { name: 'Descansar' }).tap()
     if (await page.getByTestId('equation').isVisible()) await answerRight(page)
-    await expect(page.getByText(/Você conseguiu\./)).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Voltar ao mapa' })).toBeVisible()
     await expectTouchTargets(page)
   })
 
-  test('Sair volta ao início sem perder o progresso', async ({ page }) => {
+  test('Sair volta ao mapa sem perder o progresso', async ({ page }) => {
     await startGame(page)
     await answerRight(page)
     await page.getByRole('button', { name: 'Sair' }).tap()
-    await expect(page.getByRole('heading', { name: 'Tabuada Viva' })).toBeVisible()
-    await page.getByRole('button', { name: 'Jogar' }).tap()
+    await expect(page.getByRole('heading', { name: 'Mapa' })).toBeVisible()
+    await playPhase(page)
     await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1')
   })
 

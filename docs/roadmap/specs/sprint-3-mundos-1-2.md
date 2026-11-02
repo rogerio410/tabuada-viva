@@ -41,7 +41,7 @@ Cada critério vira pelo menos um teste (Vitest para lógica, Playwright 360×74
 
 ### 4.2 Estrelas e avanço (D5, D12, D25)
 
-- **Dado** as sessões de uma fase, **quando** a sessão termina, **então** o **acerto da fase** = acertos ÷ respostas de todas as sessões daquela fase, **com ou sem apoio** (apoio só é registrado), e as estrelas saem de `PARAMS.starThresholds` (≥ 60% = 1, ≥ 80% = 2, ≥ 95% = 3).
+- **Dado** as sessões de uma fase, **quando** a sessão termina, **então** o **acerto da fase** = acertos ÷ respostas das **últimas `phaseSessions.max` (3) sessões encerradas** daquela fase, **com ou sem apoio** (apoio só é registrado); uma primeira sessão ruim não pesa para sempre, e as estrelas saem de `PARAMS.starThresholds` (≥ 60% = 1, ≥ 80% = 2, ≥ 95% = 3).
 - **Dado** que a fase tem pelo menos `sessionsBeforeAdvance` sessões (de `adaptNextSession`: 2 ao acelerar, 3 nos demais casos) e ≥ 2 estrelas, **então** a próxima fase abre; com 1 estrela, o Calú convida a treinar mais ("Boa! Vamos treinar mais um pouquinho com o Calú?").
 - **Dado** que a criança refaz a fase, **então** vale o **melhor** resultado; nunca diminui.
 - **Dado** a tela de resultado da fase, **então** ela mostra as estrelas e a voz do Calú, sem nota, sem tempo e sem comparação.
@@ -113,3 +113,13 @@ Nenhum dado novo: respostas (já gravadas), sessões e estrelas por fase, tudo n
 2. **Grande Desafio sem histórias** (item 4.6): confirmar o padrão provisório.
 3. **Decisões reversíveis do Sprint 2** para rever com a Ana: avanço automático de 900 ms, reta com "Pular", botão "Sair".
 4. **Para a Ana jogar:** instalar o PWA no celular e jogar em dias diferentes; sem painel (Sprint 8), conferir o progresso via DevTools/IndexedDB — será documentado.
+
+## Implementação e refinamentos (2026-11-02)
+
+- `Attempt.phaseId` é a **fase da sessão** (não a fase do fato), como diz o tipo ("fase em que a resposta foi dada"): assim as revisões de W1 jogadas dentro de W2 contam para W2 e a fase não trava. `Session` ganhou o campo opcional `phaseId` (sem Dexie v2: não é indexado).
+- Uma sessão por fase pode ficar aberta; "Sair" a mantém. As estrelas só contam quando a sessão **termina** (convite de descanso aceito ou fila esgotada).
+- Família de fatos: o triângulo novo de subtração vira a soma de origem + os fatos de subtração do triângulo, em sequência (`Attempt.kind = 'family'`).
+- Grande Desafio: mistura todos os fatos do mundo, sem histórias (3b).
+- Simulação de vários dias no Vitest (`progression.test.ts`): uma criança perfeita e outra que erra 1 em 7 avançam pelas fases sem travar.
+- **Não feito (arte provisória):** as 4 expressões do Calú (`CHAR-CALU-*`) e `ENV-MAP`; o mapa usa a lista de fases e as estrelas em SVG (`UI-STAR-*`). Ficam para quando houver arte.
+- **Textos novos para amostragem humana:** "Muito bem! A próxima fase abriu." e "Boa! Vamos treinar mais um pouquinho com o Calú?" (voz-do-calu.md); novos: "Muito bem! Bora jogar mais uma para abrir a próxima fase?", "Muito bem! Mais mundos em breve.", "Mapa", "Início", "Voltar ao mapa", "Mundos 3 e 4: em breve", "Portão: em breve", "Pular −1", "N pulos, parou no N" e a **dica de subtração (b + r = a, revisão 100% humana)**.

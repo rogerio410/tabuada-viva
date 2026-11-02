@@ -1,12 +1,30 @@
 import { useState } from 'react'
 import { isSoundOn, setSoundOn } from './audio'
 import { Calu } from './components/Calu'
+import { MapScreen } from './MapScreen'
 import { SessionScreen } from './SessionScreen'
 
+type Screen = { name: 'home' } | { name: 'map' } | { name: 'play'; phaseId: string }
+
 export function App() {
-  const [playing, setPlaying] = useState(false)
+  const [screen, setScreen] = useState<Screen>({ name: 'home' })
   const [sound, setSound] = useState(isSoundOn)
-  if (playing) return <SessionScreen onExit={() => setPlaying(false)} />
+
+  if (screen.name === 'play')
+    return (
+      <SessionScreen
+        key={screen.phaseId}
+        phaseId={screen.phaseId}
+        onExit={() => setScreen({ name: 'map' })}
+      />
+    )
+  if (screen.name === 'map')
+    return (
+      <MapScreen
+        onPlay={(phaseId) => setScreen({ name: 'play', phaseId })}
+        onBack={() => setScreen({ name: 'home' })}
+      />
+    )
   return (
     <main className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center">
       <h1 className="m-0 text-3xl font-extrabold">Tabuada Viva</h1>
@@ -15,7 +33,7 @@ export function App() {
       <button
         type="button"
         className="btn-primary w-full select-none touch-manipulation"
-        onClick={() => setPlaying(true)}
+        onClick={() => setScreen({ name: 'map' })}
       >
         Jogar
       </button>

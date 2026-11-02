@@ -55,6 +55,7 @@ async function playSession(
   for (let guard = 0; guard < 2000; guard++) {
     if (view.type === 'rest-offer') view = await c.rest()
     if (view.type === 'done') return { facts, kinds, result: view.result }
+    if (view.type !== 'question') throw new Error(`inesperado: ${view.type}`)
     const q = view.question
     facts.push(q.factId)
     kinds.push(q.family ? 'family' : 'fact')

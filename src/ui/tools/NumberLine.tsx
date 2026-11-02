@@ -7,9 +7,18 @@ const STEP = 15
  * Reta numérica 0–20. O ponto de partida é o primeiro número da conta; o botão dá um pulo por toque
  * (alternativa por toque a qualquer arrastar) e "Recomeçar" volta ao início.
  */
-export function NumberLine({ start, onUse }: { start: number; onUse: () => void }) {
+export function NumberLine({
+  start,
+  back = false,
+  onUse,
+}: {
+  start: number
+  /** Subtração: os pulos vão para trás a partir do primeiro número. */
+  back?: boolean
+  onUse: () => void
+}) {
   const [hops, setHops] = useState(0)
-  const at = Math.min(MAX, start + hops)
+  const at = back ? Math.max(0, start - hops) : Math.min(MAX, start + hops)
   const width = MAX * STEP + 20
   return (
     <div className="flex flex-col gap-3" data-testid="tool-reta">
@@ -44,13 +53,13 @@ export function NumberLine({ start, onUse }: { start: number; onUse: () => void 
         <button
           type="button"
           className="min-h-[56px] flex-1 rounded-2xl bg-poti-deep px-4 text-xl font-extrabold text-white select-none touch-manipulation disabled:opacity-40"
-          disabled={at >= MAX}
+          disabled={back ? at <= 0 : at >= MAX}
           onClick={() => {
             onUse()
             setHops((h) => h + 1)
           }}
         >
-          Pular +1
+          {back ? 'Pular −1' : 'Pular +1'}
         </button>
         <button
           type="button"
