@@ -52,7 +52,8 @@ export const BANNED = [
 
 /**
  * URLs absolutas que aparecem como texto no build mas nunca são requisitadas:
- * namespaces SVG/XML, mensagens de erro do React, comentário de licença do Tailwind, aviso do Workbox.
+ * namespaces SVG/XML, mensagens de erro do React, comentário de licença do Tailwind, aviso do Workbox,
+ * duas mensagens de erro do Dexie (links de ajuda, só texto; entradas exatas, não o domínio).
  * A URL do Supabase entra aqui no Sprint 4 (junto com `connect-src` da CSP).
  */
 export const ALLOWED_URL_PREFIXES = [
@@ -61,6 +62,8 @@ export const ALLOWED_URL_PREFIXES = [
   'https://react.dev/errors/',
   'https://tailwindcss.com/',
   'https://bit.ly/wb-',
+  'https://tinyurl.com/y2uuvskb',
+  'http://bit.ly/2kdckMn',
 ]
 
 // http(s), ws(s) e protocolo-relativo (//host.tld) contam como URL externa

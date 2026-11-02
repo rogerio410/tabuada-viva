@@ -28,8 +28,15 @@ describe('scanBuiltFile', () => {
       'var t=`https://react.dev/errors/`+e',
       '/*! tailwindcss v4 | MIT License | https://tailwindcss.com */',
       'Learn more at https://bit.ly/wb-precache',
+      'MissingAPI:`Please visit https://tinyurl.com/y2uuvskb`',
+      'new Error(`See http://bit.ly/2kdckMn`)',
     ].join('\n')
     expect(scanBuiltFile('dist/a.js', ok)).toEqual([])
+  })
+
+  it('a exceção do Dexie vale só para as URLs exatas, não para o domínio', () => {
+    expect(rules(scanBuiltFile('dist/a.js', 'https://tinyurl.com/outra'))).toContain('url-externa')
+    expect(rules(scanBuiltFile('dist/a.js', 'http://bit.ly/outra'))).toContain('url-externa')
   })
 
   it('não confunde onDoubleClick do React com o domínio de anúncios', () => {
