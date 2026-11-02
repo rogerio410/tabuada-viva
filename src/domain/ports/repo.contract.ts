@@ -32,6 +32,8 @@ const at = (over: Partial<Attempt> = {}): Attempt => ({
   timeMs: 2000,
   supportsUsed: [],
   errorType: null,
+  phaseId: null,
+  kind: 'fact',
   createdAt: d('2026-11-02T10:00:00Z'),
   ...over,
 })

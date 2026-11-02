@@ -1,6 +1,6 @@
 # Spec Sprint 1 — Motor pedagógico
 
-Status: rascunho. O responsável dispensou a revisão em 2026-11-02; vale o **padrão provisório** do fim do arquivo, que só usa o que já está aprovado.
+Status: **implementada** (2026-11-02) conforme o padrão provisório do fim do arquivo; o responsável dispensou a revisão da spec. Itens não implementados: 4.4 (D3) e a detecção de `swapped_subtraction`.
 Branch: `sprint-1/motor-pedagogico`
 
 ## 1. Objetivo
@@ -186,3 +186,14 @@ Para que o Sprint 1 possa começar sem decidir nada que seja só do humano (CLAU
 5. **×0 e ×1:** vale `rootChain` do Bloco 3 (`add:0+0`, `add:0+n`), marcado como suposição.
 
 Qualquer destes pontos pode ser revertido pelo responsável a qualquer momento.
+
+## Como foi implementado (decisões técnicas da IA, reversíveis)
+
+- **Catálogo:** `src/domain/facts/catalog.ts` deriva 66/121/45/81 por construção; as regras ×0/×1 (21 pares) e ÷1, n÷n, 0÷n ficam à parte, com `rule: true`.
+- **`isFast`** (`scheduler/timing.ts`): +`fastAnswerExtraMsPerDigit` por dígito extra no resultado; +`fastAnswerDivisionExtraMs` em ÷; tempo inválido nunca é rápido.
+- **`applyAnswer`:** exatamente a seção 4.3; um fato `novo` é tratado como Aprendendo.
+- **`buildSession`:** × e ÷ nunca entram com `gateOpen = false`, mesmo que a fase os liste. Dosagem 70/30: frágeis + novos ≤ `floor(conhecidos × 0,3/0,7)` (mínimo 1), reservando 1 vaga para o conteúdo novo. Fechamento = o fato conhecido de maior estado que ainda não saiu.
+- **`adaptNextSession`:** a redução é de 1 item novo (mínimo 1); o GDD não dá o número.
+- **Portão:** G4 usa `errorType === 'wrong_operation'` para a escolha da operação; G5 sem respostas elegíveis não passa (sem evidência); cada prova é o conjunto de respostas de uma sessão `kind: 'proof'`.
+- **`estimatedMinDaysToOpen`:** **limite inferior** pelas regras do motor (D1), mais otimista que as "4 a 5 semanas" de `portao.md`, que contam também o retorno de 14 dias. O painel deve mostrar o prazo mais prudente.
+- **`Attempt`** ganhou `phaseId` e `kind` (seção 9), refletidos no contrato dos repositórios; o SQL já os tinha.
