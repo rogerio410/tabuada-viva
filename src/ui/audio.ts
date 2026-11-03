@@ -22,12 +22,21 @@ export function setSoundOn(on: boolean): void {
   }
 }
 
+/** Fim de fase: três notas subindo, curtas; só toca em conquista. */
+export function playPhaseEnd(): void {
+  playNotes([523.25, 659.25, 783.99])
+}
+
 export function playCorrect(): void {
+  playNotes([523.25, 659.25])
+}
+
+function playNotes(freqs: number[]): void {
   if (!isSoundOn()) return
   try {
     ctx ??= new AudioContext()
     const t = ctx.currentTime
-    for (const [i, freq] of [523.25, 659.25].entries()) {
+    for (const [i, freq] of freqs.entries()) {
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
       osc.frequency.value = freq

@@ -63,6 +63,8 @@ export interface Session {
   childId: ChildId
   startedAt: Date
   endedAt: Date | null
+  /** Fase jogada na sessão (`W<n>-P<nn>`); as respostas da sessão levam a mesma fase. */
+  phaseId?: string
   itemCount: number
   /** Acertos sem apoio ÷ respostas (D4); null até haver respostas. */
   accuracy: number | null

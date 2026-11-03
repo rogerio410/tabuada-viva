@@ -1,6 +1,6 @@
 # Spec Sprint 2 — Loop de jogo e ferramentas
 
-Status: aprovada (2026-11-02). Decisões do responsável no fim do arquivo (seção "Decisões aprovadas"); elas substituem o padrão provisório onde diferem.
+Status: implementada e mesclada (PR #5). Decisões do responsável no fim do arquivo (seção "Decisões aprovadas"); elas substituem o padrão provisório onde diferem.
 Branch: `sprint-2/loop-de-jogo`
 
 ## 1. Objetivo

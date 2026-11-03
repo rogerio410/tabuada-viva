@@ -14,6 +14,7 @@ const TABS: { tool: Tool; label: string }[] = [
   { tool: 'reta', label: 'Reta' },
 ]
 const MAX_DIGITS = 2
+const SYMBOL = { add: '+', sub: '−' } as const
 
 interface Props {
   question: Question
@@ -54,14 +55,14 @@ export function QuestionView({ question, onAnswer }: Props) {
 
   return (
     <div className="flex flex-1 flex-col gap-3">
-      <div className="flex items-center justify-center gap-3 text-[56px] font-extrabold leading-none">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[48px] font-extrabold leading-none">
         <span data-testid="equation">
-          {question.a} + {question.b} =
+          {question.a} {SYMBOL[question.op]} {question.b} =
         </span>
         <span
           data-testid="answer"
           role="status"
-          aria-label="Sua resposta"
+          aria-label={digits === '' ? 'Sua resposta: vazia' : `Sua resposta: ${digits}`}
           className="flex h-16 min-w-[84px] items-center justify-center rounded-2xl border-4 border-poti-deep bg-white px-3"
         >
           {digits === '' ? <span className="text-ink/30">?</span> : digits}
@@ -95,7 +96,11 @@ export function QuestionView({ question, onAnswer }: Props) {
             {tool === 'dedos' && <Fingers onUse={() => markUsed('dedos')} />}
             {tool === 'quadro-de-dez' && <TenFrame onUse={() => markUsed('quadro-de-dez')} />}
             {tool === 'reta' && (
-              <NumberLine start={Math.max(question.a, question.b)} onUse={() => markUsed('reta')} />
+              <NumberLine
+                start={question.op === 'sub' ? question.a : Math.max(question.a, question.b)}
+                back={question.op === 'sub'}
+                onUse={() => markUsed('reta')}
+              />
             )}
           </div>
         )}

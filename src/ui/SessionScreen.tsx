@@ -1,19 +1,33 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { SupportKind } from '@domain/ports/types'
-import { playCorrect } from './audio'
+import { playCorrect, playPhaseEnd } from './audio'
 import { Calu } from './components/Calu'
 import { HintCard } from './components/HintCard'
+import { Stars } from './components/Stars'
 import { QuestionView } from './components/QuestionView'
 import { useServices } from './services'
+import { PHASE_ORDER } from './session/phases'
 import {
   SessionController,
   type Feedback,
+  type PhaseResult,
   type Progress,
   type View,
 } from './session/session-controller'
 
 const CORRECT_LINES = ['Mandou bem!', 'Boa!', 'Isso mesmo!']
 const AUTO_ADVANCE_MS = 900
+const SYMBOL = { add: '+', sub: '−' } as const
+
+/** Fala do Calú no fim da fase (voz-do-calu.md): nunca "não passou", sem nota nem tempo. */
+function resultLine(r: PhaseResult): string {
+  if (r.passed) {
+    const isLast = PHASE_ORDER.indexOf(r.phaseId) === PHASE_ORDER.length - 1
+    return isLast ? 'Muito bem! Mais mundos em breve.' : 'Muito bem! A próxima fase abriu.'
+  }
+  if (r.stars >= 2) return 'Muito bem! Bora jogar mais uma?'
+  return 'Boa! Vamos treinar mais um pouquinho com o Calú?'
+}
 
 const BTN = 'min-h-[56px] rounded-2xl px-6 text-xl font-extrabold select-none touch-manipulation'
 
@@ -61,7 +75,7 @@ function Screen({
   )
 }
 
-export function SessionScreen({ onExit }: { onExit: () => void }) {
+export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: () => void }) {
   const svc = useServices()
   const ctl = useRef<SessionController | null>(null)
   const started = useRef(false)
@@ -72,7 +86,7 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
   useEffect(() => {
     if (started.current) return
     started.current = true
-    void SessionController.open(svc).then(async (c) => {
+    void SessionController.open(svc, phaseId).then(async (c) => {
       ctl.current = c
       show(await c.next())
     })
@@ -83,6 +97,7 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
     setFeedback(null)
     setView(v)
     if (v.type !== 'done') setProgress(v.progress)
+    else if (v.result.stars > 0) playPhaseEnd()
   }
   const advance = async (to?: Promise<View>) => show(await (to ?? ctl.current!.next()))
 
@@ -148,9 +163,10 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
         className="mx-auto flex h-full max-w-[480px] flex-col items-center justify-center gap-6 p-4 text-center"
       >
         <Calu size={120} />
-        <p className="m-0 text-2xl font-extrabold">Você conseguiu. Amanhã tem mais!</p>
+        <Stars count={view.result.stars} size={44} />
+        <p className="m-0 text-2xl font-extrabold">{resultLine(view.result)}</p>
         <button type="button" className={`${BTN} w-full bg-green-deep text-white`} onClick={onExit}>
-          Voltar ao início
+          Voltar ao mapa
         </button>
       </Screen>
     )
@@ -184,7 +200,7 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
             <p className="m-0 text-3xl font-extrabold" role="status">
               {correctLine(feedback, progress.done)}
               <span className="mt-2 block text-[40px]">
-                {q.a} + {q.b} = {q.answer}
+                {q.a} {SYMBOL[q.op]} {q.b} = {q.answer}
               </span>
             </p>
           ) : (
@@ -192,7 +208,7 @@ export function SessionScreen({ onExit }: { onExit: () => void }) {
               <p className="m-0 text-2xl font-extrabold" role="status">
                 Vamos ver juntos?
               </p>
-              <HintCard a={q.a} b={q.b} />
+              <HintCard op={q.op} a={q.a} b={q.b} />
               <button
                 type="button"
                 className={`${BTN} w-full bg-green-deep text-white`}
