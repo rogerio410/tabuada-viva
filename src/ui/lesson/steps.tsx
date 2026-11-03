@@ -359,10 +359,15 @@ export function AskStep({ step, onDone, say }: StepProps<'ask'>) {
         </span>
       </div>
       {wrong && m && (
-        <HintCard op={m[2] === '+' ? 'add' : 'sub'} a={Number(m[1])} b={Number(m[3])} />
+        <HintCard compact op={m[2] === '+' ? 'add' : 'sub'} a={Number(m[1])} b={Number(m[3])} />
       )}
       {wrong && missing && (
-        <HintCard op="add" a={Number(missing[1])} b={Number(missing[2]) - Number(missing[1])} />
+        <HintCard
+          compact
+          op="add"
+          a={Number(missing[1])}
+          b={Number(missing[2]) - Number(missing[1])}
+        />
       )}
       <div className="mt-auto">
         <NumberPad
