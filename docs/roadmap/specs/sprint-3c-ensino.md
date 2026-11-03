@@ -1,6 +1,6 @@
 # Spec Sprint 3c — Camada de ensino (Mundos 1 e 2)
 
-Status: rascunho (aguarda leitura do storyboard `docs/pedagogia/ensino-por-fase.md`)
+Status: aprovada em 2026-11-02 (storyboard, vocabulário das lições e pendências delegados pelo responsável à IA; reversíveis)
 Branch: `sprint-3c/ensino`
 
 ## 1. Objetivo

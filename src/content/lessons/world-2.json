@@ -1,0 +1,302 @@
+{
+  "batch": {
+    "id": "licoes-w2",
+    "origin": "ia",
+    "date": "2026-11-02",
+    "reviewer": null,
+    "humanSample": "pendente"
+  },
+  "lessons": [
+    {
+      "phase": "W2-P01",
+      "strategy": "Tirar nada, tirar tudo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Tirar é levar embora."
+        },
+        {
+          "type": "remove",
+          "from": 5,
+          "take": 2,
+          "object": "balao"
+        },
+        {
+          "type": "ask",
+          "expr": "5 − 2",
+          "answer": 3,
+          "prompt": "Quantos sobraram?"
+        },
+        {
+          "type": "say",
+          "text": "E se eu não tirar nenhum?"
+        },
+        {
+          "type": "ask",
+          "expr": "5 − 0",
+          "answer": 5
+        },
+        {
+          "type": "remove",
+          "from": 5,
+          "take": 5,
+          "object": "balao"
+        },
+        {
+          "type": "ask",
+          "expr": "5 − 5",
+          "answer": 0
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["0", "1", "5"],
+          "correct": 0,
+          "strip": ["2 − 2 = 0", "3 − 3 = 0", "4 − 4 = 0", "5 − 5 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirar tudo deixa 0. Tirar nada deixa tudo."
+        },
+        {
+          "type": "ask",
+          "expr": "6 − 6",
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "phase": "W2-P02",
+      "strategy": "A família do triângulo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "3 números moram juntos."
+        },
+        {
+          "type": "family",
+          "a": 1,
+          "b": 2
+        },
+        {
+          "type": "ask",
+          "expr": "3 − 1",
+          "answer": 2,
+          "prompt": "1 + ? = 3. Quanto falta?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Se 1 + 2 = 3, quanto é 3 − 2?",
+          "options": ["1", "2", "3"],
+          "correct": 0
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Quem sabe juntar, sabe tirar."
+        },
+        {
+          "type": "ask",
+          "expr": "6 − 1",
+          "answer": 5
+        }
+      ]
+    },
+    {
+      "phase": "W2-P03",
+      "strategy": "Quanto falta",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Tirar 1 é pular para trás."
+        },
+        {
+          "type": "numline",
+          "start": 7,
+          "hops": 1,
+          "back": true
+        },
+        {
+          "type": "say",
+          "text": "Ou: quanto falta do 6 para o 7?"
+        },
+        {
+          "type": "ask",
+          "expr": "7 − 6",
+          "answer": 1
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["8", "9", "10"],
+          "correct": 1,
+          "strip": ["7 − 1 = 6", "8 − 1 = 7", "9 − 1 = 8", "10 − 1 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirar 1 dá o número de antes."
+        },
+        {
+          "type": "ask",
+          "expr": "9 − 1",
+          "answer": 8
+        }
+      ]
+    },
+    {
+      "phase": "W2-P04",
+      "strategy": "Pulos de 2",
+      "steps": [
+        {
+          "type": "say",
+          "text": "O ônibus tem 8 passageiros."
+        },
+        {
+          "type": "remove",
+          "from": 8,
+          "take": 2,
+          "object": "passageiro"
+        },
+        {
+          "type": "ask",
+          "expr": "8 − 2",
+          "answer": 6,
+          "prompt": "Quantos ficaram?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["2", "3", "5"],
+          "correct": 0,
+          "strip": ["10", "8", "6", "4", "?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? De 2 em 2 para trás também cai em par."
+        },
+        {
+          "type": "ask",
+          "expr": "7 − 2",
+          "answer": 5
+        }
+      ]
+    },
+    {
+      "phase": "W2-P05",
+      "strategy": "De 10 para baixo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "O quadro de 10 está cheio."
+        },
+        {
+          "type": "tenframe",
+          "fill": 10
+        },
+        {
+          "type": "remove",
+          "from": 10,
+          "take": 3,
+          "object": "moeda"
+        },
+        {
+          "type": "say",
+          "text": "Sobraram 7. Lembra? 3 + 7 = 10."
+        },
+        {
+          "type": "ask",
+          "expr": "3 + ? = 10",
+          "answer": 7
+        },
+        {
+          "type": "ask",
+          "expr": "10 − 3",
+          "answer": 7
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["5", "6", "7"],
+          "correct": 1,
+          "strip": ["10 − 1 = 9", "10 − 2 = 8", "10 − 3 = 7", "10 − 4 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirando de 10, o resto desce de 1 em 1."
+        },
+        {
+          "type": "ask",
+          "expr": "9 − 3",
+          "answer": 6
+        }
+      ]
+    },
+    {
+      "phase": "W2-P06",
+      "strategy": "Somar ao contrário",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Sem objetos, pense na soma."
+        },
+        {
+          "type": "family",
+          "a": 4,
+          "b": 5
+        },
+        {
+          "type": "ask",
+          "expr": "4 + ? = 9",
+          "answer": 5
+        },
+        {
+          "type": "ask",
+          "expr": "9 − 4",
+          "answer": 5
+        },
+        {
+          "type": "choose",
+          "prompt": "Para 9 − 5, pense 5 + ? = 9.",
+          "options": ["3", "4", "5"],
+          "correct": 1
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirar é somar ao contrário."
+        },
+        {
+          "type": "ask",
+          "expr": "8 − 4",
+          "answer": 4
+        }
+      ]
+    },
+    {
+      "phase": "W2-P07",
+      "strategy": "Feira dos truques",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Dia de feira! Vamos usar os truques."
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 10 − 3?",
+          "options": ["Pares de 10", "Dobro", "Mais 1"],
+          "correct": 0
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 7 − 1?",
+          "options": ["Número de antes", "Dobro", "Pares de 10"],
+          "correct": 0
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 9 − 4?",
+          "options": ["Somar ao contrário", "Dobro", "Mais 1"],
+          "correct": 0
+        }
+      ]
+    }
+  ]
+}
