@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 import {
   answerRight,
+  typeNumber,
   attemptsInDb,
   expectTouchTargets,
   finishLesson,
@@ -61,13 +62,13 @@ test.describe('lições e prática guiada (360x740)', () => {
     await page.getByTestId('phase-W1-P01').tap()
     await finishLesson(page, { stopAt: 'choose' })
     const choices = page.getByTestId('choice')
-    await expect(page.getByTestId('strip')).toContainText('4 + 0 = ?')
+    await expect(page.getByTestId('strip')).toContainText('0 + 4 = ?')
     await choices.filter({ hasText: /^3$/ }).tap() // errado: tenta de novo, sem punição
     await expect(page.getByTestId('bubble')).toContainText('Quase')
     await expect(page.getByTestId('continue')).toBeDisabled()
     await expect(page.locator('main')).not.toContainText(/errad|fracasso|perdeu/i)
     await choices.filter({ hasText: /^4$/ }).tap()
-    await expect(page.getByTestId('strip')).toContainText('4 + 0 = 4')
+    await expect(page.getByTestId('strip')).toContainText('0 + 4 = 4')
     await page.getByTestId('continue').tap()
     await expect(page.getByTestId('bubble')).toContainText('Somar 0 não muda nada')
   })
@@ -98,10 +99,10 @@ test.describe('lições e prática guiada (360x740)', () => {
     page,
   }) => {
     await openMap(page)
-    await seedProgress(page, [...W1, 'W2-P01', 'W2-P02', 'W2-P03', 'W2-P04', 'W2-P05'])
+    await seedProgress(page, [...W1, 'W2-P01', 'W2-P02', 'W2-P03', 'W2-P04', 'W2-P05', 'W2-P06'])
     await page.reload()
     await page.getByRole('button', { name: 'Jogar' }).tap()
-    for (const id of ['W2-P01', 'W2-P02', 'W2-P03', 'W2-P04', 'W2-P05', 'W2-P06']) {
+    for (const id of ['W2-P01', 'W2-P02', 'W2-P03', 'W2-P04', 'W2-P05', 'W2-P06', 'W2-P07']) {
       await page.getByTestId(`lesson-${id}`).scrollIntoViewIfNeeded()
       await page.getByTestId(`lesson-${id}`).tap()
       await finishLesson(page, {
@@ -153,5 +154,49 @@ test.describe('lições e prática guiada (360x740)', () => {
     expect(opened[0]).toBe(true)
     // depois do primeiro terço, a ferramenta não abre mais sozinha
     expect(opened.slice(3, 6).some((o) => o)).toBe(false)
+  })
+
+  test('"Sair" na lição da 1ª vez volta ao mapa sem gravar nada, e a lição volta na próxima entrada', async ({
+    page,
+  }) => {
+    await openMap(page)
+    await page.getByTestId('phase-W1-P01').tap()
+    await expect(page.getByTestId('lesson')).toBeVisible()
+    await page.getByTestId('lesson-exit').tap()
+    await expect(page.getByRole('heading', { name: 'Mapa' })).toBeVisible()
+    expect(await attemptsInDb(page)).toEqual([])
+    await page.getByTestId('phase-W1-P01').tap()
+    await expect(page.getByTestId('lesson')).toBeVisible()
+  })
+
+  test('"Sair" no "Ver o truque" fecha a lição e volta à pergunta', async ({ page }) => {
+    await openMap(page)
+    await playPhase(page)
+    await page.getByTestId('truque').tap()
+    await expect(page.getByTestId('lesson')).toBeVisible()
+    await page.getByTestId('lesson-exit').tap()
+    await expect(page.getByTestId('equation')).toBeVisible()
+    await expect(page.getByTestId('lesson')).toHaveCount(0)
+  })
+
+  test('errar uma pergunta guiada mostra a dica visual e continua cabendo em 360x740', async ({
+    page,
+  }) => {
+    await openMap(page)
+    await page.getByTestId('phase-W1-P01').tap()
+    // vai até a primeira pergunta guiada ("3 + 2") e erra de propósito
+    for (let i = 0; i < 40 && !(await page.getByTestId('lesson-expr').isVisible()); i++) {
+      const cont = page.getByTestId('continue')
+      if (await cont.isEnabled()) await cont.tap()
+      else await page.getByTestId('step-action').first().tap()
+    }
+    await expect(page.getByTestId('lesson-expr')).toBeVisible()
+    await typeNumber(page, 9)
+    await page.getByRole('button', { name: 'Confirmar' }).tap()
+    await expect(page.getByTestId('hint')).toBeVisible()
+    await expect(page.getByTestId('bubble')).toContainText('Quase')
+    await expect(page.locator('main')).not.toContainText(/errad|fracasso|perdeu/i)
+    await expectTouchTargets(page)
+    expect(await noOverflow(page)).toBeLessThanOrEqual(0)
   })
 })

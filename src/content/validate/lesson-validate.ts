@@ -24,6 +24,21 @@ const MISSING = /^(\d+) \+ \? = (\d+)$/
 
 const op = (a: number, sign: string, b: number) => (sign === '+' ? a + b : a - b)
 
+/** Chave da conta, para achar repetições: soma ignora a ordem; `a + ? = c` é a soma de a com c − a. */
+function arithKey(text: string): string | null {
+  const m = ARITH.exec(text) ?? SIMPLE.exec(text)
+  if (m) {
+    const [a, b] = [Number(m[1]), Number(m[3])]
+    return m[2] === '+' ? `+${Math.min(a, b)},${Math.max(a, b)}` : `-${a},${b}`
+  }
+  const q = MISSING.exec(text)
+  if (q) {
+    const [a, c] = [Number(q[1]), Number(q[2])]
+    return `+${Math.min(a, c - a)},${Math.max(a, c - a)}`
+  }
+  return null
+}
+
 /** Resultado de uma expressão de `ask` (`3 + 2`, `5 − 2`, `3 + ? = 10`); null se não entendida. */
 export function evalExpr(expr: string): number | null {
   const s = SIMPLE.exec(expr)
@@ -90,6 +105,24 @@ export function validateLesson(lesson: Lesson, ctx: LessonContext): Issue[] {
       err('L.remove', `${at}: tira mais do que tem`)
   }
 
+  // Ensino: a pergunta não pode repetir uma conta já respondida nem já mostrada com resultado (a criança só copiaria).
+  const seen = new Set<string>()
+  for (const [i, step] of lesson.steps.entries()) {
+    if (step.type === 'ask') {
+      const key = arithKey(step.expr)
+      if (key && seen.has(key))
+        err('L.copia', `passo ${i + 1} (ask): "${step.expr}" já foi respondida ou mostrada antes`)
+      if (key) seen.add(key)
+    }
+    if (step.type === 'choose')
+      for (const item of step.strip ?? []) {
+        const key = /\?/.test(item) ? null : arithKey(item)
+        if (key) seen.add(key)
+      }
+    if (step.type === 'move' && (step.from < 1 || step.to < 0))
+      err('L.move', `passo ${i + 1} (move): precisa de pelo menos 1 objeto para passar`)
+  }
+
   // Estrutura: começa falando; fases com fato novo terminam numa pergunta e descobrem um padrão.
   if (lesson.steps[0]?.type !== 'say')
     err('L.estrutura', 'a lição deve começar com uma fala do Calú')
@@ -118,6 +151,16 @@ export function validateLessonCoverage(lessons: Lesson[], worlds: World[]): Issu
       })
     seen.add(l.phase)
   }
+  // Viés de posição: o cartão certo não pode ser quase sempre o do meio.
+  const picks = lessons.flatMap((l) => l.steps.filter((s) => s.type === 'choose'))
+  const middle = picks.filter((s) => s.type === 'choose' && s.correct === 1).length
+  if (picks.length >= 4 && middle / picks.length > 0.5)
+    out.push({
+      severity: 'error',
+      problemId: lessons[0]!.phase,
+      rule: 'L.vies',
+      message: `o cartão certo é o do meio em ${middle} de ${picks.length} escolhas`,
+    })
   const worldIds = new Set(lessons.map((l) => Number(/^W(\d)/.exec(l.phase)?.[1])))
   for (const w of worlds)
     if (worldIds.has(w.id))

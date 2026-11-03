@@ -38,6 +38,8 @@ export const lessonStepSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('domino'), left: count.max(6), right: count.max(6) }),
   z.object({ type: z.literal('join') }),
   z.object({ type: z.literal('remove'), from: count, take: count, object: lessonObjectSchema }),
+  /** Passa 1 objeto do segundo grupo (`from`) para o primeiro (`to`): 4|6 vira 5|5. */
+  z.object({ type: z.literal('move'), from: count, to: count, object: lessonObjectSchema }),
   z.object({ type: z.literal('tenframe'), fill: count.max(10) }),
   z.object({
     type: z.literal('numline'),

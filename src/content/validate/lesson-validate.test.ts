@@ -122,3 +122,65 @@ describe('validateLessonCoverage', () => {
     )
   })
 })
+
+describe('regras de ensino (copiar a tela, viés do cartão do meio)', () => {
+  const ask = (expr: string, answer: number): Lesson['steps'][number] => ({
+    type: 'ask',
+    expr,
+    answer,
+  })
+  const strip = (items: string[], correct = 0): Lesson['steps'][number] => ({
+    type: 'choose',
+    prompt: 'Quanto é?',
+    strip: items,
+    options: ['1', '3', '5'],
+    correct,
+  })
+
+  it('reprova pergunta que repete uma conta já respondida ou já mostrada com o resultado', () => {
+    // a mesma conta duas vezes (também na ordem trocada)
+    expect(rules(withStep(ask('3 + 2', 5), 2))).toContain('L.copia')
+    expect(rules(withStep(ask('2 + 3', 5), 2))).toContain('L.copia')
+    // conta que a tira já mostrou com resultado, antes da pergunta
+    const shown = withStep(strip(['1 + 0 = 1', '6 + 1 = 7', '?']), 3)
+    expect(rules({ ...shown, steps: [...shown.steps, ask('6 + 1', 7)] })).toContain('L.copia')
+  })
+
+  it('aceita a conta que era o "?" da tira e a conta que só aparece depois da pergunta', () => {
+    const l: Lesson = {
+      ...ok,
+      steps: [
+        ...ok.steps.slice(0, 1),
+        ask('4 + 4', 8),
+        strip(['1 + 1 = 2', '4 + 4 = ?'], 1),
+        ...ok.steps.slice(3),
+      ],
+    }
+    expect(rules(l)).not.toContain('L.copia')
+  })
+
+  it('"a + ? = c" conta como a mesma conta que a soma', () => {
+    expect(rules(withStep(ask('3 + ? = 5', 2), 2))).toContain('L.copia')
+  })
+
+  it('reprova lote com o cartão certo quase sempre no meio', () => {
+    const mk = (correct: number): Lesson => ({
+      ...ok,
+      steps: ok.steps.map((s) =>
+        s.type === 'choose' ? { ...s, correct: correct as 0 | 1 | 2 } : s,
+      ),
+    })
+    const biased = [mk(1), mk(1), mk(1), mk(0)].map((l, i) => ({ ...l, phase: `W1-P0${i + 1}` }))
+    const issues = validateLessonCoverage(biased, ctx.worlds)
+    expect(issues.some((i) => i.rule === 'L.vies')).toBe(true)
+    const varied = [mk(0), mk(2), mk(1), mk(2)].map((l, i) => ({ ...l, phase: `W1-P0${i + 1}` }))
+    expect(validateLessonCoverage(varied, ctx.worlds).some((i) => i.rule === 'L.vies')).toBe(false)
+  })
+
+  it('passo "move" não passa mais objetos do que há', () => {
+    expect(rules(withStep({ type: 'move', from: 0, to: 4, object: 'ficha' }))).toContain('L.move')
+    expect(rules(withStep({ type: 'move', from: 6, to: 4, object: 'ficha' }))).not.toContain(
+      'L.move',
+    )
+  })
+})

@@ -187,6 +187,22 @@ export class SessionController {
     return this.next()
   }
 
+  private truqueSince: Date | null = null
+
+  /** A criança abriu "Ver o truque": o tempo da lição não pode contar como tempo de resposta (D2). */
+  truqueOpened() {
+    this.truqueSince = this.svc.clock.now()
+  }
+
+  /** Voltou do truque: empurra o início da pergunta pelo tempo que ficou na lição. */
+  truqueClosed() {
+    if (this.truqueSince && this.question) {
+      const away = this.svc.clock.now().getTime() - this.truqueSince.getTime()
+      this.question.shownAt = new Date(this.question.shownAt.getTime() + away)
+    }
+    this.truqueSince = null
+  }
+
   /** Sem lição a mostrar (testes, ou fase sem lição). */
   skipLesson() {
     this.lessonPending = false

@@ -135,7 +135,11 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
 
   if (view.type === 'lesson') {
     return (
-      <LessonScreen lesson={view.lesson} onDone={() => void advance(ctl.current!.lessonDone())} />
+      <LessonScreen
+        lesson={view.lesson}
+        onDone={() => void advance(ctl.current!.lessonDone())}
+        onExit={onExit}
+      />
     )
   }
 
@@ -185,10 +189,14 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
 
   const q = view.question
   const lesson = ctl.current?.phaseLesson ?? null
+  const closeTruque = () => {
+    ctl.current?.truqueClosed()
+    setTruque(false)
+  }
   return (
     <>
       <Screen
-        focusKey={`${q.itemId}-${feedback ? 'fb' : 'q'}`}
+        focusKey={`${q.itemId}-${feedback ? 'fb' : 'q'}-${truque}`}
         className="mx-auto flex h-full max-w-[480px] flex-col gap-3 p-4"
         inert={truque}
       >
@@ -238,13 +246,25 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
             key={q.itemId}
             question={q}
             onAnswer={(g, at, s) => void onAnswer(g, at, s)}
-            onTruque={lesson ? () => setTruque(true) : undefined}
+            onTruque={
+              lesson
+                ? () => {
+                    ctl.current?.truqueOpened()
+                    setTruque(true)
+                  }
+                : undefined
+            }
           />
         )}
       </Screen>
       {truque && lesson && (
-        <div className="fixed inset-0 z-50 bg-cream">
-          <LessonScreen lesson={lesson} replay onDone={() => setTruque(false)} />
+        <div
+          className="fixed inset-0 z-50 bg-cream pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Ver o truque"
+        >
+          <LessonScreen lesson={lesson} replay onDone={closeTruque} onExit={closeTruque} />
         </div>
       )}
     </>

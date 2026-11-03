@@ -151,4 +151,29 @@ describe('"Ver o truque" (D24)', () => {
     expect(q.factId).toBe('add:1+1')
     expect(q.strategyHint).toBe(true)
   })
+
+  it('o tempo gasto vendo o truque não entra no tempo da resposta (timeMs)', async () => {
+    const { svc, advance } = setup()
+    const c = await SessionController.open(svc, 'W1-P01')
+    const q = question(await c.lessonDone())
+    advance(1000)
+    c.truqueOpened()
+    advance(90_000) // a criança vê a lição
+    c.truqueClosed()
+    advance(1500)
+    await c.answer(q.answer, svc.clock.now(), [])
+    const [a] = await svc.attempts.listByChild('ana')
+    expect(a!.timeMs).toBe(2500) // 1000 antes + 1500 depois; os 90 s da lição ficam de fora
+  })
+
+  it('fechar o truque sem tê-lo aberto não muda nada', async () => {
+    const { svc, advance } = setup()
+    const c = await SessionController.open(svc, 'W1-P01')
+    const q = question(await c.lessonDone())
+    c.truqueClosed()
+    advance(2000)
+    await c.answer(q.answer, svc.clock.now(), [])
+    const [a] = await svc.attempts.listByChild('ana')
+    expect(a!.timeMs).toBe(2000)
+  })
 })

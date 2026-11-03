@@ -27,7 +27,14 @@ export function App() {
   if (screen.name === 'lesson') {
     const lesson = lessonFor(screen.phaseId)
     if (lesson)
-      return <LessonScreen lesson={lesson} replay onDone={() => setScreen({ name: 'map' })} />
+      return (
+        <LessonScreen
+          lesson={lesson}
+          replay
+          onDone={() => setScreen({ name: 'map' })}
+          onExit={() => setScreen({ name: 'map' })}
+        />
+      )
   }
   if (screen.name === 'map' || screen.name === 'lesson')
     return (

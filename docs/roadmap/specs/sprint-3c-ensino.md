@@ -1,6 +1,6 @@
 # Spec Sprint 3c — Camada de ensino (Mundos 1 e 2)
 
-Status: aprovada em 2026-11-02 (storyboard, vocabulário das lições e pendências delegados pelo responsável à IA; reversíveis)
+Status: implementada (aguarda PR); aprovada em 2026-11-02 (storyboard, vocabulário e pendências delegados pelo responsável à IA; reversíveis)
 Branch: `sprint-3c/ensino`
 
 ## 1. Objetivo
@@ -45,7 +45,7 @@ Nenhum pilar é tensionado.
 
 ### 4.4 Prática guiada
 
-- **Dado** a 1ª sessão de uma fase nova, **então** vêm 6 a 8 itens (`PARAMS.guidedPracticeItems`) cobrindo cada fato novo ao menos 2 vezes; o apoio some: 1º terço com ferramenta aberta, 2º no botão, último sem apoio.
+- **Dado** a 1ª sessão de uma fase nova, **então** vêm 6 a 8 itens (`PARAMS.guidedPracticeItems`) cobrindo cada fato em foco ao menos 2 vezes (fases com muitos fatos, como as regras, sorteiam até 4 em foco); o apoio some: 1º terço com ferramenta aberta, 2º no botão, último sem apoio.
 - **Dado** esses itens, **então** são `Attempt` normais (apoio registrado, nunca promove a Fluente).
 
 ### 4.5 "Ver o truque"
@@ -99,3 +99,12 @@ Nenhum dado novo. A lição vista é **derivada** das respostas existentes (sem 
 2. Aprovar a lista de **vocabulário das lições** (diff proposto no storyboard; não altero a lista das histórias).
 3. Amostragem (~10%) das falas; dicas de erro 100%.
 4. Arte provisória dos objetos (`OBJ-*`) e do Calú; teste com a Ana depois do sprint.
+
+## Implementação e decisões da IA (2026-11-02)
+
+- Feito: schema/validador/15 lições; `guidedItems` e `scaffoldFor` (domínio, testes antes); lição na 1ª vez, guiada, "Ver o truque" e botão "Lição" no mapa; passos `say`, `show`, `domino`, `join`, `remove`, `move`, `tenframe`, `numline`, `swap`, `family`, `ask`, `choose`, `name`.
+- Regras novas do validador: `L.copia`, `L.vies`, `L.move`, `L.estrutura`, `L.padrao`; vocabulário próprio em `palavras-licoes.json` (aprovado, delegado).
+- Guiada em fases de subtração só traz fatos cuja soma de origem já está em Praticando (D16c); o Grande Desafio não tem guiada.
+- "Ver o truque" abre a lição da fase inteira (não só a parte do fato) e o botão fica sempre visível; com `strategyHint` (D24) ele é destacado.
+- Não feito (arte provisória): expressões do Calú (`CHAR-CALU-*`); os objetos são SVG simples (`OBJ-*`).
+- **Pendências humanas:** amostragem (~10%) das falas (sugestão: W1-P06, W2-P02, W2-P05); dicas de erro 100% (ver `HintCard`, "Quase! Olha comigo.", pistas dos `ask`); tom dos imperativos com a professora; teste com a Ana.

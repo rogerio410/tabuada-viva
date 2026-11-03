@@ -7,6 +7,7 @@ import {
   DominoStep,
   FamilyStep,
   JoinStep,
+  MoveStep,
   NumlineStep,
   RemoveStep,
   ShowStep,
@@ -18,6 +19,7 @@ import {
 const NEEDS_ACTION: ReadonlySet<LessonStep['type']> = new Set([
   'join',
   'remove',
+  'move',
   'tenframe',
   'numline',
   'swap',
@@ -42,14 +44,17 @@ interface Props {
   /** "Ver de novo" (mapa ou ajuda): o botão final volta em vez de seguir para a prática. */
   replay?: boolean
   onDone: () => void
+  /** Sair a qualquer momento, sem gravar nada (pausa sempre possível). */
+  onExit: () => void
 }
 
 /**
  * Lição de uma fase (D27): o Calú ensina a estratégia com objetos do mundo da criança, que ela toca. Sem tempo e
  * sem nota. Nada aqui é gravado como resposta nem conta como apoio.
  */
-export function LessonScreen({ lesson, replay = false, onDone }: Props) {
+export function LessonScreen({ lesson, replay = false, onDone, onExit }: Props) {
   const ref = useRef<HTMLElement>(null)
+  const contRef = useRef<HTMLButtonElement>(null)
   const [index, setIndex] = useState(0)
   const [done, setDone] = useState<ReadonlySet<number>>(new Set())
   const [override, setOverride] = useState<string | null>(null)
@@ -58,6 +63,10 @@ export function LessonScreen({ lesson, replay = false, onDone }: Props) {
   const ready = !NEEDS_ACTION.has(step.type) || done.has(index)
 
   useEffect(() => ref.current?.focus(), [index])
+  // passo concluído: o foco vai para "Continuar" (teclado e leitor de tela não ficam perdidos)
+  useEffect(() => {
+    if (ready && NEEDS_ACTION.has(step.type)) contRef.current?.focus()
+  }, [ready, step.type])
 
   const groups = useMemo(() => {
     for (let i = index - 1; i >= 0; i--) {
@@ -85,18 +94,29 @@ export function LessonScreen({ lesson, replay = false, onDone }: Props) {
       data-testid="lesson"
       aria-label={`Lição: ${lesson.strategy}`}
     >
-      <div
-        role="progressbar"
-        aria-label="Passos da lição"
-        aria-valuemin={0}
-        aria-valuemax={lesson.steps.length}
-        aria-valuenow={index + 1}
-        className="h-3 w-full overflow-hidden rounded-full bg-ink/15"
-      >
+      <div className="flex items-center gap-3">
         <div
-          className="h-full rounded-full bg-poti-deep transition-[width]"
-          style={{ width: `${((index + 1) / lesson.steps.length) * 100}%` }}
-        />
+          role="progressbar"
+          aria-label="Passos da lição"
+          aria-valuemin={0}
+          aria-valuemax={lesson.steps.length}
+          aria-valuenow={index + 1}
+          aria-valuetext={`Passo ${index + 1} de ${lesson.steps.length}`}
+          className="h-3 flex-1 overflow-hidden rounded-full bg-ink/20"
+        >
+          <div
+            className="h-full rounded-full bg-poti-deep transition-[width]"
+            style={{ width: `${((index + 1) / lesson.steps.length) * 100}%` }}
+          />
+        </div>
+        <button
+          type="button"
+          data-testid="lesson-exit"
+          className="min-h-[56px] min-w-[56px] rounded-2xl border-2 border-ink/70 bg-white px-4 text-lg font-extrabold text-ink select-none touch-manipulation"
+          onClick={onExit}
+        >
+          Sair
+        </button>
       </div>
 
       <div className="flex items-center gap-3">
@@ -115,6 +135,7 @@ export function LessonScreen({ lesson, replay = false, onDone }: Props) {
         {step.type === 'domino' && <DominoStep step={step} />}
         {step.type === 'join' && <JoinStep step={step} groups={groups} {...common} />}
         {step.type === 'remove' && <RemoveStep step={step} {...common} />}
+        {step.type === 'move' && <MoveStep step={step} {...common} />}
         {step.type === 'tenframe' && <TenFrameStep step={step} {...common} />}
         {step.type === 'numline' && <NumlineStep step={step} {...common} />}
         {step.type === 'swap' && <SwapStep step={step} {...common} />}
@@ -125,6 +146,7 @@ export function LessonScreen({ lesson, replay = false, onDone }: Props) {
 
       <button
         type="button"
+        ref={contRef}
         data-testid="continue"
         disabled={!ready}
         className="min-h-[56px] rounded-2xl bg-green-deep px-6 text-xl font-extrabold text-white select-none touch-manipulation disabled:bg-ink/15 disabled:text-[#5e5247]"

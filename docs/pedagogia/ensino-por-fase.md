@@ -1,6 +1,6 @@
 # Ensino por fase — Mundos 1 e 2 (storyboard)
 
-Status: `[RASCUNHO IA 2026-11-02]` — aguarda leitura do responsável. Falas do Calú: amostragem humana de ~10%; dicas de erro: 100% humana (CLAUDE.md). Nenhuma frase daqui vai ao jogo sem passar por `npm run validate:content` e pela amostragem. Base: `docs/gdd/mundos-e-fases.md` (estratégia e CPA de cada fase), `docs/ux/voz-do-calu.md`, decisão D27 (`docs/gdd/decisoes-abertas.md`).
+Status: `[RASCUNHO IA 2026-11-02]`, aprovado pelo responsável (delegado à IA). **Fonte de verdade das falas e dos passos: `src/content/lessons/world-1.json` e `world-2.json`** — o JSON foi reescrito depois da revisão pedagógica (ver "Revisão" no fim); este texto descreve a intenção por fase e ficou parcialmente desatualizado nos detalhes. Falas do Calú: amostragem humana de ~10%; dicas de erro: 100% humana (CLAUDE.md). Nenhuma frase daqui vai ao jogo sem passar por `npm run validate:content` e pela amostragem. Base: `docs/gdd/mundos-e-fases.md` (estratégia e CPA de cada fase), `docs/ux/voz-do-calu.md`, decisão D27 (`docs/gdd/decisoes-abertas.md`).
 
 ## Princípio
 
@@ -195,3 +195,22 @@ Os padrões ficam em `lessons/` como `pattern` de cada fase; o Mapa da tabuada (
 ## Vocabulário novo (diff proposto, não aplicado)
 
 As falas usam verbos de instrução e termos de ensino que **não** estão em `palavras-2ano.json` (feita para histórias). Proposta: **lista separada** `src/content/vocab/palavras-licoes.json`, usada só no validador das lições (a lista de histórias não muda). Palavras além do que já existe: `oi`, `eu`, `sou`, `vamos`, `juntar`, `junte`, `tire`, `tirar`, `toque`, `abra`, `conte`, `comece`, `pense`, `reparou`, `truque`, `truques`, `mostra`, `quanto`, `quantos`, `ficaram`, `sobraram`, `faltam`, `pulo`, `pulos`, `pular`, `reta`, `dedos`, `dedo`, `quadro`, `triângulo`, `moram`, `soma`, `somar`, `zero`, `nada`, `tudo`, `número`, `seguinte`, `depois`, `antes`, `dobro`, `par`, `pares`, `lado`, `lados`, `total`, `troca`, `trocar`, `lugar`, `vizinhos`, `sobe`, `desce`, `fica`, `contrário`, `objetos`, `festa`. Quem aprova é o responsável.
+
+## Revisão pedagógica (2026-11-02) e o que mudou no JSON
+
+O `revisor-pedagogico` apontou e foi corrigido:
+
+- **Cartão do meio:** o certo estava no meio em 8 de 13 escolhas. Agora varia (0, 1, 2) e o validador reprova lote com mais de 50% no meio (`L.vies`).
+- **Copiar a tela:** perguntas finais repetiam contas já respondidas ou mostradas com resultado. O validador reprova (`L.copia`) e todas as perguntas finais usam um fato novo.
+- **Regra antes da descoberta:** as fases abrem com uma ação ou pergunta; a regra só aparece no `name`.
+- **Padrão nomeado = estratégia da fase** (e verdadeiro no que a criança vê): "Mais 2 é pular 2 números"; "Se 3 + 7 = 10, então 10 − 3 = 7"; "Vizinho é o dobro e mais 1"; "Comece pelo maior: dá menos pulos".
+- **W1-P04:** a criança conta 5 pulos do 3 e 3 pulos do 5, vê o `swap` e escolhe por onde começar.
+- **W1-P06:** passo novo `move` ("Passar 1"): 4|6 vira 5|5 na tela, em vez de só falar.
+- **W2-P02:** entra o concreto (cartas, juntar e tirar), um segundo triângulo (2, 3, 5) e `choose` sem número adivinhável.
+- **W2-P03 e P04:** voltam as retas ("quanto falta" para frente e pulos de 2 para trás) e a adição ao contrário (`6 + ? = 8`, `9 − 7`).
+- **W2-P05:** a criança calcula antes de ver "3 + 7 = 10".
+- **Grandes Desafios:** perguntam "Qual truque ajuda em 4 + 4?" com 4 e 5 truques, sem posição previsível.
+- **Sair:** botão "Sair" (≥ 56 px) em toda lição (primeira vez, "Ver o truque" e "Lição" no mapa).
+- **Tempo do truque:** abrir "Ver o truque" não conta no tempo de resposta (`truqueOpened`/`truqueClosed`, com teste).
+
+Ainda para o responsável (amostragem de ~10%, sugerida pelo revisor: **W1-P06, W2-P02 e W2-P05**): falas das 15 lições com `humanSample: pendente`; imperativos ("Encha", "Passe", "Conte") — confirmar o tom com a professora; "Reparou?" abre 11 lições (variar depois se enjoar).

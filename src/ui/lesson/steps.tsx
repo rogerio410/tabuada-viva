@@ -129,7 +129,7 @@ export function RemoveStep({ step, onDone }: StepProps<'remove'>) {
             data-testid="step-action"
             aria-label={`Tirar ${OBJECT_NAMES[step.object][0]} ${i + 1}`}
             disabled={gone.has(i) || done}
-            className="flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-ink/40 bg-white touch-manipulation disabled:border-dashed disabled:bg-transparent"
+            className="flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-ink/70 bg-white touch-manipulation disabled:border-dashed disabled:bg-transparent"
             onClick={() => {
               const next = new Set(gone).add(i)
               setGone(next)
@@ -145,6 +145,36 @@ export function RemoveStep({ step, onDone }: StepProps<'remove'>) {
           Sobraram {step.from - step.take}
         </p>
       )}
+    </Stage>
+  )
+}
+
+/** `move`: passa 1 objeto do grupo da direita para o da esquerda (4|6 vira 5|5). */
+export function MoveStep({ step, onDone }: StepProps<'move'>) {
+  const [moved, setMoved] = useState(false)
+  const [one] = OBJECT_NAMES[step.object]
+  return (
+    <Stage>
+      <div className="flex items-center justify-center gap-4">
+        <ObjectGroup n={step.to + (moved ? 1 : 0)} kind={step.object} />
+        <span className="text-4xl font-extrabold" aria-hidden="true">
+          +
+        </span>
+        <ObjectGroup n={step.from - (moved ? 1 : 0)} kind={step.object} />
+      </div>
+      <button
+        type="button"
+        className={PRIMARY}
+        data-testid="step-action"
+        disabled={moved}
+        aria-label={`Passar 1 ${one} para o outro grupo`}
+        onClick={() => {
+          setMoved(true)
+          onDone()
+        }}
+      >
+        Passar 1
+      </button>
     </Stage>
   )
 }
@@ -248,7 +278,7 @@ export function FamilyStep({ step, onDone }: StepProps<'family'>) {
         height="120"
         viewBox="0 0 150 120"
         role="img"
-        aria-label={`Triângulo com ${step.a}, ${step.b} e ${sum}`}
+        aria-label={`Triângulo da família: total ${sum} em cima; ${step.a} e ${step.b} embaixo`}
       >
         <path
           d="M75 8 L142 112 L8 112 Z"
@@ -260,7 +290,7 @@ export function FamilyStep({ step, onDone }: StepProps<'family'>) {
         <text x="75" y="58" textAnchor="middle" fontSize="30" fontWeight="800" fill="#2b2118">
           {sum}
         </text>
-        <text x="40" y="100" textAnchor="middle" fontSize="28" fontWeight="800" fill="#e8731a">
+        <text x="40" y="100" textAnchor="middle" fontSize="28" fontWeight="800" fill="#b04a00">
           {step.a}
         </text>
         <text x="110" y="100" textAnchor="middle" fontSize="28" fontWeight="800" fill="#1f6496">
@@ -395,7 +425,7 @@ export function ChooseStep({ step, onDone, say }: StepProps<'choose'>) {
                 onDone()
               } else {
                 setTried(new Set(tried).add(i))
-                say('Quase! Olha de novo.')
+                say('Quase! Olha comigo.')
               }
             }}
           >
