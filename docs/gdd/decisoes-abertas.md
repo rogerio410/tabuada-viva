@@ -175,3 +175,14 @@ Nada abaixo pode ser implementado como valor definitivo antes da aprovação. O 
 - Verificar na fonte oficial: EF02MA05, EF02MA06, EF03MA24 e LGPD art. 14 (L495).
 - PIN de 4 dígitos é fraco contra força bruta: tratar na Fase D (limite de tentativas, bloqueio).
 - Fonte L327 tem um diagrama de arquitetura ausente; Recharts e Supabase ainda não estão instalados (adicionar dependência exige aprovação).
+
+## Camada de ensino (Sprint 3c) — `[DECIDIDO PELA IA, 2026-11-02]`
+
+O responsável pediu que o jogo **ensine** a tabuada a uma criança que não sabe nada, de forma progressiva, divertida e com padrões ensinados de forma indireta. Valem até ele rever.
+
+### D27 — Lição, padrão do dia e prática guiada `[DECIDIDO]`
+
+- **Decisão:** toda fase com fato novo tem uma **lição** na primeira vez (CPA: objetos → desenho → número, com a criança manipulando), um **padrão do dia** descoberto por escolha de cartões (o Calú nomeia o padrão em uma frase só no fim) e uma **prática guiada** de 6 a 8 itens (`guidedPracticeItems`) com apoio que some. A lição é obrigatória na 1ª vez e revisável depois ("Ver a lição", "Ver o truque").
+- **Como:** lições são dados (`src/content/lessons`, Zod + `validateLesson`); passos reutilizáveis; interações da lição **não** geram `Attempt` nem entram em `supportsUsed`; "lição já vista" é derivado das respostas (sem Dexie v2). Animações só em CSS.
+- **Revisão humana:** falas por amostragem (~10%); dicas de erro 100%. Vocabulário das lições em lista separada, aprovada pelo responsável.
+- **Impacto:** `src/content`, `src/domain/session/guided.ts`, `session-controller`, UI de lição. Nenhum valor de `params.ts` muda.

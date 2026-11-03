@@ -61,13 +61,14 @@ Formas geométricas com os tokens da paleta, contorno `ink`, nome do ID visível
 
 Cada objeto contável é um SVG de 1–2 KB, idêntico entre si.
 
-| ID                                                                                           | Mundos    |
-| -------------------------------------------------------------------------------------------- | --------- |
-| `OBJ-PAO`, `OBJ-PAO-QUEIJO`, `OBJ-OVO`, `OBJ-LARANJA`, `OBJ-BANANA`, `OBJ-MANGA`, `OBJ-CAJU` | W1, W4–W5 |
-| `OBJ-COPO`, `OBJ-BALAO`, `OBJ-BRIGADEIRO`, `OBJ-BOLO`, `OBJ-POTE`, `OBJ-PACOTE`              | W6, W8    |
-| `OBJ-CADEIRA`, `OBJ-CANTEIRO`, `OBJ-CESTA`, `OBJ-SACO`, `OBJ-CAIXA`                          | W5, W7    |
-| `OBJ-CAJUINA`, `OBJ-PICOLE`, `OBJ-FIGURINHA`                                                 | W3, W9    |
-| `MONEY-R1`, `-R2`, `-R5`, `-R10`, `-R20`                                                     | W4, W9    |
+| ID                                                                                                             | Mundos                    |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `OBJ-PAO`, `OBJ-PAO-QUEIJO`, `OBJ-OVO`, `OBJ-LARANJA`, `OBJ-BANANA`, `OBJ-MANGA`, `OBJ-CAJU`                   | W1, W4–W5                 |
+| `OBJ-COPO`, `OBJ-BALAO`, `OBJ-BRIGADEIRO`, `OBJ-BOLO`, `OBJ-POTE`, `OBJ-PACOTE`                                | W6, W8                    |
+| `OBJ-CADEIRA`, `OBJ-CANTEIRO`, `OBJ-CESTA`, `OBJ-SACO`, `OBJ-CAIXA`                                            | W5, W7                    |
+| `OBJ-CAJUINA`, `OBJ-PICOLE`, `OBJ-FIGURINHA`                                                                   | W3, W9                    |
+| `OBJ-CARRINHO`, `OBJ-CHINELO`, `OBJ-FICHA`, `OBJ-PASSAGEIRO`, `OBJ-MOEDA-BRINQUEDO`, `OBJ-CARTA`, `OBJ-DOMINO` | W1–W2 (lições, Sprint 3c) |
+| `MONEY-R1`, `-R2`, `-R5`, `-R10`, `-R20`                                                                       | W4, W9                    |
 
 ## Álbum Bichos do Piauí (L264)
 
