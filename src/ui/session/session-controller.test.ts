@@ -7,6 +7,13 @@ import { InMemoryWalletRepo } from '@domain/ports/fakes/in-memory-wallet-repo'
 import { PARAMS } from '@domain/config/params'
 import { SessionController, type Services, type View } from './session-controller'
 
+/** Abre a fase sem a lição (nos testes do fluxo de perguntas). */
+async function openPhase(svc: Services, phaseId: string) {
+  const c = await SessionController.open(svc, phaseId)
+  c.skipLesson()
+  return c
+}
+
 function setup() {
   let t = new Date(2026, 10, 2, 10, 0, 0).getTime()
   let n = 0
@@ -31,7 +38,7 @@ const question = (v: View) => {
 describe('SessionController', () => {
   it('primeira sessão: apresenta fatos novos de adição, só adição', async () => {
     const { svc } = setup()
-    const c = await SessionController.open(svc, 'W1-P01')
+    const c = await openPhase(svc, 'W1-P01')
     const q = question(await c.next())
     expect(q.factId).toMatch(/^add:/)
     expect(q.answer).toBe(q.a + q.b)
@@ -41,7 +48,7 @@ describe('SessionController', () => {
 
   it('grava a resposta, o estado do fato e a sessão a cada item', async () => {
     const { svc, advance } = setup()
-    const c = await SessionController.open(svc, 'W1-P01')
+    const c = await openPhase(svc, 'W1-P01')
     const q = question(await c.next())
     advance(2500)
     const fb = await c.answer(q.answer, svc.clock.now(), [])
@@ -58,7 +65,7 @@ describe('SessionController', () => {
 
   it('apoio usado entra na Attempt e não conta como acerto sem apoio', async () => {
     const { svc } = setup()
-    const c = await SessionController.open(svc, 'W1-P01')
+    const c = await openPhase(svc, 'W1-P01')
     const q = question(await c.next())
     await c.answer(q.answer, svc.clock.now(), ['dedos'])
     const [a] = await svc.attempts.listByChild('ana')
@@ -68,7 +75,7 @@ describe('SessionController', () => {
 
   it('erro volta o fato à fila em 2 a 3 itens e a resposta errada não vira acerto', async () => {
     const { svc } = setup()
-    const c = await SessionController.open(svc, 'W1-P01')
+    const c = await openPhase(svc, 'W1-P01')
     const first = question(await c.next())
     const fb = await c.answer(first.answer + 1, svc.clock.now(), [])
     expect(fb.correct).toBe(false)
@@ -84,7 +91,7 @@ describe('SessionController', () => {
 
   it('depois de 10 min convida a descansar; continuar não pune e o convite não volta', async () => {
     const { svc, advance } = setup()
-    const c = await SessionController.open(svc, 'W1-P01')
+    const c = await openPhase(svc, 'W1-P01')
     const q = question(await c.next())
     await c.answer(q.answer, svc.clock.now(), [])
     advance(PARAMS.sessionMinutes.min * 60_000)
@@ -95,7 +102,7 @@ describe('SessionController', () => {
 
   it('aceitar descansar fecha a sessão em no máximo um item e marca endedAt', async () => {
     const { svc, advance } = setup()
-    const c = await SessionController.open(svc, 'W1-P01')
+    const c = await openPhase(svc, 'W1-P01')
     for (let i = 0; i < 4; i++) {
       const q = question(await c.next())
       await c.answer(q.answer, svc.clock.now(), [])
@@ -114,10 +121,10 @@ describe('SessionController', () => {
 
   it('reabrir retoma a mesma sessão aberta (recarregar a página)', async () => {
     const { svc } = setup()
-    const c1 = await SessionController.open(svc, 'W1-P01')
+    const c1 = await openPhase(svc, 'W1-P01')
     const q = question(await c1.next())
     await c1.answer(q.answer, svc.clock.now(), [])
-    const c2 = await SessionController.open(svc, 'W1-P01')
+    const c2 = await openPhase(svc, 'W1-P01')
     expect(c2.progress.done).toBe(1)
     expect((await svc.sessions.listByChild('ana')).length).toBe(1)
     expect(question(await c2.next()).factId).toMatch(/^add:/)

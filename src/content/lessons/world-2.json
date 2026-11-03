@@ -1,0 +1,422 @@
+{
+  "batch": {
+    "id": "licoes-w2",
+    "origin": "ia",
+    "date": "2026-11-02",
+    "reviewer": null,
+    "humanSample": "pendente"
+  },
+  "lessons": [
+    {
+      "phase": "W2-P01",
+      "strategy": "Tirar nada, tirar tudo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Tirar é levar embora."
+        },
+        {
+          "type": "remove",
+          "from": 5,
+          "take": 2,
+          "object": "balao"
+        },
+        {
+          "type": "ask",
+          "expr": "5 − 2",
+          "answer": 3,
+          "prompt": "Quantos balões sobraram?"
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 5,
+              "object": "balao"
+            }
+          ]
+        },
+        {
+          "type": "say",
+          "text": "Agora não vou tirar nenhum."
+        },
+        {
+          "type": "ask",
+          "expr": "5 − 0",
+          "answer": 5,
+          "prompt": "Quantos balões sobraram?"
+        },
+        {
+          "type": "remove",
+          "from": 5,
+          "take": 5,
+          "object": "balao"
+        },
+        {
+          "type": "ask",
+          "expr": "5 − 5",
+          "answer": 0,
+          "prompt": "Quantos balões sobraram?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["0", "7", "6"],
+          "correct": 1,
+          "strip": ["5 − 0 = 5", "6 − 0 = 6", "7 − 0 = ?"]
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["0", "1", "5"],
+          "correct": 0,
+          "strip": ["2 − 2 = 0", "3 − 3 = 0", "4 − 4 = 0", "5 − 5 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirar nada deixa tudo. Tirar tudo deixa 0."
+        },
+        {
+          "type": "say",
+          "text": "Lembra? Se 0 + 6 = 6, então 6 − 0 = 6."
+        },
+        {
+          "type": "ask",
+          "expr": "6 − 6",
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "phase": "W2-P02",
+      "strategy": "A família do triângulo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Vamos brincar com cartas."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 1,
+              "object": "carta"
+            },
+            {
+              "n": 2,
+              "object": "carta"
+            }
+          ]
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "1 + 2",
+          "answer": 3,
+          "prompt": "Quantas cartas?"
+        },
+        {
+          "type": "remove",
+          "from": 3,
+          "take": 1,
+          "object": "carta"
+        },
+        {
+          "type": "ask",
+          "expr": "3 − 1",
+          "answer": 2,
+          "prompt": "Quantas cartas sobraram?"
+        },
+        {
+          "type": "say",
+          "text": "3 números moram juntos."
+        },
+        {
+          "type": "family",
+          "a": 1,
+          "b": 2
+        },
+        {
+          "type": "ask",
+          "expr": "3 − 2",
+          "answer": 1,
+          "prompt": "2 + ? = 3. Quanto falta?"
+        },
+        {
+          "type": "say",
+          "text": "Outra família."
+        },
+        {
+          "type": "family",
+          "a": 2,
+          "b": 3
+        },
+        {
+          "type": "choose",
+          "prompt": "Se 2 + 3 = 5, quanto é 5 − 2?",
+          "options": ["3", "4", "6"],
+          "correct": 0
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Quem sabe juntar, sabe tirar."
+        },
+        {
+          "type": "ask",
+          "expr": "6 − 1",
+          "answer": 5
+        }
+      ]
+    },
+    {
+      "phase": "W2-P03",
+      "strategy": "Quanto falta",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Tenho 7 figurinhas. Dei 1."
+        },
+        {
+          "type": "remove",
+          "from": 7,
+          "take": 1,
+          "object": "figurinha"
+        },
+        {
+          "type": "ask",
+          "expr": "7 − 1",
+          "answer": 6,
+          "prompt": "Quantas figurinhas ficaram?"
+        },
+        {
+          "type": "say",
+          "text": "Na reta, do 7, 1 pulo para trás."
+        },
+        {
+          "type": "numline",
+          "start": 7,
+          "hops": 1,
+          "back": true
+        },
+        {
+          "type": "say",
+          "text": "Ou conte para frente, do 6 até o 7."
+        },
+        {
+          "type": "numline",
+          "start": 6,
+          "hops": 1
+        },
+        {
+          "type": "ask",
+          "expr": "7 − 6",
+          "answer": 1,
+          "prompt": "Quanto falta de 6 até 7?"
+        },
+        {
+          "type": "ask",
+          "expr": "9 − 7",
+          "answer": 2,
+          "prompt": "De 7 até 9. Quanto falta?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["8", "10", "9"],
+          "correct": 2,
+          "strip": ["7 − 1 = 6", "8 − 1 = 7", "9 − 1 = 8", "10 − 1 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirar 1 dá o número de antes."
+        },
+        {
+          "type": "say",
+          "text": "Tirar também é ver quanto falta."
+        },
+        {
+          "type": "ask",
+          "expr": "4 − 2",
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "phase": "W2-P04",
+      "strategy": "Pulos de 2",
+      "steps": [
+        {
+          "type": "say",
+          "text": "O ônibus tem 8 passageiros. 2 descem."
+        },
+        {
+          "type": "remove",
+          "from": 8,
+          "take": 2,
+          "object": "passageiro"
+        },
+        {
+          "type": "ask",
+          "expr": "8 − 2",
+          "answer": 6,
+          "prompt": "Quantos ficaram?"
+        },
+        {
+          "type": "say",
+          "text": "Na reta, 2 pulos para trás."
+        },
+        {
+          "type": "numline",
+          "start": 8,
+          "hops": 2,
+          "back": true
+        },
+        {
+          "type": "say",
+          "text": "Ao contrário: quanto falta de 6 até 8?"
+        },
+        {
+          "type": "ask",
+          "expr": "6 + ? = 8",
+          "answer": 2,
+          "prompt": "Quanto falta?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["3", "2", "5"],
+          "correct": 1,
+          "strip": ["10", "8", "6", "4", "?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Tirar 2 é pular 2 para trás."
+        },
+        {
+          "type": "ask",
+          "expr": "7 − 2",
+          "answer": 5
+        }
+      ]
+    },
+    {
+      "phase": "W2-P05",
+      "strategy": "De 10 para baixo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "O quadro de 10 está cheio."
+        },
+        {
+          "type": "tenframe",
+          "fill": 10
+        },
+        {
+          "type": "remove",
+          "from": 10,
+          "take": 3,
+          "object": "moeda"
+        },
+        {
+          "type": "ask",
+          "expr": "10 − 3",
+          "answer": 7,
+          "prompt": "Quantas moedas sobraram?"
+        },
+        {
+          "type": "say",
+          "text": "Lembra? 3 + 7 = 10. Por isso 10 − 3 é 7."
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["5", "7", "6"],
+          "correct": 2,
+          "strip": ["3 + 7 = 10", "10 − 3 = 7", "4 + 6 = 10", "10 − 4 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Se 3 + 7 = 10, então 10 − 3 = 7."
+        },
+        {
+          "type": "ask",
+          "expr": "10 − 2",
+          "answer": 8
+        }
+      ]
+    },
+    {
+      "phase": "W2-P06",
+      "strategy": "Quanto falta",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Sem objetos. Pense na soma."
+        },
+        {
+          "type": "family",
+          "a": 4,
+          "b": 5
+        },
+        {
+          "type": "ask",
+          "expr": "4 + ? = 9",
+          "answer": 5,
+          "prompt": "Quanto falta?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["5", "6", "7"],
+          "correct": 1,
+          "strip": ["4 + 5 = 9", "9 − 4 = 5", "3 + 6 = 9", "9 − 3 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Para tirar, pense: quanto falta?"
+        },
+        {
+          "type": "ask",
+          "expr": "9 − 5",
+          "answer": 4
+        }
+      ]
+    },
+    {
+      "phase": "W2-P07",
+      "strategy": "Feira dos truques",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Dia de feira! Vamos usar os truques."
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 10 − 3?",
+          "options": ["Dobro", "Pares de 10", "Mais 1"],
+          "correct": 1
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 7 − 1?",
+          "options": ["Número de antes", "Dobro", "Pares de 10"],
+          "correct": 0
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 9 − 5?",
+          "options": ["Mais 1", "Dobro", "Quanto falta"],
+          "correct": 2
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 5 − 0?",
+          "options": ["Tirar nada", "Dobro", "Mais 1"],
+          "correct": 0
+        }
+      ]
+    }
+  ]
+}

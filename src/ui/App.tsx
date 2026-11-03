@@ -1,10 +1,16 @@
 import { useState } from 'react'
 import { isSoundOn, setSoundOn } from './audio'
 import { Calu } from './components/Calu'
+import { LessonScreen } from './lesson/LessonScreen'
 import { MapScreen } from './MapScreen'
+import { lessonFor } from './session/lessons'
 import { SessionScreen } from './SessionScreen'
 
-type Screen = { name: 'home' } | { name: 'map' } | { name: 'play'; phaseId: string }
+type Screen =
+  | { name: 'home' }
+  | { name: 'map' }
+  | { name: 'play'; phaseId: string }
+  | { name: 'lesson'; phaseId: string }
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
@@ -18,10 +24,23 @@ export function App() {
         onExit={() => setScreen({ name: 'map' })}
       />
     )
-  if (screen.name === 'map')
+  if (screen.name === 'lesson') {
+    const lesson = lessonFor(screen.phaseId)
+    if (lesson)
+      return (
+        <LessonScreen
+          lesson={lesson}
+          replay
+          onDone={() => setScreen({ name: 'map' })}
+          onExit={() => setScreen({ name: 'map' })}
+        />
+      )
+  }
+  if (screen.name === 'map' || screen.name === 'lesson')
     return (
       <MapScreen
         onPlay={(phaseId) => setScreen({ name: 'play', phaseId })}
+        onLesson={(phaseId) => setScreen({ name: 'lesson', phaseId })}
         onBack={() => setScreen({ name: 'home' })}
       />
     )

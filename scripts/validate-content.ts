@@ -2,8 +2,10 @@
 // Sai com código 1 se houver erro; avisos não reprovam.
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { lessonBatchSchema, type Lesson } from '../src/content/schema/lesson.ts'
 import { storyBatchSchema } from '../src/content/schema/problem.ts'
 import { worldSchema } from '../src/content/schema/world.ts'
+import { validateLesson, validateLessonCoverage } from '../src/content/validate/lesson-validate.ts'
 import {
   validateBatch,
   type Issue,
@@ -68,8 +70,30 @@ for (const file of jsonFiles('stories')) {
   }
 }
 
+// Lições (Sprint 3c): vocabulário próprio = vocabulário das histórias + palavras de ensino aprovadas.
+const lessonVocab = readJson(join(root, 'vocab/palavras-licoes.json')) as { palavras: string[] }
+const lessonCtx = {
+  worlds,
+  allowedWords: new Set([...ctx.allowedWords, ...lessonVocab.palavras]),
+  forbiddenWords: forbidden.palavras,
+}
+const lessons: Lesson[] = []
+for (const file of jsonFiles('lessons')) {
+  const parsed = lessonBatchSchema.safeParse(readJson(file))
+  if (!parsed.success) {
+    fail(file, parsed.error.message)
+    continue
+  }
+  lessons.push(...parsed.data.lessons)
+  for (const l of parsed.data.lessons)
+    for (const i of validateLesson(l, lessonCtx))
+      fail(`${parsed.data.batch.id}/${i.problemId}`, `[${i.rule}] ${i.message}`)
+}
+for (const i of validateLessonCoverage(lessons, worlds))
+  fail(`lições/${i.problemId}`, `[${i.rule}] ${i.message}`)
+
 const phaseCount = worlds.reduce((n, w) => n + w.phases.length, 0)
 console.log(
-  `validate:content — ${problemCount} histórias, ${phaseCount} fases catalogadas, ${errors} erros, ${warnings} avisos`,
+  `validate:content — ${problemCount} histórias, ${lessons.length} lições, ${phaseCount} fases catalogadas, ${errors} erros, ${warnings} avisos`,
 )
 process.exit(errors > 0 ? 1 : 0)

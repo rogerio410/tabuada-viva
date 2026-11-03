@@ -9,6 +9,13 @@ import { PHASE_ORDER } from './phases'
 import { loadProgress } from './progress'
 import { SessionController, type Services, type View } from './session-controller'
 
+/** Abre a fase sem a lição (nos testes do fluxo de perguntas). */
+async function openPhase(svc: Services, phaseId: string) {
+  const c = await SessionController.open(svc, phaseId)
+  c.skipLesson()
+  return c
+}
+
 function setup() {
   let t = new Date(2026, 10, 2, 10, 0, 0).getTime()
   let n = 0
@@ -47,7 +54,7 @@ async function playSession(
   kinds: string[]
   result: Extract<View, { type: 'done' }>['result']
 }> {
-  const c = await SessionController.open(env.svc, phaseId)
+  const c = await openPhase(env.svc, phaseId)
   const facts: string[] = []
   const kinds: string[] = []
   let count = 0
@@ -111,10 +118,10 @@ describe('progressão pelas fases', () => {
 
   it('sessões de fases diferentes não se misturam', async () => {
     const env = setup()
-    const c1 = await SessionController.open(env.svc, 'W1-P01')
+    const c1 = await openPhase(env.svc, 'W1-P01')
     const q = await c1.next()
     expect(q.type).toBe('question')
-    const c2 = await SessionController.open(env.svc, 'W1-P02')
+    const c2 = await openPhase(env.svc, 'W1-P02')
     await c2.next()
     const sessions = await env.svc.sessions.listByChild('ana')
     expect(sessions.map((s) => s.phaseId).sort()).toEqual(['W1-P01', 'W1-P02'])

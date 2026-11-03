@@ -19,13 +19,15 @@ const SYMBOL = { add: '+', sub: '−' } as const
 interface Props {
   question: Question
   onAnswer: (given: number, firstTouchAt: Date, supportsUsed: SupportKind[]) => void
+  /** Abre a lição da fase ("Ver o truque"); sem a prop, o botão não aparece. */
+  onTruque?: () => void
 }
 
 /**
  * Uma pergunta: conta e resposta no topo, ferramentas no meio, teclado embaixo. O primeiro toque de resposta
  * fixa o instante usado para `timeMs` (D2); nada de tempo aparece na tela.
  */
-export function QuestionView({ question, onAnswer }: Props) {
+export function QuestionView({ question, onAnswer, onTruque }: Props) {
   const { clock } = useServices()
   const [digits, setDigits] = useState('')
   const firstTouch = useRef<Date | null>(null)
@@ -70,14 +72,26 @@ export function QuestionView({ question, onAnswer }: Props) {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
-        <button
-          type="button"
-          className="min-h-[56px] self-center rounded-2xl border-2 border-poti-deep bg-white px-6 text-xl font-extrabold text-poti-deep select-none touch-manipulation"
-          aria-expanded={panelOpen}
-          onClick={toggleHelp}
-        >
-          {panelOpen ? 'Fechar ajuda' : 'Ajuda'}
-        </button>
+        <div className="flex flex-wrap justify-center gap-3">
+          <button
+            type="button"
+            className="min-h-[56px] rounded-2xl border-2 border-poti-deep bg-white px-4 text-lg font-extrabold text-poti-deep select-none touch-manipulation"
+            aria-expanded={panelOpen}
+            onClick={toggleHelp}
+          >
+            {panelOpen ? 'Fechar ajuda' : 'Ajuda'}
+          </button>
+          {onTruque && (
+            <button
+              type="button"
+              data-testid="truque"
+              className={`min-h-[56px] rounded-2xl border-2 px-4 text-lg font-extrabold select-none touch-manipulation ${question.strategyHint ? 'border-green-deep bg-green-deep text-white' : 'border-poti-deep bg-white text-poti-deep'}`}
+              onClick={onTruque}
+            >
+              Ver o truque
+            </button>
+          )}
+        </div>
         {panelOpen && (
           <div className="flex flex-col gap-3" data-testid="tools">
             <div className="grid grid-cols-3 gap-3" role="group" aria-label="Ferramentas de ajuda">

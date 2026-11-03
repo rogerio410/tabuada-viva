@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { phaseStatuses, type PhaseStatus } from '@domain/progress/phase-progress'
 import { Stars } from './components/Stars'
 import { useServices } from './services'
+import { lessonFor } from './session/lessons'
 import { GAME_PHASES, PHASE_ORDER } from './session/phases'
 import { loadProgress } from './session/progress'
 
@@ -22,9 +23,11 @@ function Lock() {
  */
 export function MapScreen({
   onPlay,
+  onLesson,
   onBack,
 }: {
   onPlay: (phaseId: string) => void
+  onLesson: (phaseId: string) => void
   onBack: () => void
 }) {
   const svc = useServices()
@@ -76,41 +79,56 @@ export function MapScreen({
               }
               const locked = s.state === 'locked'
               return (
-                <button
-                  key={phase.id}
-                  type="button"
-                  data-testid={`phase-${phase.id}`}
-                  data-state={s.state}
-                  disabled={locked}
-                  className={`flex min-h-[64px] items-center justify-between gap-3 rounded-2xl border-2 px-4 text-left text-xl font-extrabold select-none touch-manipulation ${
-                    s.state === 'current'
-                      ? 'border-green-deep bg-green-deep text-white'
-                      : locked
-                        ? 'border-ink/40 bg-ink/10 text-ink/70'
-                        : 'border-ink/70 bg-white text-ink'
-                  }`}
-                  onClick={() => onPlay(phase.id)}
-                >
-                  <span>
-                    {phase.name.replace(/^GD:\s*/, 'Grande Desafio: ')}
-                    {s.state === 'current' && <span className="sr-only"> (fase atual)</span>}
-                  </span>
-                  {locked ? (
-                    <>
-                      <Lock />
-                      <span className="sr-only">Bloqueada</span>
-                    </>
-                  ) : (
-                    <span className="flex items-center gap-2 rounded-full bg-white px-2 py-1">
-                      {s.state === 'current' && (
-                        <span aria-hidden="true" className="text-lg font-extrabold text-green-deep">
-                          ▶
-                        </span>
-                      )}
-                      <Stars count={s.stars} size={24} />
+                <div key={phase.id} className="flex gap-3">
+                  <button
+                    type="button"
+                    data-testid={`phase-${phase.id}`}
+                    data-state={s.state}
+                    disabled={locked}
+                    className={`flex min-h-[64px] flex-1 items-center justify-between gap-3 rounded-2xl border-2 px-4 text-left text-xl font-extrabold select-none touch-manipulation ${
+                      s.state === 'current'
+                        ? 'border-green-deep bg-green-deep text-white'
+                        : locked
+                          ? 'border-ink/40 bg-ink/10 text-ink/70'
+                          : 'border-ink/70 bg-white text-ink'
+                    }`}
+                    onClick={() => onPlay(phase.id)}
+                  >
+                    <span>
+                      {phase.name.replace(/^GD:\s*/, 'Grande Desafio: ')}
+                      {s.state === 'current' && <span className="sr-only"> (fase atual)</span>}
                     </span>
+                    {locked ? (
+                      <>
+                        <Lock />
+                        <span className="sr-only">Bloqueada</span>
+                      </>
+                    ) : (
+                      <span className="flex items-center gap-2 rounded-full bg-white px-2 py-1">
+                        {s.state === 'current' && (
+                          <span
+                            aria-hidden="true"
+                            className="text-lg font-extrabold text-green-deep"
+                          >
+                            ▶
+                          </span>
+                        )}
+                        <Stars count={s.stars} size={24} />
+                      </span>
+                    )}
+                  </button>
+                  {!locked && lessonFor(phase.id) && (
+                    <button
+                      type="button"
+                      data-testid={`lesson-${phase.id}`}
+                      aria-label={`Ver a lição: ${phase.name.replace(/^GD:\s*/, 'Grande Desafio: ')}`}
+                      className="min-h-[64px] min-w-[72px] rounded-2xl border-2 border-poti-deep bg-white px-3 text-lg font-extrabold text-poti-deep select-none touch-manipulation"
+                      onClick={() => onLesson(phase.id)}
+                    >
+                      Lição
+                    </button>
                   )}
-                </button>
+                </div>
               )
             })}
           </section>

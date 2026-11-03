@@ -1,0 +1,539 @@
+{
+  "batch": {
+    "id": "licoes-w1",
+    "origin": "ia",
+    "date": "2026-11-02",
+    "reviewer": null,
+    "humanSample": "pendente"
+  },
+  "lessons": [
+    {
+      "phase": "W1-P01",
+      "strategy": "Juntar tudo",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Oi! Eu sou o Calú. Vamos juntar coisas?"
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 3,
+              "object": "carrinho"
+            },
+            {
+              "n": 2,
+              "object": "carrinho"
+            }
+          ]
+        },
+        {
+          "type": "say",
+          "text": "Aqui tem 3. Ali tem 2."
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "3 + 2",
+          "answer": 5,
+          "prompt": "Quantos ficaram?"
+        },
+        {
+          "type": "say",
+          "text": "Juntar é pôr tudo junto."
+        },
+        {
+          "type": "tenframe",
+          "fill": 6
+        },
+        {
+          "type": "say",
+          "text": "Aqui tem 6 bolinhas. O outro cesto está vazio."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 0,
+              "object": "bolinha"
+            },
+            {
+              "n": 6,
+              "object": "bolinha"
+            }
+          ]
+        },
+        {
+          "type": "ask",
+          "expr": "0 + 6",
+          "answer": 6,
+          "prompt": "Quantas bolinhas ficaram?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["4", "5", "3"],
+          "correct": 0,
+          "strip": ["0 + 1 = 1", "0 + 2 = 2", "0 + 3 = 3", "0 + 4 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Somar 0 não muda nada."
+        },
+        {
+          "type": "ask",
+          "expr": "0 + 8",
+          "answer": 8
+        }
+      ]
+    },
+    {
+      "phase": "W1-P02",
+      "strategy": "Mais 1",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Tem 5 bolinhas. Chega mais 1."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 5,
+              "object": "bolinha"
+            },
+            {
+              "n": 1,
+              "object": "bolinha"
+            }
+          ]
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "5 + 1",
+          "answer": 6,
+          "prompt": "Quantas bolinhas ficaram?"
+        },
+        {
+          "type": "say",
+          "text": "Na reta, o pulo começa no 3."
+        },
+        {
+          "type": "numline",
+          "start": 3,
+          "hops": 1
+        },
+        {
+          "type": "ask",
+          "expr": "3 + 1",
+          "answer": 4,
+          "prompt": "Onde o pulo para?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["6", "4", "5"],
+          "correct": 2,
+          "strip": ["1 + 1 = 2", "2 + 1 = 3", "3 + 1 = 4", "4 + 1 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Mais 1 é o número que vem depois."
+        },
+        {
+          "type": "ask",
+          "expr": "6 + 1",
+          "answer": 7
+        }
+      ]
+    },
+    {
+      "phase": "W1-P03",
+      "strategy": "Mais 2",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Tem 4 ovos. Chegam mais 2."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 4,
+              "object": "ovo"
+            },
+            {
+              "n": 2,
+              "object": "ovo"
+            }
+          ]
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "4 + 2",
+          "answer": 6,
+          "prompt": "Quantos ovos ficaram?"
+        },
+        {
+          "type": "say",
+          "text": "Encha de 2 em 2: 2, 4, 6, 8."
+        },
+        {
+          "type": "tenframe",
+          "fill": 8
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["9", "10", "11"],
+          "correct": 1,
+          "strip": ["2", "4", "6", "8", "?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Mais 2 é pular 2 números."
+        },
+        {
+          "type": "ask",
+          "expr": "5 + 2",
+          "answer": 7
+        }
+      ]
+    },
+    {
+      "phase": "W1-P04",
+      "strategy": "Do maior para frente",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Vamos juntar 3 bananas e 5 laranjas."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 3,
+              "object": "banana"
+            },
+            {
+              "n": 5,
+              "object": "laranja"
+            }
+          ]
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "3 + 5",
+          "answer": 8,
+          "prompt": "Quantas frutas?"
+        },
+        {
+          "type": "say",
+          "text": "Conte pulando. Comece pelo 3."
+        },
+        {
+          "type": "numline",
+          "start": 3,
+          "hops": 5
+        },
+        {
+          "type": "say",
+          "text": "Agora comece pelo 5."
+        },
+        {
+          "type": "numline",
+          "start": 5,
+          "hops": 3
+        },
+        {
+          "type": "swap",
+          "a": 3,
+          "b": 5
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual número é melhor para começar?",
+          "options": ["3", "4", "5"],
+          "correct": 2
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Comece pelo maior: dá menos pulos."
+        },
+        {
+          "type": "ask",
+          "expr": "7 + 2",
+          "answer": 9
+        }
+      ]
+    },
+    {
+      "phase": "W1-P05",
+      "strategy": "Dobros",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Cada pé usa 1 chinelo. Vamos contar."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 3,
+              "object": "chinelo"
+            },
+            {
+              "n": 3,
+              "object": "chinelo"
+            }
+          ]
+        },
+        {
+          "type": "say",
+          "text": "3 do pé esquerdo e 3 do pé direito."
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "3 + 3",
+          "answer": 6,
+          "prompt": "Quantos chinelos?"
+        },
+        {
+          "type": "say",
+          "text": "O dominó também tem 2 lados iguais."
+        },
+        {
+          "type": "domino",
+          "left": 4,
+          "right": 4
+        },
+        {
+          "type": "ask",
+          "expr": "4 + 4",
+          "answer": 8
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["10", "9", "12"],
+          "correct": 0,
+          "strip": ["1 + 1 = 2", "2 + 2 = 4", "3 + 3 = 6", "4 + 4 = 8", "5 + 5 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Dobro é o mesmo número 2 vezes."
+        },
+        {
+          "type": "ask",
+          "expr": "5 + 5",
+          "answer": 10
+        }
+      ]
+    },
+    {
+      "phase": "W1-P06",
+      "strategy": "Vizinhos do dobro",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Vamos olhar o dobro e mais 1."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 4,
+              "object": "ficha"
+            },
+            {
+              "n": 4,
+              "object": "ficha"
+            }
+          ]
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "4 + 4",
+          "answer": 8,
+          "prompt": "Quanto é o dobro de 4?"
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 4,
+              "object": "ficha"
+            },
+            {
+              "n": 5,
+              "object": "ficha"
+            }
+          ]
+        },
+        {
+          "type": "say",
+          "text": "Agora são 4 e 5. Tem 1 ficha a mais."
+        },
+        {
+          "type": "ask",
+          "expr": "4 + 5",
+          "answer": 9,
+          "prompt": "Então 4 + 5 é quanto?"
+        },
+        {
+          "type": "say",
+          "text": "Passe 1 ficha do 6 para o 4."
+        },
+        {
+          "type": "move",
+          "from": 6,
+          "to": 4,
+          "object": "ficha"
+        },
+        {
+          "type": "ask",
+          "expr": "4 + 6",
+          "answer": 10,
+          "prompt": "Ficou 5 e 5. Quanto é?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual vem agora?",
+          "options": ["10", "8", "9"],
+          "correct": 2,
+          "strip": ["3 + 3 = 6", "3 + 4 = 7", "4 + 4 = 8", "4 + 5 = ?"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Vizinho é o dobro e mais 1."
+        },
+        {
+          "type": "ask",
+          "expr": "2 + 3",
+          "answer": 5
+        }
+      ]
+    },
+    {
+      "phase": "W1-P07",
+      "strategy": "Pares de 10",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Vamos encher copos até 10."
+        },
+        {
+          "type": "show",
+          "groups": [
+            {
+              "n": 3,
+              "object": "copo"
+            },
+            {
+              "n": 7,
+              "object": "copo"
+            }
+          ]
+        },
+        {
+          "type": "join"
+        },
+        {
+          "type": "ask",
+          "expr": "3 + 7",
+          "answer": 10,
+          "prompt": "Quantos copos?"
+        },
+        {
+          "type": "say",
+          "text": "No quadro de 10, faltam quantos?"
+        },
+        {
+          "type": "tenframe",
+          "fill": 6
+        },
+        {
+          "type": "ask",
+          "expr": "6 + ? = 10",
+          "answer": 4,
+          "prompt": "Faltam quantos para 10?"
+        },
+        {
+          "type": "choose",
+          "prompt": "Quanto falta agora?",
+          "options": ["4", "5", "6"],
+          "correct": 1,
+          "strip": ["1 + 9 = 10", "2 + 8 = 10", "3 + 7 = 10", "4 + 6 = 10", "5 + ? = 10"]
+        },
+        {
+          "type": "name",
+          "text": "Reparou? Pares de 10: um sobe, o outro desce."
+        },
+        {
+          "type": "ask",
+          "expr": "3 + 6",
+          "answer": 9,
+          "prompt": "Pense no 3 + 7."
+        }
+      ]
+    },
+    {
+      "phase": "W1-P08",
+      "strategy": "Festa dos truques",
+      "steps": [
+        {
+          "type": "say",
+          "text": "Hoje tem festa! Vamos usar os truques."
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 4 + 4?",
+          "options": ["Mais 1", "Somar 0", "Dobro"],
+          "correct": 2
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 6 + 1?",
+          "options": ["Mais 1", "Dobro", "Pares de 10"],
+          "correct": 0
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 4 + 6?",
+          "options": ["Mais 2", "Pares de 10", "Somar 0"],
+          "correct": 1
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 8 + 0?",
+          "options": ["Dobro", "Mais 1", "Somar 0"],
+          "correct": 2
+        },
+        {
+          "type": "choose",
+          "prompt": "Qual truque ajuda em 2 + 7?",
+          "options": ["Comece pelo maior", "Dobro", "Somar 0"],
+          "correct": 0
+        }
+      ]
+    }
+  ]
+}
