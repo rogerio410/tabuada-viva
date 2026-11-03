@@ -11,18 +11,22 @@ import type {
   Session,
   SupportKind,
 } from '@domain/ports/types'
+import type { Lesson } from '@content/schema/lesson'
 import { FACT_BY_ID } from '@domain/facts/catalog'
 import { parseFactId } from '@domain/facts/fact-id'
 import { classifyError } from '@domain/errors/classify-error'
 import { evaluatePhase, type PhaseEvaluation, type Stars } from '@domain/progress/phase-progress'
 import { presentFact } from '@domain/scheduler/apply-answer'
 import { recordAttempt } from '@domain/scheduler/record-attempt'
+import { needsStrategyHint } from '@domain/scheduler/slow-counting'
 import { isUnsupported } from '@domain/support/support'
 import { autoOpenSupports } from '@domain/support/auto-open'
+import { guidedItems, scaffoldFor, type Scaffold } from '@domain/session/guided'
 import { shouldSuggestRest } from '@domain/session/rest'
 import { adaptNextSession } from '@domain/session/adapt'
 import { buildSession, reinsertAfterError, type SessionItem } from '@domain/session/build-session'
-import { phaseFactsFor } from './phases'
+import { lessonFor } from './lessons'
+import { phaseById, phaseFactsFor } from './phases'
 
 export interface Services {
   childId: ChildId
@@ -47,6 +51,10 @@ export interface Question {
   family: boolean
   /** Apoios que a tela abre sozinha; só contam como usados se a criança os tocar. */
   autoSupports: SupportKind[]
+  /** Prática guiada: nível de apoio deste item (o apoio vai sumindo). */
+  guided?: Scaffold
+  /** "Contou de um em um" (D3/D24): a tela oferece "Ver o truque". */
+  strategyHint: boolean
   shownAt: Date
 }
 
@@ -60,6 +68,7 @@ export interface PhaseResult extends PhaseEvaluation {
 }
 
 export type View =
+  | { type: 'lesson'; lesson: Lesson }
   | { type: 'question'; question: Question; progress: Progress }
   | { type: 'rest-offer'; progress: Progress }
   | { type: 'done'; answered: number; result: PhaseResult }
@@ -73,7 +82,7 @@ export interface Feedback {
 }
 
 /** Item da fila; `family` marca as contas do triângulo geradas na hora. */
-type QueueItem = SessionItem & { family?: boolean }
+type QueueItem = SessionItem & { family?: boolean; guided?: Scaffold }
 
 /**
  * Orquestra uma sessão de uma fase: monta a fila com o motor, grava cada resposta e cada item, devolve o que a tela
@@ -90,12 +99,24 @@ export class SessionController {
   private wrapping = false
   private maxNew: number
   private question: Question | null = null
+  private lesson: Lesson | null
+  private lessonPending: boolean
 
-  private constructor(svc: Services, session: Session, phaseId: string, maxNew: number) {
+  private constructor(
+    svc: Services,
+    session: Session,
+    phaseId: string,
+    maxNew: number,
+    lesson: Lesson | null,
+    queue: QueueItem[],
+  ) {
     this.svc = svc
     this.session = session
     this.phaseId = phaseId
     this.maxNew = maxNew
+    this.lesson = lesson
+    this.lessonPending = lesson !== null
+    this.queue = queue
   }
 
   /** Retoma a sessão aberta desta fase ou começa uma nova. */
@@ -114,7 +135,40 @@ export class SessionController {
     }
     if (!open) await svc.sessions.save(session)
     const history = all.filter((s) => s.endedAt !== null).map((s) => ({ accuracy: s.accuracy }))
-    return new SessionController(svc, session, phaseId, adaptNextSession(history).maxNew)
+    // 1ª vez na fase (nenhuma resposta nela): lição obrigatória e prática guiada (6 a 8 itens, apoio que some).
+    const firstTime = !(await svc.attempts.listByChild(svc.childId)).some(
+      (a) => a.phaseId === phaseId,
+    )
+    const lesson = firstTime ? (lessonFor(phaseId) ?? null) : null
+    const queue = firstTime ? await SessionController.guidedQueue(svc, phaseId) : []
+    return new SessionController(
+      svc,
+      session,
+      phaseId,
+      adaptNextSession(history).maxNew,
+      lesson,
+      queue,
+    )
+  }
+
+  /** Itens da prática guiada. Subtração só entra se a soma de origem já está em Praticando (D16c). */
+  private static async guidedQueue(svc: Services, phaseId: string): Promise<QueueItem[]> {
+    if (phaseById(phaseId)?.grandChallenge) return []
+    const states = await svc.facts.listByChild(svc.childId)
+    const status = new Map(states.map((s) => [s.factId, s.status]))
+    const ready = (factId: string) => {
+      const fact = FACT_BY_ID.get(factId)
+      if (!fact || fact.op !== 'sub') return true
+      const root = status.get(fact.root[0]!)
+      return root === 'praticando' || root === 'fluente' || root === 'dominado'
+    }
+    const facts = phaseFactsFor(phaseId).filter(ready)
+    const ids = guidedItems(facts, states, svc.rng)
+    return ids.map((factId, i): QueueItem => ({
+      kind: 'review',
+      factId,
+      guided: scaffoldFor(i, ids.length),
+    }))
   }
 
   get progress(): Progress {
@@ -122,8 +176,25 @@ export class SessionController {
     return { done, total: done + Math.max(0, this.queue.length - this.index) }
   }
 
-  /** Mostra o próximo item (ou o convite a descansar, ou o fim). */
+  /** A lição da fase (para "Ver de novo"); repetir não grava nada. */
+  get phaseLesson(): Lesson | null {
+    return lessonFor(this.phaseId) ?? null
+  }
+
+  /** Terminou a lição da 1ª vez: segue para a prática guiada. */
+  lessonDone(): Promise<View> {
+    this.lessonPending = false
+    return this.next()
+  }
+
+  /** Sem lição a mostrar (testes, ou fase sem lição). */
+  skipLesson() {
+    this.lessonPending = false
+  }
+
+  /** Mostra o próximo item (ou a lição, ou o convite a descansar, ou o fim). */
   async next(): Promise<View> {
+    if (this.lessonPending && this.lesson) return { type: 'lesson', lesson: this.lesson }
     if (
       !this.restOffered &&
       !this.wrapping &&
@@ -200,7 +271,10 @@ export class SessionController {
     return { correct, given, question: q, supportsUsed }
   }
 
-  private plan(states: Awaited<ReturnType<FactStateRepo['listByChild']>>): SessionItem[] {
+  private plan(
+    states: Awaited<ReturnType<FactStateRepo['listByChild']>>,
+    slowCounting?: ReadonlySet<string>,
+  ): SessionItem[] {
     return buildSession(
       {
         childId: this.svc.childId,
@@ -209,16 +283,27 @@ export class SessionController {
         gateOpen: false,
         storyItems: 0, // histórias: Sprint 3b
         maxNew: this.maxNew,
+        slowCounting,
       },
       this.svc.rng,
       this.svc.clock.now(),
     ).items
   }
 
+  /** Fatos em que a criança "contou de um em um" (D24): a tela oferece o truque. */
+  private async slowFacts(
+    states: Awaited<ReturnType<FactStateRepo['listByChild']>>,
+  ): Promise<ReadonlySet<string>> {
+    const attempts = await this.svc.attempts.listByChild(this.svc.childId)
+    return new Set(states.map((s) => s.factId).filter((id) => needsStrategyHint(attempts, id)))
+  }
+
   /** Fila esgotada: novo plano com os estados atuais. Sem o fechamento no meio da sessão. */
   private async refill(): Promise<boolean> {
     const states = await this.svc.facts.listByChild(this.svc.childId)
-    const items = this.plan(states).filter((i) => i.kind !== 'closing')
+    const items = this.plan(states, await this.slowFacts(states)).filter(
+      (i) => i.kind !== 'closing',
+    )
     this.queue = items
     this.index = 0
     return items.length > 0
@@ -230,7 +315,7 @@ export class SessionController {
    */
   private expandFamily() {
     const item = this.queue[this.index]
-    if (!item || item.kind !== 'new' || item.family || item.factId === null) return
+    if (!item || item.kind !== 'new' || item.family || item.guided || item.factId === null) return
     const fact = FACT_BY_ID.get(item.factId)
     if (!fact || fact.op !== 'sub' || fact.rule) return
     const ids = [fact.root[0]!, ...(item.unit ?? [fact.id])]
@@ -261,7 +346,13 @@ export class SessionController {
       answer: fact.result,
       status,
       family: item.family === true,
-      autoSupports: autoOpenSupports(status),
+      autoSupports: item.guided
+        ? item.guided === 'full'
+          ? autoOpenSupports('aprendendo')
+          : []
+        : autoOpenSupports(status),
+      guided: item.guided,
+      strategyHint: item.strategyHint === true,
       shownAt: this.svc.clock.now(),
     }
     return this.question
