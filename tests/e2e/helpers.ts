@@ -84,11 +84,76 @@ export const openMap = async (page: Page) => {
   await expect(page.getByRole('heading', { name: 'Mapa' })).toBeVisible()
 }
 
-/** Toca numa fase do mapa e espera a primeira pergunta. */
+/**
+ * Atravessa a lição aberta: responde as perguntas guiadas, tenta os cartões até acertar, toca nas ações do passo
+ * (juntar, tirar, pular, família...) e em "Continuar". `onStep` roda uma vez por passo; `stopAt: 'choose'` para
+ * quando os cartões do padrão aparecem.
+ */
+export const finishLesson = async (
+  page: Page,
+  { onStep, stopAt }: { onStep?: (step: number) => Promise<void>; stopAt?: 'choose' } = {},
+) => {
+  const lesson = page.getByTestId('lesson')
+  const cont = page.getByTestId('continue')
+  await expect(lesson).toBeVisible()
+  let lastStep = -1
+  let taps = 0
+  for (let guard = 0; guard < 120; guard++) {
+    if (!(await lesson.isVisible())) return
+    const step = Number(await page.getByRole('progressbar').first().getAttribute('aria-valuenow'))
+    if (step !== lastStep) {
+      lastStep = step
+      taps = 0
+      await onStep?.(step)
+    }
+    if (stopAt === 'choose' && (await page.getByTestId('choice').count()) > 0) return
+    if (await cont.isEnabled()) {
+      const final = /Bora jogar!|Voltar/.test((await cont.textContent()) ?? '')
+      await cont.tap()
+      if (final) {
+        await expect(lesson).toBeHidden()
+        return
+      }
+      continue
+    }
+    const expr = page.getByTestId('lesson-expr')
+    if (await expr.isVisible()) {
+      const text = (await expr.innerText()).trim()
+      const missing = /^(\d+) \+ \? = (\d+)/.exec(text)
+      const simple = /^(\d+) ([+−]) (\d+)/.exec(text)
+      const value = missing
+        ? Number(missing[2]) - Number(missing[1])
+        : simple![2] === '+'
+          ? Number(simple![1]) + Number(simple![3])
+          : Number(simple![1]) - Number(simple![3])
+      await answer(page, value)
+      continue
+    }
+    const choices = page.getByTestId('choice')
+    if ((await choices.count()) > 0) {
+      for (let i = 0; i < (await choices.count()); i++)
+        if (await choices.nth(i).isEnabled()) {
+          await choices.nth(i).tap()
+          break
+        }
+      continue
+    }
+    // em passos de alternar (quadro de dez, família) toca uma ação diferente a cada vez
+    const actions = page.getByTestId('step-action').and(page.locator(':enabled'))
+    const n = await actions.count()
+    if (n > 0) await actions.nth(taps++ % n).tap()
+  }
+  const where = (await lesson.innerText().catch(() => '(sem lição)')).replace(/\s+/g, ' ')
+  throw new Error(`a lição não terminou no passo ${lastStep}: ${where}`)
+}
+
+/** Toca numa fase do mapa e chega à primeira pergunta (atravessando a lição, se for a primeira vez). */
 export const playPhase = async (page: Page, phaseId = 'W1-P01') => {
   const phase = page.getByTestId(`phase-${phaseId}`)
   await phase.scrollIntoViewIfNeeded()
   await phase.tap()
+  await expect(page.getByTestId('equation').or(page.getByTestId('lesson'))).toBeVisible()
+  if (await page.getByTestId('lesson').isVisible()) await finishLesson(page)
   await expect(page.getByTestId('equation')).toBeVisible()
 }
 

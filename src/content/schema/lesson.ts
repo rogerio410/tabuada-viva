@@ -20,6 +20,7 @@ export const LESSON_OBJECTS = [
   'figurinha',
 ] as const
 export const lessonObjectSchema = z.enum(LESSON_OBJECTS)
+export type LessonObject = z.infer<typeof lessonObjectSchema>
 
 const text = z.string().min(1)
 const count = z.number().int().min(0).max(20)

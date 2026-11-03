@@ -11,11 +11,14 @@ export function NumberLine({
   start,
   back = false,
   onUse,
+  onHop,
 }: {
   start: number
   /** Subtração: os pulos vão para trás a partir do primeiro número. */
   back?: boolean
   onUse: () => void
+  /** Chamado com o total de pulos depois de cada pulo (lições). */
+  onHop?: (hops: number) => void
 }) {
   const [hops, setHops] = useState(0)
   const at = back ? Math.max(0, start - hops) : Math.min(MAX, start + hops)
@@ -52,11 +55,13 @@ export function NumberLine({
       <div className="flex gap-3">
         <button
           type="button"
+          data-testid="step-action"
           className="min-h-[56px] flex-1 rounded-2xl bg-poti-deep px-4 text-xl font-extrabold text-white select-none touch-manipulation disabled:bg-ink/15 disabled:text-[#5e5247]"
           disabled={back ? at <= 0 : at >= MAX}
           onClick={() => {
             onUse()
             setHops((h) => h + 1)
+            onHop?.(hops + 1)
           }}
         >
           {back ? 'Pular −1' : 'Pular +1'}

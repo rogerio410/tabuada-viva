@@ -5,6 +5,7 @@ import { Calu } from './components/Calu'
 import { HintCard } from './components/HintCard'
 import { Stars } from './components/Stars'
 import { QuestionView } from './components/QuestionView'
+import { LessonScreen } from './lesson/LessonScreen'
 import { useServices } from './services'
 import { PHASE_ORDER } from './session/phases'
 import {
@@ -60,16 +61,19 @@ function ProgressBar({ progress }: { progress: Progress }) {
 function Screen({
   focusKey,
   className,
+  inert,
   children,
 }: {
   focusKey: string
   className: string
+  /** Escondida para o teclado e o leitor de tela (outra tela está por cima). */
+  inert?: boolean
   children: ReactNode
 }) {
   const ref = useRef<HTMLElement>(null)
   useEffect(() => ref.current?.focus(), [focusKey])
   return (
-    <main ref={ref} tabIndex={-1} className={`${className} outline-none`}>
+    <main ref={ref} tabIndex={-1} className={inert ? 'hidden' : `${className} outline-none`}>
       {children}
     </main>
   )
@@ -82,6 +86,7 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
   const [view, setView] = useState<View | null>(null)
   const [feedback, setFeedback] = useState<Feedback | null>(null)
   const [progress, setProgress] = useState<Progress>({ done: 0, total: 0 })
+  const [truque, setTruque] = useState(false)
 
   useEffect(() => {
     if (started.current) return
@@ -96,8 +101,8 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
   const show = (v: View) => {
     setFeedback(null)
     setView(v)
-    if (v.type !== 'done') setProgress(v.progress)
-    else if (v.result.stars > 0) playPhaseEnd()
+    if (v.type === 'question' || v.type === 'rest-offer') setProgress(v.progress)
+    else if (v.type === 'done' && v.result.stars > 0) playPhaseEnd()
   }
   const advance = async (to?: Promise<View>) => show(await (to ?? ctl.current!.next()))
 
@@ -125,6 +130,12 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
       >
         <Calu />
       </Screen>
+    )
+  }
+
+  if (view.type === 'lesson') {
+    return (
+      <LessonScreen lesson={view.lesson} onDone={() => void advance(ctl.current!.lessonDone())} />
     )
   }
 
@@ -173,59 +184,69 @@ export function SessionScreen({ phaseId, onExit }: { phaseId: string; onExit: ()
   }
 
   const q = view.question
+  const lesson = ctl.current?.phaseLesson ?? null
   return (
-    <Screen
-      focusKey={`${q.itemId}-${feedback ? 'fb' : 'q'}`}
-      className="mx-auto flex h-full max-w-[480px] flex-col gap-3 p-4"
-    >
-      <div className="flex items-center gap-3">
-        <div className="flex-1">
-          <ProgressBar progress={progress} />
+    <>
+      <Screen
+        focusKey={`${q.itemId}-${feedback ? 'fb' : 'q'}`}
+        className="mx-auto flex h-full max-w-[480px] flex-col gap-3 p-4"
+        inert={truque}
+      >
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <ProgressBar progress={progress} />
+          </div>
+          <button
+            type="button"
+            className="min-h-[56px] min-w-[56px] rounded-2xl border-2 border-ink/70 bg-white px-4 text-lg font-extrabold text-ink select-none touch-manipulation"
+            onClick={onExit}
+          >
+            Sair
+          </button>
         </div>
-        <button
-          type="button"
-          className="min-h-[56px] min-w-[56px] rounded-2xl border-2 border-ink/70 bg-white px-4 text-lg font-extrabold text-ink select-none touch-manipulation"
-          onClick={onExit}
-        >
-          Sair
-        </button>
-      </div>
-      {feedback ? (
-        <div
-          className="flex flex-1 flex-col items-center justify-center gap-6 text-center"
-          data-testid="feedback"
-        >
-          <Calu size={96} />
-          {feedback.correct ? (
-            <p className="m-0 text-3xl font-extrabold" role="status">
-              {correctLine(feedback, progress.done)}
-              <span className="mt-2 block text-[40px]">
-                {q.a} {SYMBOL[q.op]} {q.b} = {q.answer}
-              </span>
-            </p>
-          ) : (
-            <>
-              <p className="m-0 text-2xl font-extrabold" role="status">
-                Vamos ver juntos?
+        {feedback ? (
+          <div
+            className="flex flex-1 flex-col items-center justify-center gap-6 text-center"
+            data-testid="feedback"
+          >
+            <Calu size={96} />
+            {feedback.correct ? (
+              <p className="m-0 text-3xl font-extrabold" role="status">
+                {correctLine(feedback, progress.done)}
+                <span className="mt-2 block text-[40px]">
+                  {q.a} {SYMBOL[q.op]} {q.b} = {q.answer}
+                </span>
               </p>
-              <HintCard op={q.op} a={q.a} b={q.b} />
-              <button
-                type="button"
-                className={`${BTN} w-full bg-green-deep text-white`}
-                onClick={() => void advance()}
-              >
-                Bora!
-              </button>
-            </>
-          )}
+            ) : (
+              <>
+                <p className="m-0 text-2xl font-extrabold" role="status">
+                  Vamos ver juntos?
+                </p>
+                <HintCard op={q.op} a={q.a} b={q.b} />
+                <button
+                  type="button"
+                  className={`${BTN} w-full bg-green-deep text-white`}
+                  onClick={() => void advance()}
+                >
+                  Bora!
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <QuestionView
+            key={q.itemId}
+            question={q}
+            onAnswer={(g, at, s) => void onAnswer(g, at, s)}
+            onTruque={lesson ? () => setTruque(true) : undefined}
+          />
+        )}
+      </Screen>
+      {truque && lesson && (
+        <div className="fixed inset-0 z-50 bg-cream">
+          <LessonScreen lesson={lesson} replay onDone={() => setTruque(false)} />
         </div>
-      ) : (
-        <QuestionView
-          key={q.itemId}
-          question={q}
-          onAnswer={(g, at, s) => void onAnswer(g, at, s)}
-        />
       )}
-    </Screen>
+    </>
   )
 }

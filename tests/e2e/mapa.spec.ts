@@ -105,6 +105,17 @@ test.describe('mapa, estrelas e subtração (360x740)', () => {
       await answerRight(page)
     }
     expect(sawSub).toBe(true)
+    // a família do triângulo aparece quando um triângulo ainda é novo (depois da prática guiada)
+    for (let i = 0; i < 40; i++) {
+      if (
+        (await attemptsInDb(page)).some((r) => r.kind === 'family' && r.factId.startsWith('sub:'))
+      )
+        break
+      await answerRight(page)
+    }
+
+    for (let i = 0; i < 20 && !(await page.getByTestId('equation').innerText()).includes('−'); i++)
+      await answerRight(page)
 
     // erro em subtração: a dica é a adição inversa (b + r = a), sem frase nova
     const [, a, b] = (await page.getByTestId('equation').innerText()).match(/(\d+)\s*−\s*(\d+)/)!
